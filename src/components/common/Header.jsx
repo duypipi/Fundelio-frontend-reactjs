@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import Button from './Button';
 
-const Header = ({ variant = 'light' }) => {
+export const Header = ({ variant = 'light' }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Định nghĩa các danh mục
@@ -156,4 +156,3 @@ const Header = ({ variant = 'light' }) => {
   );
 };
 
-export default Header;

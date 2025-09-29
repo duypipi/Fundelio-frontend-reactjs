@@ -1,5 +1,6 @@
-import Header from '@/components/common/Header';
+import { Header } from '@/components/common/Header';
 import Button from '@/components/common/Button';
+import { Footer } from '@/components/common/Footer';
 
 function App() {
   const handleClick = (variant) => {
@@ -156,6 +157,7 @@ function App() {
           </div>
         </div>
       </main>
+      <Footer/>
     </div>
   );
 }
