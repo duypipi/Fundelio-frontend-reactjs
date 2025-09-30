@@ -52,7 +52,7 @@ export const Header = ({ variant = 'light' }) => {
       <div className="mx-auto grid grid-cols-[1fr_auto_1fr] items-center">
         <div className="flex items-center gap-4">
           <h1 className={`text-2xl font-bold ${currentVariant.title}`}>
-            FundFountain
+            Fundelio
           </h1>
 
           {/* Dropdown menu danh mục */}
@@ -146,7 +146,7 @@ export const Header = ({ variant = 'light' }) => {
             <Globe className="w-5 h-5" />
           </button>
 
-          <Button>Bắt đầu gây quỹ</Button>
+          <Button>Đăng ký</Button>
           <Button variant="white" className="border-none">
             Đăng nhập
           </Button>

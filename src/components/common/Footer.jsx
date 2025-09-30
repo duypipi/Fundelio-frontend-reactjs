@@ -40,13 +40,13 @@ export const Footer = () => {
 
   return (
     <footer className="bg-white border-t border-gray-200 text-gray-800 py-12">
-      <div className="container mx-auto px-6 max-w-7xl">
+      <div className="container mx-auto px-6 max-w-container">
         {/* Main Grid - 4 sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Section 1 - Logo & Social */}
           <div className="col-span-1">
             <h2 className="text-2xl font-bold text-text-primary mb-4">
-              FundFountain
+              Fundelio
             </h2>
             <p className="text-text-secondary text-sm mb-6 leading-relaxed">
               Nền tảng gây quỹ cộng đồng cho các dự án sáng tạo và khởi nghiệp.
