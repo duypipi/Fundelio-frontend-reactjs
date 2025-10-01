@@ -1,9 +1,13 @@
 import React from 'react';
-import { LandingPage } from './pages/LandingPage';
+import Hero from './components/common/Hero';
+import { HomePage } from './pages/HomePage';
 
 function App() {
-  return <div>
-    PT Gà
-  </div>;
+  return (
+    <div>
+      <HomePage />
+    </div>
+  );
 }
+
 export default App;

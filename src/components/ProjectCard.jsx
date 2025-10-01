@@ -47,7 +47,7 @@ export const ProjectCard = ({
       case 'wide':
         return 'min-h-[320px]';
       default:
-        return 'min-h-[280px]';
+        return 'min-h-[200px]';
     }
   };
 
@@ -55,19 +55,17 @@ export const ProjectCard = ({
     <article
       role="article"
       className={`
-        group relative bg-white rounded-xl border border-gray-200 overflow-visible
+        group relative bg-white overflow-visible
         transition-all duration-300 ease-out
-        hover:shadow-2xl hover:z-20
-        focus-within:shadow-2xl focus-within:z-20
+        hover:z-20 hover:shadow-lg
         break-inside-avoid mb-6
         ${getSizeClasses()}
         ${className}
       `}
-      tabIndex={0}
     >
-      <div className="relative transition-transform duration-300 group-hover:-translate-y-2 group-focus-within:-translate-y-2">
+      <div className="relative transition-transform duration-300 group-hover:-translate-y-2">
         {/* Image Container */}
-        <div className="relative aspect-[16/9] overflow-hidden rounded-t-xl">
+        <div className="relative aspect-[16/9] overflow-hidden rounded-t-md">
           <img
             src={imageUrl || '/placeholder.svg'}
             alt={`Cover image for ${title} project`}
@@ -93,7 +91,7 @@ export const ProjectCard = ({
             onClick={handleBookmarkClick}
             className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full
                       hover:bg-white hover:scale-110 transition-all duration-200
-                      focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 z-20"
+                      focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 z-10"
             aria-pressed={bookmarked}
             aria-label={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
           >
@@ -106,33 +104,33 @@ export const ProjectCard = ({
         </div>
 
         {/* Main Content - Always Visible */}
-        <div className="p-4 relative z-10 bg-white rounded-b-xl">
+        <div className="px-4 pt-2 pb-3 relative z-10 bg-white">
           {/* Author Info */}
-          <div className="flex items-center mb-3">
+          <div className="flex items-center">
             <img
               src={authorAvatarUrl || '/api/placeholder/32/32'}
               alt={`${authorName}'s avatar`}
               className="w-8 h-8 rounded-full mr-3 object-cover"
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 line-clamp-1 text-sm leading-tight">
+              <h3 className="font-semibold text-text-primary line-clamp-1 text-md leading-tight">
                 {title}
               </h3>
-              <p className="text-xs text-gray-600">by {authorName}</p>
+              <p className="text-xs text-text-secondary">by {authorName}</p>
             </div>
           </div>
 
           {/* Funding Stats */}
-          <div className="mb-3">
+          <div className="mb-0">
             <div className="flex items-baseline gap-2 mb-1">
               <span className="text-lg font-bold text-primary">
                 {formatCurrency(pledged)}
               </span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-text-secondary">
                 / {formatCurrency(goal)}
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs text-gray-600">
+            <div className="flex items-center justify-between text-xs text-text-secondary">
               <div className="flex items-center gap-1">
                 <Users className="w-3 h-3" />
                 <span>{backerCount} người ủng hộ</span>
@@ -145,11 +143,11 @@ export const ProjectCard = ({
           </div>
         </div>
 
-        <div className="absolute left-0 right-0 top-full bg-white rounded-b-xl shadow-xl border border-gray-200 border-t-0 opacity-0 invisible translate-y-2 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 z-30">
-          <div className="p-4 pt-3 space-y-3">
+        <div className="absolute left-0 right-0 top-full bg-white rounded-b-xl shadow-lg opacity-0 invisible translate-y-2 transition-all duration-100 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-30">
+          <div className="px-4 pb-4">
             {/* Description */}
             {description && (
-              <p className="text-sm text-gray-700 line-clamp-3 leading-relaxed">
+              <p className="text-sm text-text-secondary line-clamp-3 leading-relaxed">
                 {description}
               </p>
             )}

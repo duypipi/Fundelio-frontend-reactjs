@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ChevronDown,
   Monitor,
@@ -10,11 +10,25 @@ import {
   Sun,
   Moon,
   Globe,
+  Menu,
+  X,
 } from 'lucide-react';
 import Button from './Button';
 
-export const Header = ({ variant = 'light' }) => {
+export const Header = ({ variant = 'transparent' }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Theo dõi scroll để thay đổi background
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Định nghĩa các danh mục
   const categories = [
@@ -28,43 +42,62 @@ export const Header = ({ variant = 'light' }) => {
 
   // Định nghĩa các variant cho header
   const headerVariants = {
+    transparent: {
+      container: isScrolled
+        ? 'bg-white/95 backdrop-blur-md text-text-primary shadow-md'
+        : 'bg-transparent text-text-white',
+      title: isScrolled ? 'text-text-primary' : 'text-text-white',
+      navLink: isScrolled
+        ? 'text-text-primary hover:text-primary'
+        : 'text-text-white hover:text-secondary',
+      dropdown: 'bg-white border border-gray-200 text-text-primary',
+      dropdownItem: 'hover:bg-gray-50 text-text-primary hover:text-primary',
+      button: isScrolled ? 'text-text-primary' : 'text-text-white',
+    },
     light: {
-      container: 'bg-[#fff] text-text-primary',
+      container: 'bg-white text-text-primary shadow-md',
       title: 'text-text-primary',
       navLink: 'text-text-primary hover:text-primary',
       dropdown: 'bg-white border border-gray-200 text-text-primary',
       dropdownItem: 'hover:bg-gray-50 text-text-primary hover:text-primary',
+      button: 'text-text-primary',
     },
     primary: {
-      container: 'bg-primary text-text-white',
+      container: 'bg-primary text-text-white shadow-md',
       title: 'text-text-white',
       navLink: 'text-text-white hover:text-secondary',
       dropdown: 'bg-primary border border-secondary text-text-white',
       dropdownItem:
         'hover:bg-secondary/10 text-text-white hover:text-secondary',
+      button: 'text-text-white',
     },
   };
 
   const currentVariant = headerVariants[variant];
 
   return (
-    <header className={`${currentVariant.container} py-4 px-6 shadow-lg`}>
-      <div className="mx-auto grid grid-cols-[1fr_auto_1fr] items-center">
-        <div className="flex items-center gap-4">
-          <h1 className={`text-2xl font-bold ${currentVariant.title}`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 py-3 px-4 sm:py-4 sm:px-6 transition-all duration-300 ${currentVariant.container}`}
+    >
+      <div className="mx-auto max-w-[1400px] flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr]">
+        {/* Left - Logo & Explore */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          <h1
+            className={`text-xl sm:text-2xl font-bold ${currentVariant.title}`}
+          >
             Fundelio
           </h1>
 
-          {/* Dropdown menu danh mục */}
+          {/* Dropdown menu danh mục - Desktop only */}
           <div
-            className="relative"
+            className="relative hidden lg:block"
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
           >
             <button
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-opacity-10 hover:bg-primary-100 transition-colors`}
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
             >
-              <span className="font-medium">Khám phá</span>
+              <span className="font-medium text-sm">Khám phá</span>
               <ChevronDown className="w-4 h-4" />
             </button>
 
@@ -101,12 +134,13 @@ export const Header = ({ variant = 'light' }) => {
           </div>
         </div>
 
-        <nav>
+        {/* Center - Navigation (Desktop only) */}
+        <nav className="hidden lg:block">
           <ul className="flex space-x-6">
             <li>
               <a
                 href="#"
-                className={`${currentVariant.navLink} transition-colors font-medium`}
+                className={`${currentVariant.navLink} transition-colors font-medium text-sm`}
               >
                 Trang chủ
               </a>
@@ -114,7 +148,7 @@ export const Header = ({ variant = 'light' }) => {
             <li>
               <a
                 href="#"
-                className={`${currentVariant.navLink} transition-colors font-medium`}
+                className={`${currentVariant.navLink} transition-colors font-medium text-sm`}
               >
                 Về chúng tôi
               </a>
@@ -122,37 +156,116 @@ export const Header = ({ variant = 'light' }) => {
             <li>
               <a
                 href="#"
-                className={`${currentVariant.navLink} transition-colors font-medium`}
+                className={`${currentVariant.navLink} transition-colors font-medium text-sm`}
               >
                 Liên hệ
               </a>
             </li>
           </ul>
         </nav>
-        <div className="flex items-center gap-4 justify-self-end">
-          {/* Theme Toggle Placeholder */}
+
+        {/* Right - Actions */}
+        <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
+          {/* Theme Toggle - Desktop only */}
           <button
-            className={`p-2 rounded-lg ${currentVariant.navLink} hover:bg-opacity-10 hover:bg-primary-100 transition-colors`}
+            className={`hidden md:block p-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
             title="Chuyển đổi chế độ sáng/tối"
           >
             <Sun className="w-5 h-5" />
           </button>
 
-          {/* Language Toggle Placeholder */}
+          {/* Language Toggle - Desktop only */}
           <button
-            className={`p-2 rounded-lg ${currentVariant.navLink} hover:bg-opacity-10 hover:bg-primary-100 transition-colors`}
+            className={`hidden md:block p-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
             title="Chuyển đổi ngôn ngữ"
           >
             <Globe className="w-5 h-5" />
           </button>
 
-          <Button>Đăng ký</Button>
-          <Button variant="white" className="border-none">
+          {/* Auth Buttons - Responsive */}
+          <Button size="md" className="hidden sm:inline-flex">
+            Đăng ký
+          </Button>
+          <Button
+            variant="outline"
+            size="md"
+            className="hidden sm:inline-flex border-current"
+          >
             Đăng nhập
           </Button>
+
+          {/* Mobile Menu Button */}
+          <button
+            className={`lg:hidden p-2 rounded-lg ${currentVariant.button}`}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden mt-4 py-4 border-t border-white/20">
+          <nav className="space-y-2">
+            <a
+              href="#"
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors font-medium`}
+            >
+              Trang chủ
+            </a>
+            <a
+              href="#"
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors font-medium`}
+            >
+              Về chúng tôi
+            </a>
+            <a
+              href="#"
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors font-medium`}
+            >
+              Liên hệ
+            </a>
+
+            {/* Categories in mobile */}
+            <div className="pt-2 border-t border-white/20 mt-2">
+              <p
+                className={`px-4 py-2 text-sm font-semibold ${currentVariant.title}`}
+              >
+                Khám phá
+              </p>
+              {categories.map((category, index) => {
+                const IconComponent = category.icon;
+                return (
+                  <a
+                    key={index}
+                    href={category.href}
+                    className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
+                  >
+                    <IconComponent className="w-4 h-4" />
+                    <span className="text-sm">{category.name}</span>
+                  </a>
+                );
+              })}
+            </div>
+
+            {/* Mobile Auth Buttons */}
+            <div className="flex gap-2 px-4 pt-4 sm:hidden">
+              <Button size="sm" className="flex-1">
+                Đăng ký
+              </Button>
+              <Button variant="outline" size="sm" className="flex-1">
+                Đăng nhập
+              </Button>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
-

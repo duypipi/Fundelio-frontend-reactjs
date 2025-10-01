@@ -39,26 +39,26 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="bg-white border-t border-gray-200 text-gray-800 py-12">
-      <div className="container mx-auto px-6 max-w-container">
+    <footer className="sticky top-[100vh] bg-white border-t border-gray-200 text-gray-800 py-8 sm:py-10 lg:py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-container">
         {/* Main Grid - 4 sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
           {/* Section 1 - Logo & Social */}
           <div className="col-span-1">
-            <h2 className="text-2xl font-bold text-text-primary mb-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-text-primary mb-3 sm:mb-4">
               Fundelio
             </h2>
-            <p className="text-text-secondary text-sm mb-6 leading-relaxed">
+            <p className="text-text-secondary text-sm mb-4 sm:mb-6 leading-relaxed">
               Nền tảng gây quỹ cộng đồng cho các dự án sáng tạo và khởi nghiệp.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3 sm:space-x-4">
               {socialLinks.map((social, index) => {
                 const IconComponent = social.icon;
                 return (
                   <a
                     key={index}
                     href={social.href}
-                    className="p-2 rounded-lg text-text-secondary hover:text-green-600 hover:bg-green-50 transition-all duration-200"
+                    className="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary-50 transition-all duration-200"
                     title={social.name}
                   >
                     <IconComponent className="w-5 h-5" />
@@ -71,15 +71,15 @@ export const Footer = () => {
           {/* Sections 2, 3, 4 - Navigation Links */}
           {footerSections.map((section, sectionIndex) => (
             <div key={sectionIndex} className="col-span-1">
-              <h3 className="text-lg font-semibold text-text-primary mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-text-primary mb-3 sm:mb-4">
                 {section.title}
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2 sm:space-y-3">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
                     <a
                       href={link.href}
-                      className="text-text-secondary hover:text-green-600 transition-colors duration-200 text-sm"
+                      className="text-text-secondary hover:text-primary transition-colors duration-200 text-sm"
                     >
                       {link.name}
                     </a>
@@ -91,10 +91,10 @@ export const Footer = () => {
         </div>
 
         {/* Separator Line */}
-        <div className="border-t border-gray-300 pt-6">
+        <div className="border-t border-gray-300 pt-4 sm:pt-6">
           <div className="text-center">
-            <p className="text-text-secondary text-sm">
-              © 2025 Khởi nghiệp sáng tạo. Mọi quyền được bảo lưu.
+            <p className="text-text-secondary text-xs sm:text-sm">
+              © 2025 Fundelio. Mọi quyền được bảo lưu.
             </p>
           </div>
         </div>
