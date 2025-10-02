@@ -29,11 +29,11 @@ export const PopularCampaigns = () => {
   const canGoNext = currentPage < totalPages - 1;
 
   return (
-    <section className="py-8 sm:py-10 lg:py-12 bg-white">
+    <section className="py-8 sm:py-10 lg:py-12 bg-white dark:bg-black transition-colors duration-300">
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Title and Navigation */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-text-primary">
+          <h2 className="text-2xl sm:text-3xl font-bold text-text-primary dark:text-text-white transition-colors duration-300">
             Popular Campaigns
           </h2>
 
@@ -52,7 +52,7 @@ export const PopularCampaigns = () => {
               <ChevronLeft className="w-5 h-5" />
             </button>
 
-            <span className="text-sm text-text-secondary font-medium min-w-[60px] text-center">
+            <span className="text-sm text-text-secondary dark:text-gray-400 font-medium min-w-[60px] text-center transition-colors duration-300">
               {currentPage + 1} / {totalPages}
             </span>
 

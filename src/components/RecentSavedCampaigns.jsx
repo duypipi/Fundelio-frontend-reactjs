@@ -26,13 +26,13 @@ export const RecentSavedCampaigns = () => {
   // Empty State Component
   const EmptyState = () => (
     <div className="flex flex-col items-center justify-center py-16 sm:py-20 lg:py-24 px-4">
-      <div className="bg-gray-100 rounded-full p-6 sm:p-8 mb-6">
-        <Bookmark className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400" />
+      <div className="bg-background-lighter dark:bg-black rounded-full p-6 sm:p-8 mb-6 transition-colors duration-300">
+        <Bookmark className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 dark:text-gray-500" />
       </div>
-      <h3 className="text-xl sm:text-2xl font-bold text-text-primary mb-3">
+      <h3 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-text-white mb-3 transition-colors duration-300">
         No Saved Campaigns Yet
       </h3>
-      <p className="text-text-secondary text-center max-w-md mb-6 sm:mb-8 text-sm sm:text-base">
+      <p className="text-text-secondary dark:text-gray-400 text-center max-w-md mb-6 sm:mb-8 text-sm sm:text-base transition-colors duration-300">
         Start exploring and bookmark campaigns you're interested in. They'll
         appear here for easy access.
       </p>
@@ -44,27 +44,27 @@ export const RecentSavedCampaigns = () => {
   );
 
   return (
-    <section className="py-8 sm:py-10 lg:py-12 bg-gray-50">
+    <section className="py-8 sm:py-10 lg:py-12 bg-background-lighter dark:bg-black/95 transition-colors duration-300">
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Tab Navigation */}
-        <div className="flex items-center gap-6 sm:gap-8 mb-6 sm:mb-8 border-b border-gray-200">
+        <div className="flex items-center gap-6 sm:gap-8 mb-6 sm:mb-8 border-b border-gray-200 dark:border-gray-600 transition-colors duration-300">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`relative pb-4 font-medium transition-all duration-200 ${
                 activeTab === tab.id
-                  ? 'text-text-primary'
-                  : 'text-text-secondary hover:text-text-primary'
+                  ? 'text-text-primary dark:text-text-white'
+                  : 'text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-text-white'
               }`}
             >
               <span className="flex items-center gap-2">
                 {tab.label}
                 <span
-                  className={`text-xs px-2 py-0.5 rounded-full ${
+                  className={`text-xs px-2 py-0.5 rounded-full transition-colors duration-300 ${
                     activeTab === tab.id
                       ? 'bg-primary text-white'
-                      : 'bg-gray-200 text-text-secondary'
+                      : 'bg-gray-200 dark:bg-gray-600 text-text-secondary dark:text-gray-300'
                   }`}
                 >
                   {tab.count}

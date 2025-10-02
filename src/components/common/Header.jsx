@@ -14,11 +14,13 @@ import {
   X,
 } from 'lucide-react';
 import Button from './Button';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export const Header = ({ variant = 'transparent' }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { theme, toggleTheme, isDark } = useTheme();
 
   // Theo dõi scroll để thay đổi background
   useEffect(() => {
@@ -168,10 +170,17 @@ export const Header = ({ variant = 'transparent' }) => {
         <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
           {/* Theme Toggle - Desktop only */}
           <button
-            className={`hidden md:block p-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
-            title="Chuyển đổi chế độ sáng/tối"
+            onClick={toggleTheme}
+            className={`hidden md:block p-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-all duration-200 hover:scale-105`}
+            title={
+              isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'
+            }
           >
-            <Sun className="w-5 h-5" />
+            {isDark ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
           </button>
 
           {/* Language Toggle - Desktop only */}
@@ -252,6 +261,26 @@ export const Header = ({ variant = 'transparent' }) => {
                   </a>
                 );
               })}
+            </div>
+
+            {/* Mobile Theme Toggle */}
+            <div className="px-4 py-2 border-t border-white/20 mt-2">
+              <button
+                onClick={toggleTheme}
+                className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
+              >
+                {isDark ? (
+                  <>
+                    <Sun className="w-4 h-4" />
+                    <span className="text-sm">Chế độ sáng</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="w-4 h-4" />
+                    <span className="text-sm">Chế độ tối</span>
+                  </>
+                )}
+              </button>
             </div>
 
             {/* Mobile Auth Buttons */}

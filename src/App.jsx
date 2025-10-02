@@ -1,12 +1,12 @@
 import React from 'react';
-import Hero from './components/common/Hero';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { HomePage } from './pages/HomePage';
 
 function App() {
   return (
-    <div>
+    <ThemeProvider>
       <HomePage />
-    </div>
+    </ThemeProvider>
   );
 }
 
