@@ -20,7 +20,7 @@ export const Header = ({ variant = 'transparent' }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
 
   // Theo dõi scroll để thay đổi background
   useEffect(() => {
@@ -46,31 +46,46 @@ export const Header = ({ variant = 'transparent' }) => {
   const headerVariants = {
     transparent: {
       container: isScrolled
-        ? 'bg-white/95 backdrop-blur-md text-text-primary shadow-md'
+        ? 'bg-white/95 dark:bg-black/80 backdrop-blur-md text-text-primary dark:text-text-white shadow-md transition-colors duration-300'
         : 'bg-transparent text-text-white',
-      title: isScrolled ? 'text-text-primary' : 'text-text-white',
+      title: isScrolled
+        ? 'text-text-primary dark:text-text-white transition-colors duration-300'
+        : 'text-text-white',
       navLink: isScrolled
-        ? 'text-text-primary hover:text-primary'
+        ? 'text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300'
         : 'text-text-white hover:text-secondary',
-      dropdown: 'bg-white border border-gray-200 text-text-primary',
-      dropdownItem: 'hover:bg-gray-50 text-text-primary hover:text-primary',
-      button: isScrolled ? 'text-text-primary' : 'text-text-white',
+      dropdown:
+        'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
+      dropdownItem:
+        'hover:bg-gray-50 dark:hover:bg-gray-700 text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
+      button: isScrolled
+        ? 'text-text-primary dark:text-text-white transition-colors duration-300'
+        : 'text-text-white',
     },
     light: {
-      container: 'bg-white text-text-primary shadow-md',
-      title: 'text-text-primary',
-      navLink: 'text-text-primary hover:text-primary',
-      dropdown: 'bg-white border border-gray-200 text-text-primary',
-      dropdownItem: 'hover:bg-gray-50 text-text-primary hover:text-primary',
-      button: 'text-text-primary',
+      container:
+        'bg-white dark:bg-black/80 text-text-primary dark:text-text-white shadow-md transition-colors duration-300',
+      title:
+        'text-text-primary dark:text-text-white transition-colors duration-300',
+      navLink:
+        'text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
+      dropdown:
+        'bg-white dark:bg-black border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
+      dropdownItem:
+        'hover:bg-gray-50 dark:hover:bg-gray-700 text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
+      button:
+        'text-text-primary dark:text-text-white transition-colors duration-300',
     },
     primary: {
-      container: 'bg-primary text-text-white shadow-md',
+      container:
+        'bg-primary dark:bg-primary-700 text-text-white shadow-md transition-colors duration-300',
       title: 'text-text-white',
-      navLink: 'text-text-white hover:text-secondary',
-      dropdown: 'bg-primary border border-secondary text-text-white',
+      navLink:
+        'text-text-white hover:text-secondary dark:hover:text-secondary-400 transition-colors duration-300',
+      dropdown:
+        'bg-primary dark:bg-primary-700 border border-secondary dark:border-secondary-600 text-text-white transition-colors duration-300',
       dropdownItem:
-        'hover:bg-secondary/10 text-text-white hover:text-secondary',
+        'hover:bg-secondary/10 dark:hover:bg-secondary/20 text-text-white hover:text-secondary dark:hover:text-secondary-400 transition-colors duration-300',
       button: 'text-text-white',
     },
   };
@@ -191,7 +206,7 @@ export const Header = ({ variant = 'transparent' }) => {
             <Globe className="w-5 h-5" />
           </button>
 
-          {/* Auth Buttons - Responsive */}
+          {/* Auth Buttons - Desktop only */}
           <Button size="md" className="hidden sm:inline-flex">
             Đăng ký
           </Button>
@@ -220,29 +235,29 @@ export const Header = ({ variant = 'transparent' }) => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden mt-4 py-4 border-t border-white/20">
+        <div className="lg:hidden mt-4 py-4 border-t border-white/20 dark:border-gray-700 transition-colors duration-300">
           <nav className="space-y-2">
             <a
               href="#"
-              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors font-medium`}
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium`}
             >
               Trang chủ
             </a>
             <a
               href="#"
-              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors font-medium`}
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium`}
             >
               Về chúng tôi
             </a>
             <a
               href="#"
-              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors font-medium`}
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium`}
             >
               Liên hệ
             </a>
 
             {/* Categories in mobile */}
-            <div className="pt-2 border-t border-white/20 mt-2">
+            <div className="pt-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300">
               <p
                 className={`px-4 py-2 text-sm font-semibold ${currentVariant.title}`}
               >
@@ -254,7 +269,7 @@ export const Header = ({ variant = 'transparent' }) => {
                   <a
                     key={index}
                     href={category.href}
-                    className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
+                    className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors`}
                   >
                     <IconComponent className="w-4 h-4" />
                     <span className="text-sm">{category.name}</span>
@@ -264,10 +279,10 @@ export const Header = ({ variant = 'transparent' }) => {
             </div>
 
             {/* Mobile Theme Toggle */}
-            <div className="px-4 py-2 border-t border-white/20 mt-2">
+            <div className="px-4 py-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300">
               <button
                 onClick={toggleTheme}
-                className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
+                className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors`}
               >
                 {isDark ? (
                   <>
@@ -288,7 +303,11 @@ export const Header = ({ variant = 'transparent' }) => {
               <Button size="sm" className="flex-1">
                 Đăng ký
               </Button>
-              <Button variant="outline" size="sm" className="flex-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 border-current dark:border-gray-600"
+              >
                 Đăng nhập
               </Button>
             </div>

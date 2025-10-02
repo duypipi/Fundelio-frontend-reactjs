@@ -7,6 +7,7 @@ export const ProjectCard = ({
   className = '',
   asLink,
   size = 'default', // default, tall, wide
+  mode = 'default', // default (hover to show), expanded (always show)
 }) => {
   const {
     id,
@@ -18,7 +19,6 @@ export const ProjectCard = ({
     progressPercent,
     pledged,
     goal,
-    backerCount,
     description,
     category,
     location,
@@ -63,7 +63,11 @@ export const ProjectCard = ({
         ${className}
       `}
     >
-      <div className="relative transition-transform duration-300 group-hover:-translate-y-2">
+      <div
+        className={`relative transition-transform duration-300 ${
+          mode === 'default' ? 'group-hover:-translate-y-2' : ''
+        }`}
+      >
         {/* Image Container */}
         <div className="relative aspect-[16/9] overflow-hidden rounded-t-md">
           <img
@@ -153,7 +157,14 @@ export const ProjectCard = ({
           </div>
         </div>
 
-        <div className="absolute left-0 right-0 top-full bg-white dark:bg-black rounded-b-xl shadow-lg opacity-0 invisible translate-y-2 transition-all duration-100 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-30">
+        {/* Expanded Details - Show on hover (default) or always (expanded mode) */}
+        <div
+          className={`absolute left-0 right-0 top-full bg-white dark:bg-black rounded-b-xl z-30 transition-all duration-100 ease-out ${
+            mode === 'expanded'
+              ? 'opacity-100 visible translate-y-0'
+              : 'opacity-0 shadow-lg invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0'
+          }`}
+        >
           <div className="px-4 pb-4">
             {/* Description */}
             {description && (
