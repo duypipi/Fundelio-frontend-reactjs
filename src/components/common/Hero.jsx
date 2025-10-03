@@ -118,7 +118,8 @@ const Hero = () => {
 
           {/* Description - Optional, only on larger screens */}
           <p className="hidden md:block mt-4 text-base lg:text-lg text-white/90 max-w-2xl">
-            {mockCampaigns[currentSlide].description || 'Discover and support amazing campaigns'}
+            {mockCampaigns[currentSlide].description ||
+              'Discover and support amazing campaigns'}
           </p>
 
           {/* Button */}

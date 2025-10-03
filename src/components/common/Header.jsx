@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   ChevronDown,
   Monitor,
@@ -21,6 +22,7 @@ export const Header = ({ variant = 'transparent' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { toggleTheme, isDark } = useTheme();
+  const location = useLocation();
 
   // Theo dõi scroll để thay đổi background
   useEffect(() => {
@@ -99,11 +101,13 @@ export const Header = ({ variant = 'transparent' }) => {
       <div className="mx-auto max-w-[1400px] flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr]">
         {/* Left - Logo & Explore */}
         <div className="flex items-center gap-2 sm:gap-4">
-          <h1
-            className={`text-xl sm:text-2xl font-bold ${currentVariant.title}`}
-          >
-            Fundelio
-          </h1>
+          <Link to="/">
+            <h1
+              className={`text-xl sm:text-2xl font-bold ${currentVariant.title} cursor-pointer hover:opacity-80 transition-opacity`}
+            >
+              Fundelio
+            </h1>
+          </Link>
 
           {/* Dropdown menu danh mục - Desktop only */}
           <div
@@ -155,16 +159,36 @@ export const Header = ({ variant = 'transparent' }) => {
         <nav className="hidden lg:block">
           <ul className="flex space-x-6">
             <li>
-              <a
-                href="#"
-                className={`${currentVariant.navLink} transition-colors font-medium text-sm`}
+              <Link
+                to="/"
+                className={`${
+                  currentVariant.navLink
+                } transition-colors font-medium text-sm ${
+                  location.pathname === '/'
+                    ? 'text-primary dark:text-primary-400'
+                    : ''
+                }`}
               >
                 Trang chủ
-              </a>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/create-campaign"
+                className={`${
+                  currentVariant.navLink
+                } transition-colors font-medium text-sm ${
+                  location.pathname === '/create-campaign'
+                    ? 'text-primary dark:text-primary-400'
+                    : ''
+                }`}
+              >
+                Tạo chiến dịch
+              </Link>
             </li>
             <li>
               <a
-                href="#"
+                href="#about"
                 className={`${currentVariant.navLink} transition-colors font-medium text-sm`}
               >
                 Về chúng tôi
@@ -172,7 +196,7 @@ export const Header = ({ variant = 'transparent' }) => {
             </li>
             <li>
               <a
-                href="#"
+                href="#contact"
                 className={`${currentVariant.navLink} transition-colors font-medium text-sm`}
               >
                 Liên hệ
@@ -237,21 +261,43 @@ export const Header = ({ variant = 'transparent' }) => {
       {isMobileMenuOpen && (
         <div className="lg:hidden mt-4 py-4 border-t border-white/20 dark:border-gray-700 transition-colors duration-300">
           <nav className="space-y-2">
-            <a
-              href="#"
-              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium`}
+            <Link
+              to="/"
+              className={`block px-4 py-2 rounded-lg ${
+                currentVariant.navLink
+              } hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium ${
+                location.pathname === '/'
+                  ? 'text-primary dark:text-primary-400'
+                  : ''
+              }`}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Trang chủ
-            </a>
+            </Link>
+            <Link
+              to="/create-campaign"
+              className={`block px-4 py-2 rounded-lg ${
+                currentVariant.navLink
+              } hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium ${
+                location.pathname === '/create-campaign'
+                  ? 'text-primary dark:text-primary-400'
+                  : ''
+              }`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Tạo chiến dịch
+            </Link>
             <a
-              href="#"
+              href="#about"
               className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium`}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Về chúng tôi
             </a>
             <a
-              href="#"
+              href="#contact"
               className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium`}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Liên hệ
             </a>
@@ -317,3 +363,5 @@ export const Header = ({ variant = 'transparent' }) => {
     </header>
   );
 };
+
+export default Header;

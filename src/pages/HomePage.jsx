@@ -1,5 +1,3 @@
-import { Footer } from '@/components/common/Footer';
-import { Header } from '@/components/common/Header';
 import Hero from '@/components/common/Hero';
 import HowItWorks from '@/components/home/HowItWorks';
 import NearGoalMasonry from '@/components/home/NearGoalMasonry';
@@ -10,11 +8,9 @@ import React from 'react';
 import RecentSavedCampaigns from '@/components/home/RecentSavedCampaigns';
 import PopularCampaigns from '@/components/home/PopularCampaigns';
 
-export const HomePage = () => {
+export default function HomePage() {
   return (
-    <div>
-      <Header />
-
+    <div className="min-h-screen bg-white dark:bg-black">
       {/* Hero Section */}
       <Hero />
 
@@ -37,8 +33,9 @@ export const HomePage = () => {
 
       {/* Primary CTA */}
       <PrimaryCTA />
-
-      <Footer />
     </div>
   );
-};
+}
+
+// Export named for backward compatibility
+export { HomePage };

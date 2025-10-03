@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 
 export const Footer = () => {
@@ -102,3 +103,5 @@ export const Footer = () => {
     </footer>
   );
 };
+
+export default Footer;
