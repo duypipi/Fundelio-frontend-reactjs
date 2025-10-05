@@ -4,8 +4,10 @@ import React from 'react';
  * BlankSection Component
  * Renders a single blank section with title and content HTML
  */
-const BlankSection = ({ blank }) => {
+const BlankSection = React.memo(({ blank }) => {
   const { id, order, title_html, content_html } = blank;
+
+  console.log('Loading BlankSection:', id, order, title_html);
 
   return (
     <section
@@ -17,7 +19,7 @@ const BlankSection = ({ blank }) => {
       {/* Title */}
       {title_html && (
         <h2
-          className="text-2xl font-semibold mb-3 text-foreground dark:text-text-white"
+          className="text-3xl font-bold mb-3 text-black dark:text-text-white"
           dangerouslySetInnerHTML={{ __html: title_html }}
         />
       )}
@@ -39,6 +41,9 @@ const BlankSection = ({ blank }) => {
       )}
     </section>
   );
-};
+});
+
+// Display name for debugging
+BlankSection.displayName = 'BlankSection';
 
 export default BlankSection;

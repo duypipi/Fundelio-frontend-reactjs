@@ -30,7 +30,7 @@ export default function CreateCampaignPage() {
   return (
     <>
       <div className="min-h-screen bg-gray-50 dark:bg-black">
-        <Header variant="light" />
+        {/* <Header variant="light" /> */}
 
         {/* Mobile Sidebar Toggle Button */}
         <button
@@ -93,7 +93,7 @@ export default function CreateCampaignPage() {
               <StoryToolbar activeEditorRef={activeEditorRef} onSave={save} />
 
               {/* Blanks */}
-              <div className='mt-18'>
+              <div className="mt-18">
                 {blanks.map((blank) => (
                   <BlankSection
                     key={blank.id}
@@ -118,7 +118,7 @@ export default function CreateCampaignPage() {
           </div>
         </div>
 
-        <Footer />
+        {/* <Footer /> */}
       </div>
 
       {/* Toast Notifications */}

@@ -87,6 +87,53 @@
   display: none;
 }
 
+/* Custom Scrollbar - Primary Blue Theme */
+.scrollbar-primary {
+  scrollbar-width: thin;
+  scrollbar-color: #0894e2 transparent;
+}
+
+.scrollbar-primary::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-primary::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.scrollbar-primary::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0894e2 0%, #0683ca 100%);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.2s ease;
+}
+
+.scrollbar-primary::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #26b0ea 0%, #0894e2 100%);
+  box-shadow: 0 0 6px rgba(8, 148, 226, 0.4);
+}
+
+.scrollbar-primary::-webkit-scrollbar-thumb:active {
+  background: #056aa4;
+}
+
+/* Dark mode scrollbar */
+.dark .scrollbar-primary {
+  scrollbar-color: #26b0ea transparent;
+}
+
+.dark .scrollbar-primary::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #26b0ea 0%, #0894e2 100%);
+}
+
+.dark .scrollbar-primary::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4dc3f1 0%, #26b0ea 100%);
+  box-shadow: 0 0 8px rgba(38, 176, 234, 0.5);
+}
+
 /* Global styles */
 body {
   font-family: var(--font-family-sans);
