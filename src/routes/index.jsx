@@ -3,7 +3,7 @@ import RootLayout from '../layouts/RootLayout';
 import HomePage from '../pages/HomePage';
 import CreateCampaignPage from '../pages/CreateCampaignPage';
 import CampaignDetailPage from '../pages/CampaignDetailPage';
-import LandingPage from '@/pages/LandpingPage';
+import LandingPage from '@/pages/LandingPage';
 
 /**
  * Application routes configuration
