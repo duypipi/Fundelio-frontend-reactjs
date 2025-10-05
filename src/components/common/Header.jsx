@@ -174,11 +174,11 @@ export const Header = ({ variant = 'transparent' }) => {
             </li>
             <li>
               <Link
-                to="/create-campaign"
+                to="/campaign/create"
                 className={`${
                   currentVariant.navLink
                 } transition-colors font-medium text-sm ${
-                  location.pathname === '/create-campaign'
+                  location.pathname === '/campaign/create'
                     ? 'text-primary dark:text-primary-400'
                     : ''
                 }`}

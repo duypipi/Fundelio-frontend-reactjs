@@ -18,11 +18,10 @@ export const router = createBrowserRouter([
       },
       {
         path: 'campaign',
-        element: <CampaignDetailPage />,
-      },
-      {
-        path: 'create-campaign',
-        element: <CreateCampaignPage />,
+        children: [
+          { path: 'detail', element: <CampaignDetailPage /> },
+          { path: 'create', element: <CreateCampaignPage /> },
+        ],
       },
     ],
   },
