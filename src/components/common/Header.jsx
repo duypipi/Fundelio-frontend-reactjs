@@ -160,11 +160,11 @@ export const Header = ({ variant = 'transparent' }) => {
           <ul className="flex space-x-6">
             <li>
               <Link
-                to="/"
+                to="/home"
                 className={`${
                   currentVariant.navLink
                 } transition-colors font-medium text-sm ${
-                  location.pathname === '/'
+                  location.pathname === '/home'
                     ? 'text-primary dark:text-primary-400'
                     : ''
                 }`}
@@ -174,11 +174,11 @@ export const Header = ({ variant = 'transparent' }) => {
             </li>
             <li>
               <Link
-                to="/campaign/create"
+                to="/campaigns/create"
                 className={`${
                   currentVariant.navLink
                 } transition-colors font-medium text-sm ${
-                  location.pathname === '/campaign/create'
+                  location.pathname === '/campaigns/create'
                     ? 'text-primary dark:text-primary-400'
                     : ''
                 }`}
@@ -262,11 +262,11 @@ export const Header = ({ variant = 'transparent' }) => {
         <div className="lg:hidden mt-4 py-4 border-t border-white/20 dark:border-gray-700 transition-colors duration-300">
           <nav className="space-y-2">
             <Link
-              to="/"
+              to="/home"
               className={`block px-4 py-2 rounded-lg ${
                 currentVariant.navLink
               } hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium ${
-                location.pathname === '/'
+                location.pathname === '/home'
                   ? 'text-primary dark:text-primary-400'
                   : ''
               }`}
@@ -275,11 +275,11 @@ export const Header = ({ variant = 'transparent' }) => {
               Trang chủ
             </Link>
             <Link
-              to="/create-campaign"
+              to="/campaigns/create"
               className={`block px-4 py-2 rounded-lg ${
                 currentVariant.navLink
               } hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium ${
-                location.pathname === '/create-campaign'
+                location.pathname === '/campaigns/create'
                   ? 'text-primary dark:text-primary-400'
                   : ''
               }`}

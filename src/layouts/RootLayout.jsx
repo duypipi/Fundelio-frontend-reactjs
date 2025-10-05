@@ -8,17 +8,17 @@ import Footer from '../components/common/Footer';
  */
 export default function RootLayout() {
   const location = useLocation();
-  const headerVariant = location.pathname === '/' ? 'transparent' : 'light';
+  const headerVariant = location.pathname === '/home' ? 'transparent' : 'light';
   return (
     <div className="flex flex-col min-h-screen">
-      <Header variant={headerVariant} />
+      {location.pathname !== '/' && <Header variant={headerVariant} />}
 
       <main className="flex-1">
         <Outlet />
       </main>
 
       {/* <Footer /> */}
-      {location.pathname !== '/landing' && <Footer />}
+      {location.pathname !== '/' && <Footer />}
     </div>
   );
 }

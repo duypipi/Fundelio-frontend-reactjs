@@ -12,22 +12,26 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
+    
     children: [
+      { index: true, element: <LandingPage /> },
+
+      { path: 'home', element: <HomePage /> },
+
       {
-        index: true,
-        element: <HomePage />,
-      },
-      {
-        path: 'campaign',
+        path: 'campaigns',
         children: [
           { path: 'detail', element: <CampaignDetailPage /> },
           { path: 'create', element: <CreateCampaignPage /> },
         ],
       },
-      {
-        path: 'landing',
-        element: <LandingPage/>
-      }
+      // {
+      //   path: 'auth',
+      //   children: [
+      //     { path: 'login', element: <LoginPage /> },
+      //     { path: 'register', element: <RegisterPage /> },
+      //   ],
+      // }
     ],
   },
 ]);

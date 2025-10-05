@@ -3,12 +3,12 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from '@/components/common/Header';
 import { Footer } from '@/components/common/Footer';
-import HeroLanding from '@/components/LandingPage/HeroLanding';
-import FeaturesSection from '@/components/LandingPage/FeaturesSection';
-import HowItWorksSection from '@/components/LandingPage/HowItWorksSection';
-import StatisticsSection from '@/components/LandingPage/StatisticsSection';
-import PopularCampaignsLanding from '@/components/LandingPage/PopularCampaignsLanding';
-import CTASection from '@/components/LandingPage/CTASection';
+import HeroLanding from '@/components/landing-page/HeroLanding';
+import FeaturesSection from '@/components/landing-page/FeaturesSection';
+import HowItWorksSection from '@/components/landing-page/HowItWorksSection';
+import StatisticsSection from '@/components/landing-page/StatisticsSection';
+import PopularCampaignsLanding from '@/components/landing-page/PopularCampaignsLanding';
+import CTASection from '@/components/landing-page/CTASection';
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -491,7 +491,7 @@ const LandingPage = () => {
 
   return (
     <div className='relative bg-background'>
-      <Header />
+      <Header variant='light'/>
 
       {/* Fullpage Sections Container */}
       <div className='relative h-screen overflow-hidden'>

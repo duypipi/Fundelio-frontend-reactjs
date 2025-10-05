@@ -4,8 +4,6 @@ import useBlanks from '@/hooks/useBlanks';
 import StoryToolbar from '@/components/create/StoryToolbar';
 import SidebarTOC from '@/components/create/SidebarTOC';
 import BlankSection from '@/components/create/BlankSection';
-import Header from '@/components/common/Header';
-import Footer from '@/components/common/Footer';
 import { Menu } from 'lucide-react';
 
 export default function CreateCampaignPage() {
@@ -30,7 +28,6 @@ export default function CreateCampaignPage() {
   return (
     <>
       <div className="min-h-screen bg-gray-50 dark:bg-black">
-        {/* <Header variant="light" /> */}
 
         {/* Mobile Sidebar Toggle Button */}
         <button
