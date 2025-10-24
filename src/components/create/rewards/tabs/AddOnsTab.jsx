@@ -1,7 +1,7 @@
 import { useState } from "react"
 import AddOnList from "../addons/AddOnList"
-import AddOnForm from "../addons/AddOnForm"
-import AddOnPreview from "../addons/AddOnPreview"
+import RewardForm from "../rewards/RewardForm"
+import RewardPreview from "../rewards/RewardPreview"
 
 export default function AddOnsTab({ state, dispatch }) {
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -10,11 +10,13 @@ export default function AddOnsTab({ state, dispatch }) {
 
   const handleCreate = () => {
     setEditingAddOn(null)
+    setPreviewAddOn(null)
     setIsFormOpen(true)
   }
 
   const handleEdit = (addon) => {
     setEditingAddOn(addon)
+    setPreviewAddOn(null)
     setIsFormOpen(true)
   }
 
@@ -26,11 +28,13 @@ export default function AddOnsTab({ state, dispatch }) {
     }
     setIsFormOpen(false)
     setEditingAddOn(null)
+    setPreviewAddOn(null)
   }
 
   const handleCancel = () => {
     setIsFormOpen(false)
     setEditingAddOn(null)
+    setPreviewAddOn(null)
   }
 
   const handleDelete = (id) => {
@@ -44,32 +48,42 @@ export default function AddOnsTab({ state, dispatch }) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <div className="lg:col-span-2 space-y-6">
-        {!isFormOpen ? (
-          <AddOnList
-            addOns={state.addOns}
-            items={state.items}
-            rewards={state.rewards}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onCreate={handleCreate}
-          />
-        ) : (
-          <AddOnForm
-            addon={editingAddOn}
-            items={state.items}
-            rewards={state.rewards}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            onChange={handleFormChange}
-          />
-        )}
-      </div>
+    <div>
+      {!isFormOpen ? (
+        <AddOnList
+          addOns={state.addOns}
+          items={state.items}
+          rewards={state.rewards}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onCreate={handleCreate}
+        />
+      ) : (
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Form Column */}
+          <div className="flex-1">
+            <RewardForm
+              reward={editingAddOn}
+              items={state.items}
+              rewards={state.rewards}
+              onSave={handleSave}
+              onCancel={handleCancel}
+              onChange={handleFormChange}
+              type="addon"
+            />
+          </div>
 
-      <div className="lg:col-span-1">
-        <AddOnPreview addon={previewAddOn || editingAddOn} items={state.items} />
-      </div>
+          {/* Preview Column */}
+          <div className="lg:w-96">
+            <RewardPreview 
+              reward={previewAddOn || editingAddOn} 
+              items={state.items}
+              rewards={state.rewards}
+              type="addon"
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,4 +1,5 @@
-import Button from "../ui/button"
+import Button from "@/components/common/Button"
+import RewardCard from "../components/RewardCard"
 
 export default function RewardList({ rewards, items, onEdit, onDelete, onDuplicate, onCreate }) {
   if (rewards.length === 0) {
@@ -18,59 +19,33 @@ export default function RewardList({ rewards, items, onEdit, onDelete, onDuplica
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-foreground">Phần thưởng ({rewards.length})</h2>
         <Button onClick={onCreate} variant="primary" size="sm">
           + Tạo mới
         </Button>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted border-b border-border">
-            <tr>
-              <th className="px-4 py-3 text-left font-semibold text-foreground">Tên</th>
-              <th className="px-4 py-3 text-left font-semibold text-foreground">Giá</th>
-              <th className="px-4 py-3 text-left font-semibold text-foreground">Thành phần</th>
-              <th className="px-4 py-3 text-left font-semibold text-foreground">Giới hạn</th>
-              <th className="px-4 py-3 text-right font-semibold text-foreground">Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rewards.map((reward) => (
-              <tr key={reward.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                <td className="px-4 py-3 text-foreground font-medium">{reward.title}</td>
-                <td className="px-4 py-3 text-foreground">CA${reward.price}</td>
-                <td className="px-4 py-3 text-muted-foreground">{reward.items.length} mục</td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  {reward.limitTotal ? `${reward.limitTotal} suất` : "Không"}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <div className="flex gap-2 justify-end">
-                    <button
-                      onClick={() => onEdit(reward)}
-                      className="px-3 py-1 text-xs font-medium text-primary hover:bg-primary/10 rounded transition-colors"
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      onClick={() => onDuplicate(reward.id)}
-                      className="px-3 py-1 text-xs font-medium text-secondary hover:bg-secondary/10 rounded transition-colors"
-                    >
-                      Nhân bản
-                    </button>
-                    <button
-                      onClick={() => onDelete(reward.id)}
-                      className="px-3 py-1 text-xs font-medium text-destructive hover:bg-destructive/10 rounded transition-colors"
-                    >
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Header */}
+      <div className="hidden md:grid md:grid-cols-4 gap-6 px-6 py-3 text-sm font-medium text-muted-foreground bg-muted/30 rounded-lg">
+        <div>Số tiền pledge</div>
+        <div>Chi tiết</div>
+        <div>Bao gồm</div>
+        <div>Hình ảnh</div>
+      </div>
+
+      <div className="space-y-4">
+        {rewards.map((reward) => (
+          <RewardCard
+            key={reward.id}
+            data={reward}
+            items={items}
+            type="reward"
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onDuplicate={onDuplicate}
+          />
+        ))}
       </div>
     </div>
   )

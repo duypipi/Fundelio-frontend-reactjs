@@ -1,15 +1,31 @@
-export default function RewardPreview({ reward, items }) {
+export default function RewardPreview({ reward, items, rewards, type = 'reward' }) {
+  const isAddon = type === 'addon'
+  
   if (!reward) {
     return (
       <div className="sticky top-6 rounded-xl border border-border bg-card p-6 space-y-4">
         <h3 className="text-lg font-semibold text-foreground">Xem trước</h3>
         <div className="space-y-4">
-          <div className="aspect-video rounded-lg bg-muted animate-pulse" />
-          <div className="h-6 bg-muted rounded animate-pulse" />
-          <div className="h-4 bg-muted rounded w-1/2 animate-pulse" />
-          <div className="grid grid-cols-2 gap-3">
-            <div className="h-12 bg-muted rounded animate-pulse" />
-            <div className="h-12 bg-muted rounded animate-pulse" />
+          <div className="aspect-video rounded-lg border-2 border-dashed border-border bg-muted/30 flex items-center justify-center">
+            <span className="text-muted-foreground text-sm">Chưa có ảnh</span>
+          </div>
+          <div className="space-y-2">
+            <div>
+              <h4 className="font-semibold text-foreground line-clamp-2">Title</h4>
+              <p className="text-2xl font-bold text-primary mt-2">$0</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3 pt-4 border-t border-border">
+            <div>
+              <p className="text-xs text-muted-foreground">Backers</p>
+              <p className="text-lg font-semibold text-foreground">0</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Giao dự kiến</p>
+              <p className="text-lg font-semibold text-foreground">
+                Tháng  Năm
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -17,11 +33,17 @@ export default function RewardPreview({ reward, items }) {
   }
 
   const rewardItems = reward.items
-    .map((item) => ({
+    ?.map((item) => ({
       ...item,
       title: items.find((i) => i.id === item.itemId)?.title,
     }))
-    .filter((item) => item.title)
+    .filter((item) => item.title) || []
+
+  const applicableRewards = isAddon && reward.offeredWithRewardIds && rewards
+    ? reward.offeredWithRewardIds
+        .map((rewardId) => rewards.find((r) => r.id === rewardId)?.title)
+        .filter(Boolean)
+    : []
 
   return (
     <div className="sticky top-6 rounded-xl border border-border bg-card p-6 space-y-4">
@@ -35,7 +57,9 @@ export default function RewardPreview({ reward, items }) {
 
       <div>
         <h4 className="font-semibold text-foreground line-clamp-2">{reward.title}</h4>
-        <p className="text-2xl font-bold text-primary mt-2">CA${reward.price}</p>
+        <p className={`text-2xl font-bold mt-2 ${isAddon ? 'text-secondary' : 'text-primary'}`}>
+          ${reward.price}
+        </p>
       </div>
 
       {rewardItems.length > 0 && (
@@ -57,13 +81,19 @@ export default function RewardPreview({ reward, items }) {
         <div>
           <p className="text-xs text-muted-foreground">Giao dự kiến</p>
           <p className="text-lg font-semibold text-foreground">
-            Tháng {reward.delivery.month} {reward.delivery.year}
+            Tháng {reward.delivery?.month} {reward.delivery?.year}
           </p>
         </div>
       </div>
 
-      {reward.shipping === "anywhere" && (
+      {!isAddon && reward.shipping === "anywhere" && (
         <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">✓ Ship toàn cầu</div>
+      )}
+
+      {isAddon && applicableRewards.length > 0 && (
+        <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
+          ✓ Áp dụng cho {applicableRewards.length} phần thưởng
+        </div>
       )}
 
       {reward.limitTotal && (

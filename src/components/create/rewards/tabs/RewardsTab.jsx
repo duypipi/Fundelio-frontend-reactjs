@@ -10,11 +10,13 @@ export default function RewardTiersTab({ state, dispatch }) {
 
   const handleCreate = () => {
     setEditingReward(null)
+    setPreviewReward(null)
     setIsFormOpen(true)
   }
 
   const handleEdit = (reward) => {
     setEditingReward(reward)
+    setPreviewReward(null)
     setIsFormOpen(true)
   }
 
@@ -26,11 +28,13 @@ export default function RewardTiersTab({ state, dispatch }) {
     }
     setIsFormOpen(false)
     setEditingReward(null)
+    setPreviewReward(null)
   }
 
   const handleCancel = () => {
     setIsFormOpen(false)
     setEditingReward(null)
+    setPreviewReward(null)
   }
 
   const handleDelete = (id) => {
@@ -49,32 +53,36 @@ export default function RewardTiersTab({ state, dispatch }) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <div className="lg:col-span-2 space-y-6">
-        {!isFormOpen ? (
-          <RewardList
-            rewards={state.rewards}
-            items={state.items}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onDuplicate={handleDuplicate}
-            onCreate={handleCreate}
-          />
-        ) : (
-          <RewardForm
-            reward={editingReward}
-            items={state.items}
-            rewards={state.rewards}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            onChange={handleFormChange}
-          />
-        )}
-      </div>
+    <div>
+      {!isFormOpen ? (
+        <RewardList
+          rewards={state.rewards}
+          items={state.items}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onDuplicate={handleDuplicate}
+          onCreate={handleCreate}
+        />
+      ) : (
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Form Column */}
+          <div className="flex-1">
+            <RewardForm
+              reward={editingReward}
+              items={state.items}
+              rewards={state.rewards}
+              onSave={handleSave}
+              onCancel={handleCancel}
+              onChange={handleFormChange}
+            />
+          </div>
 
-      <div className="lg:col-span-1">
-        <RewardPreview reward={previewReward || editingReward} items={state.items} />
-      </div>
+          {/* Preview Column */}
+          <div className="lg:w-96">
+            <RewardPreview reward={previewReward || editingReward} items={state.items} />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

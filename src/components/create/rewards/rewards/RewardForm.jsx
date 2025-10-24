@@ -1,24 +1,27 @@
 import { useState, useRef } from "react"
-import Button from "../ui/button"
-import Input from "../ui/input"
-import Textarea from "../ui/textarea"
-import Checkbox from "../ui/checkbox"
-import ItemSelector from "../ui/item-selector"
+import Button from "@/components/common/Button"
+import Input from "@/components/common/Input"
+import Checkbox from "@/components/common/Checkbox"
+import ItemSelector from "@/components/common/ItemSelector"
+import Textarea from "@/components/common/Textarea"
 
-export default function RewardForm({ reward, items, rewards, onSave, onCancel, onChange }) {
+export default function RewardForm({ reward, items, rewards, onSave, onCancel, onChange, type = 'reward' }) {
+  const isAddon = type === 'addon'
+  
   const [formData, setFormData] = useState(
     reward || {
-      id: `r${Date.now()}`,
+      id: isAddon ? `a${Date.now()}` : `r${Date.now()}`,
       title: "",
       description: "",
       image: null,
       price: 0,
       items: [],
       delivery: { month: new Date().getMonth() + 1, year: new Date().getFullYear() },
-      shipping: "anywhere",
+      shipping: isAddon ? undefined : "anywhere",
       limitTotal: null,
-      limitPerBacker: null,
-      allowAddOns: false,
+      limitPerBacker: isAddon ? undefined : null,
+      allowAddOns: isAddon ? undefined : false,
+      offeredWithRewardIds: isAddon ? [] : undefined,
     },
   )
   const [errors, setErrors] = useState({})
@@ -33,6 +36,17 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
       setErrors((prev) => ({ ...prev, [name]: null }))
     }
     onChange({ ...formData, [name]: newValue })
+  }
+
+  const handleRewardToggle = (rewardId) => {
+    const newData = {
+      ...formData,
+      offeredWithRewardIds: formData.offeredWithRewardIds.includes(rewardId)
+        ? formData.offeredWithRewardIds.filter((id) => id !== rewardId)
+        : [...formData.offeredWithRewardIds, rewardId],
+    }
+    setFormData(newData)
+    onChange(newData)
   }
 
   const handleImageChange = (e) => {
@@ -133,35 +147,86 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
       {/* Image Section */}
       <div className="rounded-xl border border-border bg-card p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Hình ảnh</h3>
-        <div className="flex gap-4">
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 border border-border rounded-lg text-foreground hover:bg-muted transition-colors"
-          >
-            Chọn ảnh
-          </button>
-          {formData.image && (
-            <button
-              type="button"
-              onClick={() => {
-                const newData = { ...formData, image: null }
-                setFormData(newData)
-                onChange(newData)
-              }}
-              className="px-4 py-2 border border-destructive text-destructive rounded-lg hover:bg-destructive/10 transition-colors"
-            >
-              Xóa ảnh
-            </button>
-          )}
-        </div>
-        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-        {formData.image && (
-          <div className="mt-3 aspect-video rounded-lg overflow-hidden bg-muted">
-            <img src={formData.image || "/placeholder.svg"} alt="Preview" className="w-full h-full object-cover" />
+        
+        {/* Upload Area - Only show when no image */}
+        {!formData.image && (
+          <div className="flex flex-col items-center">
+            <div className="w-full max-w-2xl">
+              <div className="border-2 border-dashed border-border rounded-xl p-8 bg-muted/30 hover:bg-muted/50 transition-colors">
+                <div className="flex flex-col items-center text-center space-y-4">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-6 py-3 border border-border rounded-lg text-foreground bg-background hover:bg-muted transition-colors font-medium"
+                  >
+                    Upload a file
+                  </button>
+                  
+                  <p className="text-sm text-muted-foreground">Select a file.</p>
+                  
+                  <p className="text-xs text-muted-foreground">
+                    Image specifications: JPG, PNG, GIF, or WEBP, 3:2 ratio, 348 × 232 pixels, 50 MB maximum
+                  </p>
+                </div>
+              </div>
+              
+              <input 
+                ref={fileInputRef} 
+                type="file" 
+                accept="image/*" 
+                onChange={handleImageChange} 
+                className="hidden" 
+              />
+            </div>
           </div>
         )}
-        <p className="mt-2 text-xs text-muted-foreground">💡 Ảnh thật, không chèn chữ hoặc banner lớn.</p>
+
+        {/* Image Preview - Only show when image exists */}
+        {formData.image && (
+          <div className="flex flex-col items-center">
+            <div className="w-full max-w-2xl">
+              <div className="relative aspect-video rounded-lg overflow-hidden bg-muted border border-border">
+                <img 
+                  src={formData.image} 
+                  alt="Preview" 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+              <div className="mt-3 flex justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-4 py-2 border border-border rounded-lg text-foreground bg-background hover:bg-muted transition-colors text-sm font-medium"
+                >
+                  Thay đổi
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newData = { ...formData, image: null }
+                    setFormData(newData)
+                    onChange(newData)
+                  }}
+                  className="px-4 py-2 border border-destructive text-destructive rounded-lg hover:bg-destructive/10 transition-colors text-sm font-medium"
+                >
+                  Xóa ảnh
+                </button>
+              </div>
+            </div>
+            <input 
+              ref={fileInputRef} 
+              type="file" 
+              accept="image/*" 
+              onChange={handleImageChange} 
+              className="hidden" 
+            />
+          </div>
+        )}
+
+        <p className="mt-4 text-xs text-muted-foreground text-center">
+          💡 Show your backers what they'll receive for their support. Images should be{" "}
+          <span className="text-primary">honest</span>, and should avoid banners, badges, and overlaid text.
+        </p>
       </div>
 
       {/* Pricing Section */}
@@ -272,34 +337,56 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
         <p className="mt-2 text-xs text-muted-foreground">💡 Chọn dư thời gian để tránh giao trễ.</p>
       </div>
 
-      {/* Shipping Section */}
-      <div className="rounded-xl border border-border bg-card p-6">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Vận chuyển</h3>
-        <div className="space-y-3">
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input
-              type="radio"
-              name="shipping"
-              value="anywhere"
-              checked={formData.shipping === "anywhere"}
-              onChange={handleChange}
-              className="w-4 h-4"
-            />
-            <span className="text-foreground">Ship toàn cầu</span>
-          </label>
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input
-              type="radio"
-              name="shipping"
-              value="custom"
-              checked={formData.shipping === "custom"}
-              onChange={handleChange}
-              className="w-4 h-4"
-            />
-            <span className="text-foreground">Tùy chỉnh (ghi chú)</span>
-          </label>
+      {/* Shipping Section - Only for rewards */}
+      {!isAddon && (
+        <div className="rounded-xl border border-border bg-card p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Vận chuyển</h3>
+          <div className="space-y-3">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="shipping"
+                value="anywhere"
+                checked={formData.shipping === "anywhere"}
+                onChange={handleChange}
+                className="w-4 h-4"
+              />
+              <span className="text-foreground">Ship toàn cầu</span>
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="shipping"
+                value="custom"
+                checked={formData.shipping === "custom"}
+                onChange={handleChange}
+                className="w-4 h-4"
+              />
+              <span className="text-foreground">Tùy chỉnh (ghi chú)</span>
+            </label>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Offered With Section - Only for addons */}
+      {isAddon && rewards && rewards.length > 0 && (
+        <div className="rounded-xl border border-border bg-card p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Áp dụng cho phần thưởng</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Chọn các phần thưởng mà add-on này có thể được thêm vào
+          </p>
+          <div className="space-y-2">
+            {rewards.map((reward) => (
+              <Checkbox
+                key={reward.id}
+                checked={formData.offeredWithRewardIds?.includes(reward.id) || false}
+                onChange={() => handleRewardToggle(reward.id)}
+                label={`${reward.title} - CA$${reward.price}`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Limits Section */}
       <div className="rounded-xl border border-border bg-card p-6">
@@ -322,38 +409,42 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
               min="1"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Giới hạn mỗi backer (tùy chọn)</label>
-            <Input
-              type="number"
-              value={formData.limitPerBacker || ""}
-              onChange={(e) => {
-                const newData = {
-                  ...formData,
-                  limitPerBacker: e.target.value ? Number.parseInt(e.target.value) : null,
-                }
-                setFormData(newData)
-                onChange(newData)
-              }}
-              placeholder="Không giới hạn"
-              min="1"
-            />
-          </div>
+          {!isAddon && (
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Giới hạn mỗi backer (tùy chọn)</label>
+              <Input
+                type="number"
+                value={formData.limitPerBacker || ""}
+                onChange={(e) => {
+                  const newData = {
+                    ...formData,
+                    limitPerBacker: e.target.value ? Number.parseInt(e.target.value) : null,
+                  }
+                  setFormData(newData)
+                  onChange(newData)
+                }}
+                placeholder="Không giới hạn"
+                min="1"
+              />
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Add-ons Section */}
-      <div className="rounded-xl border border-border bg-card p-6">
-        <Checkbox
-          checked={formData.allowAddOns}
-          onChange={(checked) => {
-            const newData = { ...formData, allowAddOns: checked }
-            setFormData(newData)
-            onChange(newData)
-          }}
-          label="Cho phép Add-ons cho phần thưởng này"
-        />
-      </div>
+      {/* Add-ons Section - Only for rewards */}
+      {!isAddon && (
+        <div className="rounded-xl border border-border bg-card p-6">
+          <Checkbox
+            checked={formData.allowAddOns}
+            onChange={(checked) => {
+              const newData = { ...formData, allowAddOns: checked }
+              setFormData(newData)
+              onChange(newData)
+            }}
+            label="Cho phép Add-ons cho phần thưởng này"
+          />
+        </div>
+      )}
 
       {/* Item Selector Modal */}
       {showItemSelector && (

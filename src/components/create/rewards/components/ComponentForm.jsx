@@ -1,7 +1,7 @@
 import { useState, useRef } from "react"
-import Button from "../ui/button"
-import Input from "../ui/input"
-import Checkbox from "../ui/checkbox"
+import Button from "@/components/common/Button"
+import Input from "@/components/common/Input"
+import Checkbox from "@/components/common/Checkbox"
 
 export default function ItemForm({ item, rewards, onSave, onCancel }) {
   const [formData, setFormData] = useState(

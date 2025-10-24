@@ -1,8 +1,8 @@
 import { useState, useRef } from "react"
-import Button from "../ui/button"
-import Input from "../ui/input"
-import Checkbox from "../ui/checkbox"
-import ItemSelector from "../ui/item-selector"
+import Button from "@/components/common/Button"
+import Input from "@/components/common/Input"
+import Checkbox from "@/components/common/Checkbox"
+import ItemSelector from "@/components/common/ItemSelector"
 
 export default function AddOnForm({ addon, items, rewards, onSave, onCancel, onChange }) {
   const [formData, setFormData] = useState(

@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react"
-import Button from "../ui/button"
-import Input from "../ui/input"
+import Button from "@/components/common/Button"
+import Input from "@/components/common/Input"
+import RewardCard from "./RewardCard"
 
 export default function ItemList({ items, onEdit, onDelete, onCreate }) {
   const [searchTerm, setSearchTerm] = useState("")
@@ -38,34 +39,25 @@ export default function ItemList({ items, onEdit, onDelete, onCreate }) {
         placeholder="Tìm kiếm thành phần..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        className="mb-2"
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Header - 3 columns for components */}
+      <div className="hidden md:grid md:grid-cols-3 gap-6 px-6 py-3 text-sm font-medium text-muted-foreground bg-muted/30 rounded-lg mb-4">
+        <div>Tên thành phần</div>
+        <div>Chi tiết</div>
+        <div className="text-right">Hình ảnh</div>
+      </div>
+
+      <div className="space-y-4">
         {filteredItems.map((item) => (
-          <div
+          <RewardCard
             key={item.id}
-            className="group rounded-xl border border-border bg-card p-4 hover:shadow-md transition-shadow"
-          >
-            <div className="mb-3 aspect-video rounded-lg bg-muted overflow-hidden">
-              {item.image ? (
-                <img src={item.image || "/placeholder.svg"} alt={item.title} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                  <span className="text-3xl">📷</span>
-                </div>
-              )}
-            </div>
-            <h3 className="font-semibold text-foreground line-clamp-2 mb-2">{item.title}</h3>
-            <p className="text-sm text-muted-foreground mb-4">Thuộc {item.rewardRefs?.length || 0} phần thưởng</p>
-            <div className="flex gap-2">
-              <Button onClick={() => onEdit(item)} variant="secondary" size="sm" className="flex-1">
-                Sửa
-              </Button>
-              <Button onClick={() => onDelete(item.id)} variant="destructive" size="sm" className="flex-1">
-                Xóa
-              </Button>
-            </div>
-          </div>
+            data={item}
+            type="item"
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         ))}
       </div>
     </div>
