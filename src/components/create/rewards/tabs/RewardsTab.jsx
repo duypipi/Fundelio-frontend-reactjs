@@ -3,7 +3,7 @@ import RewardList from "../rewards/RewardList"
 import RewardForm from "../rewards/RewardForm"
 import RewardPreview from "../rewards/RewardPreview"
 
-export default function RewardTiersTab({ state, dispatch }) {
+export default function RewardTiersTab({ state, dispatch, setIsEditing }) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingReward, setEditingReward] = useState(null)
   const [previewReward, setPreviewReward] = useState(null)
@@ -12,12 +12,14 @@ export default function RewardTiersTab({ state, dispatch }) {
     setEditingReward(null)
     setPreviewReward(null)
     setIsFormOpen(true)
+    setIsEditing?.(true)
   }
 
   const handleEdit = (reward) => {
     setEditingReward(reward)
     setPreviewReward(null)
     setIsFormOpen(true)
+    setIsEditing?.(true)
   }
 
   const handleSave = (reward) => {
@@ -29,12 +31,14 @@ export default function RewardTiersTab({ state, dispatch }) {
     setIsFormOpen(false)
     setEditingReward(null)
     setPreviewReward(null)
+    setIsEditing?.(false)
   }
 
   const handleCancel = () => {
     setIsFormOpen(false)
     setEditingReward(null)
     setPreviewReward(null)
+    setIsEditing?.(false)
   }
 
   const handleDelete = (id) => {

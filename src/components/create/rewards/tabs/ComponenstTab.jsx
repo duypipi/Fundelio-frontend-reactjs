@@ -4,18 +4,20 @@ import { useState } from "react"
 import ItemList from "../components/ComponentList"
 import ItemForm from "../components/ComponentForm"
 
-export default function ComponentsTab({ state, dispatch }) {
+export default function ComponentsTab({ state, dispatch, setIsEditing }) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingItem, setEditingItem] = useState(null)
 
   const handleCreate = () => {
     setEditingItem(null)
     setIsFormOpen(true)
+    setIsEditing?.(true)
   }
 
   const handleEdit = (item) => {
     setEditingItem(item)
     setIsFormOpen(true)
+    setIsEditing?.(true)
   }
 
   const handleSave = (item) => {
@@ -26,11 +28,13 @@ export default function ComponentsTab({ state, dispatch }) {
     }
     setIsFormOpen(false)
     setEditingItem(null)
+    setIsEditing?.(false)
   }
 
   const handleCancel = () => {
     setIsFormOpen(false)
     setEditingItem(null)
+    setIsEditing?.(false)
   }
 
   const handleDelete = (id) => {

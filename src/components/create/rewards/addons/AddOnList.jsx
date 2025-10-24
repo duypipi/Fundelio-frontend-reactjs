@@ -21,7 +21,7 @@ export default function AddOnList({ addOns, items, rewards, onEdit, onDelete, on
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-foreground">Add-ons ({addOns.length})</h2>
-        <Button onClick={onCreate} variant="primary" size="sm">
+        <Button onClick={onCreate} variant="primary" size="md">
           + Tạo mới
         </Button>
       </div>
@@ -31,7 +31,7 @@ export default function AddOnList({ addOns, items, rewards, onEdit, onDelete, on
         <div>Số tiền</div>
         <div>Chi tiết</div>
         <div>Bao gồm</div>
-        <div className="text-right">Hình ảnh</div>
+        <div>Hình ảnh</div>
       </div>
 
       <div className="space-y-4">

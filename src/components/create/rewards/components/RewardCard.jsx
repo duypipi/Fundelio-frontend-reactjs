@@ -51,7 +51,7 @@ export default function RewardCard({
   const gridCols = type === 'item' ? 'md:grid-cols-3' : 'md:grid-cols-4';
 
   return (
-    <div className="rounded-lg border border-border bg-card overflow-hidden hover:shadow-md transition-shadow">
+    <div className="rounded-sm border border-border bg-white dark:bg-darker overflow-hidden hover:shadow-md transition-shadow">
       {/* Content Grid - 3-4 columns on desktop, stack on mobile */}
       <div className={`grid grid-cols-1 ${gridCols} gap-4 md:gap-6 p-4 md:p-6`}>
         {/* Column 1: Pledge Amount / Component Name */}
@@ -144,10 +144,10 @@ export default function RewardCard({
             <img
               src={data.image}
               alt={data.title}
-              className="w-full h-32 md:h-40 object-cover rounded-lg"
+              className="w-full h-32 md:h-40 object-cover rounded-sm"
             />
           ) : (
-            <div className="w-full h-32 md:h-40 rounded-lg bg-muted flex items-center justify-center">
+            <div className="w-full h-32 md:h-40 rounded-sm bg-muted flex items-center justify-center">
               <span className="text-muted-foreground text-sm">Không có ảnh</span>
             </div>
           )}

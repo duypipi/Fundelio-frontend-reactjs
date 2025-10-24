@@ -51,7 +51,7 @@ export default function ItemSelector({ items, selectedItems, onConfirm, onClose 
           {filteredItems.map((item) => {
             const selected = localSelected.find((s) => s.itemId === item.id)
             return (
-              <div key={item.id} className="flex items-center justify-between p-3 border border-border rounded-lg">
+              <div key={item.id} className="flex items-center justify-between p-3 border border-border rounded-sm">
                 <div className="flex-1">
                   <p className="font-medium text-foreground">{item.title}</p>
                 </div>

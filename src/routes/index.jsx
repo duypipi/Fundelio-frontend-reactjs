@@ -22,7 +22,6 @@ export const router = createBrowserRouter([
         path: 'campaigns',
         children: [
           { path: 'detail', element: <CampaignDetailPage /> },
-          { path: 'create', element: <CreateCampaignPage /> },
         ],
       },
       // {
@@ -33,5 +32,10 @@ export const router = createBrowserRouter([
       //   ],
       // }
     ],
+  },
+  // CreateCampaignPage has its own layout (CreateCampaignHeader + Footer)
+  {
+    path: '/campaigns/create',
+    element: <CreateCampaignPage />,
   },
 ]);

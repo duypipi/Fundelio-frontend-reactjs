@@ -145,7 +145,7 @@ export default function AddOnForm({ addon, items, rewards, onSave, onCancel, onC
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 border border-border rounded-lg text-foreground hover:bg-muted transition-colors"
+            className="px-4 py-2 border border-border rounded-sm text-foreground hover:bg-muted transition-colors"
           >
             Chọn ảnh
           </button>
@@ -157,7 +157,7 @@ export default function AddOnForm({ addon, items, rewards, onSave, onCancel, onC
                 setFormData(newData)
                 onChange(newData)
               }}
-              className="px-4 py-2 border border-destructive text-destructive rounded-lg hover:bg-destructive/10 transition-colors"
+              className="px-4 py-2 border border-destructive text-destructive rounded-sm hover:bg-destructive/10 transition-colors"
             >
               Xóa ảnh
             </button>
@@ -165,7 +165,7 @@ export default function AddOnForm({ addon, items, rewards, onSave, onCancel, onC
         </div>
         <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
         {formData.image && (
-          <div className="mt-3 aspect-video rounded-lg overflow-hidden bg-muted">
+          <div className="mt-3 aspect-video rounded-sm overflow-hidden bg-muted">
             <img src={formData.image || "/placeholder.svg"} alt="Preview" className="w-full h-full object-cover" />
           </div>
         )}
@@ -186,7 +186,7 @@ export default function AddOnForm({ addon, items, rewards, onSave, onCancel, onC
               {formData.items.map((selectedItem) => {
                 const item = items.find((i) => i.id === selectedItem.itemId)
                 return (
-                  <div key={selectedItem.itemId} className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                  <div key={selectedItem.itemId} className="flex items-center justify-between p-3 bg-muted rounded-sm">
                     <span className="text-foreground font-medium">
                       {item?.title} × {selectedItem.qty}
                     </span>
@@ -219,7 +219,7 @@ export default function AddOnForm({ addon, items, rewards, onSave, onCancel, onC
             <select
               value={formData.delivery.month}
               onChange={(e) => handleDeliveryChange("month", e.target.value)}
-              className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground"
+              className="w-full px-3 py-2 border border-border rounded-sm bg-background text-foreground"
             >
               {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                 <option key={month} value={month}>
@@ -233,7 +233,7 @@ export default function AddOnForm({ addon, items, rewards, onSave, onCancel, onC
             <select
               value={formData.delivery.year}
               onChange={(e) => handleDeliveryChange("year", e.target.value)}
-              className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground"
+              className="w-full px-3 py-2 border border-border rounded-sm bg-background text-foreground"
             >
               {years.map((year) => (
                 <option key={year} value={year}>
@@ -293,15 +293,6 @@ export default function AddOnForm({ addon, items, rewards, onSave, onCancel, onC
           onClose={() => setShowItemSelector(false)}
         />
       )}
-
-      <div className="flex gap-3 justify-end">
-        <Button onClick={onCancel} variant="secondary">
-          Hủy
-        </Button>
-        <Button type="submit" variant="primary">
-          {addon ? "Cập nhật" : "Tạo mới"}
-        </Button>
-      </div>
     </form>
   )
 }

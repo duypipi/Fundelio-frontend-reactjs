@@ -29,7 +29,7 @@ export default function ItemList({ items, onEdit, onDelete, onCreate }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-foreground">Thành phần ({items.length})</h2>
-        <Button onClick={onCreate} variant="primary" size="sm">
+        <Button onClick={onCreate} variant="primary" size="md">
           + Tạo mới
         </Button>
       </div>
@@ -46,7 +46,7 @@ export default function ItemList({ items, onEdit, onDelete, onCreate }) {
       <div className="hidden md:grid md:grid-cols-3 gap-6 px-6 py-3 text-sm font-medium text-muted-foreground bg-muted/30 rounded-lg mb-4">
         <div>Tên thành phần</div>
         <div>Chi tiết</div>
-        <div className="text-right">Hình ảnh</div>
+        <div>Hình ảnh</div>
       </div>
 
       <div className="space-y-4">

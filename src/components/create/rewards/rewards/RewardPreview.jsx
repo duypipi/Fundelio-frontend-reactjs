@@ -3,7 +3,7 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
   
   if (!reward) {
     return (
-      <div className="sticky top-6 rounded-xl border border-border bg-card p-6 space-y-4">
+      <div className="sticky top-6 rounded-xl border border-border bg-white dark:bg-darker p-6 space-y-4">
         <h3 className="text-lg font-semibold text-foreground">Xem trước</h3>
         <div className="space-y-4">
           <div className="aspect-video rounded-lg border-2 border-dashed border-border bg-muted/30 flex items-center justify-center">
@@ -23,7 +23,7 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
             <div>
               <p className="text-xs text-muted-foreground">Giao dự kiến</p>
               <p className="text-lg font-semibold text-foreground">
-                Tháng  Năm
+                Tháng/Năm
               </p>
             </div>
           </div>
@@ -46,7 +46,7 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
     : []
 
   return (
-    <div className="sticky top-6 rounded-xl border border-border bg-card p-6 space-y-4">
+    <div className="sticky top-6 rounded-xl border border-border bg-white dark:bg-darker p-6 space-y-4">
       <h3 className="text-lg font-semibold text-foreground">Xem trước</h3>
 
       {reward.image && (

@@ -21,7 +21,7 @@ export default function RewardList({ rewards, items, onEdit, onDelete, onDuplica
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-foreground">Phần thưởng ({rewards.length})</h2>
-        <Button onClick={onCreate} variant="primary" size="sm">
+        <Button onClick={onCreate} variant="primary" size="md">
           + Tạo mới
         </Button>
       </div>

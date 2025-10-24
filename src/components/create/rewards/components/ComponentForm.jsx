@@ -145,15 +145,6 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
           )}
         </div>
       </div>
-
-      <div className="flex gap-3 justify-end">
-        <Button onClick={onCancel} variant="secondary">
-          Hủy
-        </Button>
-        <Button type="submit" variant="primary">
-          {item ? "Cập nhật" : "Tạo mới"}
-        </Button>
-      </div>
     </form>
   )
 }

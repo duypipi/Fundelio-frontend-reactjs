@@ -136,7 +136,7 @@ function rewardsReducer(state, action) {
   }
 }
 
-export default function RewardComingSoon() {
+export default function RewardComingSoon({ setIsEditing }) {
   const [state, dispatch] = useReducer(rewardsReducer, initialState)
   const [activeTab, setActiveTab] = useState("component")
   const [mounted, setMounted] = useState(false)
@@ -169,15 +169,16 @@ export default function RewardComingSoon() {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab)
+    setIsEditing(false)
     window.location.hash = tab
   }
 
   if (!mounted) return null
 
   const tabs = [
-    { id: "component", label: "Thành phần", icon: "📦" },
-    { id: "rewards", label: "Phần thưởng", icon: "🎁" },
-    { id: "addons", label: "Add-ons", icon: "➕" },
+    { id: "component", label: "Thành phần" },
+    { id: "rewards", label: "Phần thưởng" },
+    { id: "addons", label: "Add-ons" },
   ]
 
   return (
@@ -197,10 +198,9 @@ export default function RewardComingSoon() {
               className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeTab === tab.id
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
+                  : "border-transparent text-muted-foreground hover:text-primary/50 hover:border-primary/50"
               }`}
             >
-              <span>{tab.icon}</span>
               <span>{tab.label}</span>
             </button>
           ))}
@@ -209,9 +209,9 @@ export default function RewardComingSoon() {
 
       {/* Tab Content */}
       <div className="space-y-6">
-        {activeTab === "component" && <ComponentsTab state={state} dispatch={dispatch} />}
-        {activeTab === "rewards" && <RewardsTab state={state} dispatch={dispatch} />}
-        {activeTab === "addons" && <AddOnsTab state={state} dispatch={dispatch} />}
+        {activeTab === "component" && <ComponentsTab state={state} dispatch={dispatch} setIsEditing={setIsEditing} />}
+        {activeTab === "rewards" && <RewardsTab state={state} dispatch={dispatch} setIsEditing={setIsEditing} />}
+        {activeTab === "addons" && <AddOnsTab state={state} dispatch={dispatch} setIsEditing={setIsEditing} />}
       </div>
     </div>
   )

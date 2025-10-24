@@ -3,7 +3,7 @@ import AddOnList from "../addons/AddOnList"
 import RewardForm from "../rewards/RewardForm"
 import RewardPreview from "../rewards/RewardPreview"
 
-export default function AddOnsTab({ state, dispatch }) {
+export default function AddOnsTab({ state, dispatch, setIsEditing }) {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingAddOn, setEditingAddOn] = useState(null)
   const [previewAddOn, setPreviewAddOn] = useState(null)
@@ -12,12 +12,14 @@ export default function AddOnsTab({ state, dispatch }) {
     setEditingAddOn(null)
     setPreviewAddOn(null)
     setIsFormOpen(true)
+    setIsEditing?.(true)
   }
 
   const handleEdit = (addon) => {
     setEditingAddOn(addon)
     setPreviewAddOn(null)
     setIsFormOpen(true)
+    setIsEditing?.(true)
   }
 
   const handleSave = (addon) => {
@@ -29,12 +31,14 @@ export default function AddOnsTab({ state, dispatch }) {
     setIsFormOpen(false)
     setEditingAddOn(null)
     setPreviewAddOn(null)
+    setIsEditing?.(false)
   }
 
   const handleCancel = () => {
     setIsFormOpen(false)
     setEditingAddOn(null)
     setPreviewAddOn(null)
+    setIsEditing?.(false)
   }
 
   const handleDelete = (id) => {

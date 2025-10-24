@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { BookOpen, Gift } from 'lucide-react';
 import StoryToolbar from './story/StoryToolbar';
 import SidebarTOC from './story/SidebarTOC';
 import BlankSection from './story/BlankSection';
 import RewardComingSoon from './rewards/RewardComingSoon';
 
 /**
- * CreateCampaignTabs component - Tabs for Story and Reward sections
+ * CreateCampaignTabs component - Content for Story and Reward sections
+ * Now tabs are managed in CreateCampaignHeader
  * @param {Object} props
  * @param {Array} props.blanks - Story blanks data
  * @param {Object} props.activeEditorRef - Reference to currently active editor
@@ -16,6 +16,9 @@ import RewardComingSoon from './rewards/RewardComingSoon';
  * @param {Function} props.setActiveEditor - Callback to set active editor
  * @param {Function} props.scrollToBlank - Callback to scroll to blank
  * @param {Function} props.save - Callback to save
+ * @param {string} props.activeTab - Current active tab from parent
+ * @param {Function} props.onTabChange - Callback when tab changes (optional, for compatibility)
+ * @param {Function} props.setIsEditing - Callback to set editing state in header
  */
 export default function CreateCampaignTabs({
   blanks,
@@ -26,40 +29,31 @@ export default function CreateCampaignTabs({
   setActiveEditor,
   scrollToBlank,
   save,
+  activeTab: externalActiveTab,
+  onTabChange,
+  setIsEditing,
 }) {
-  const [activeTab, setActiveTab] = useState('story');
+  // Use external activeTab if provided, otherwise use internal state
+  const [internalActiveTab, setInternalActiveTab] = useState('story');
+  const activeTab = externalActiveTab || internalActiveTab;
+  const handleTabChange = onTabChange || setInternalActiveTab;
 
   return (
-    <div className="w-full pt-20">
-      {/* Tab Navigation */}
-      <div className="flex gap-2 border-b border-gray-300 dark:border-gray-700 mb-6">
-        <button
-          onClick={() => setActiveTab('story')}
-          className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors ${
-            activeTab === 'story'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-primary'
-          }`}
-        >
-          <BookOpen className="w-5 h-5" />
-          <span>Câu chuyện</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('reward')}
-          className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors ${
-            activeTab === 'reward'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-primary'
-          }`}
-        >
-          <Gift className="w-5 h-5" />
-          <span>Phần thưởng</span>
-        </button>
-      </div>
-
-      {/* Tab Content */}
+    <div className="w-full">
+      {/* Tab Content - No tab navigation here, it's in the header now */}
       <div>
+        {/* Basic Tab - Placeholder for future */}
+        {activeTab === 'basic' && (
+          <div className="bg-white dark:bg-black border border-gray-300 dark:border-gray-700 rounded-lg p-8 text-center">
+            <h3 className="text-xl font-bold text-text-primary dark:text-text-white mb-2">
+              Thông tin cơ bản
+            </h3>
+            <p className="text-text-secondary dark:text-gray-400">
+              Nội dung tab Cơ bản sẽ được phát triển sau
+            </p>
+          </div>
+        )}
+
         {/* Story Tab */}
         {activeTab === 'story' && (
           <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
@@ -103,8 +97,8 @@ export default function CreateCampaignTabs({
           </div>
         )}
 
-        {/* Reward Tab */}
-        {activeTab === 'reward' && <RewardComingSoon />}
+        {/* Rewards Tab */}
+        {activeTab === 'rewards' && <RewardComingSoon setIsEditing={setIsEditing} />}
       </div>
     </div>
   );
