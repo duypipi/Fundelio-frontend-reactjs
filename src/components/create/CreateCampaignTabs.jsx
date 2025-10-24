@@ -3,6 +3,7 @@ import StoryToolbar from './story/StoryToolbar';
 import SidebarTOC from './story/SidebarTOC';
 import BlankSection from './story/BlankSection';
 import RewardComingSoon from './rewards/RewardComingSoon';
+import BasicsContent from './basics/BasicsContent';
 
 /**
  * CreateCampaignTabs component - Content for Story and Reward sections
@@ -42,17 +43,8 @@ export default function CreateCampaignTabs({
     <div className="w-full">
       {/* Tab Content - No tab navigation here, it's in the header now */}
       <div>
-        {/* Basic Tab - Placeholder for future */}
-        {activeTab === 'basic' && (
-          <div className="bg-white dark:bg-black border border-gray-300 dark:border-gray-700 rounded-lg p-8 text-center">
-            <h3 className="text-xl font-bold text-text-primary dark:text-text-white mb-2">
-              Thông tin cơ bản
-            </h3>
-            <p className="text-text-secondary dark:text-gray-400">
-              Nội dung tab Cơ bản sẽ được phát triển sau
-            </p>
-          </div>
-        )}
+        {/* Basic Tab */}
+        {activeTab === 'basic' && <BasicsContent />}
 
         {/* Story Tab */}
         {activeTab === 'story' && (

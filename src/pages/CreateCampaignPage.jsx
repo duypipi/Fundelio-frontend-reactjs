@@ -36,15 +36,23 @@ export default function CreateCampaignPage() {
   };
 
   const handleCancel = () => {
-    console.log('Cancel editing');
+    console.log('Cancel editing from header');
+    // Trigger cancel button click in the form
+    const cancelButton = document.querySelector('form button[type="button"]');
+    if (cancelButton && cancelButton.textContent.includes('Hủy')) {
+      cancelButton.click();
+    }
     setIsEditing(false);
-    // TODO: Reset form or discard changes
   };
 
   const handleSave = () => {
-    console.log('Save changes');
-    // TODO: Implement save functionality
-    setIsEditing(false);
+    console.log('Save changes from header');
+    // Trigger form submission
+    const submitButton = document.querySelector('form button[type="submit"]');
+    if (submitButton) {
+      submitButton.click();
+    }
+    // Don't set isEditing to false here - let the form handler do it after successful save
   };
 
   return (

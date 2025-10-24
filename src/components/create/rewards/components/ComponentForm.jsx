@@ -64,7 +64,7 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="rounded-xl border border-border bg-card p-6">
+      <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">
           {item ? "Chỉnh sửa thành phần" : "Tạo thành phần mới"}
         </h3>
@@ -86,41 +86,89 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
             </p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Ảnh</label>
-            <div className="flex gap-4">
-              <div className="flex-1">
+               <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Hình ảnh</h3>
+        
+        {/* Upload Area - Only show when no image */}
+        {!formData.image && (
+          <div className="flex flex-col items-center">
+            <div className="w-full max-w-2xl">
+              <div className="border-2 border-dashed border-border rounded-sm p-8 bg-muted/30 hover:bg-muted/50 transition-colors">
+                <div className="flex flex-col items-center text-center space-y-4">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-6 py-3 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors font-medium"
+                  >
+                    Upload a file
+                  </button>
+                  
+                  <p className="text-sm text-muted-foreground">Select a file.</p>
+                  
+                  <p className="text-xs text-muted-foreground">
+                    Image specifications: JPG, PNG, GIF, or WEBP, 3:2 ratio, 348 × 232 pixels, 50 MB maximum
+                  </p>
+                </div>
+              </div>
+              
+              <input 
+                ref={fileInputRef} 
+                type="file" 
+                accept="image/*" 
+                onChange={handleImageChange} 
+                className="hidden" 
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Image Preview - Only show when image exists */}
+        {formData.image && (
+          <div className="flex flex-col items-center">
+            <div className="w-full max-w-2xl">
+              <div className="relative aspect-video rounded-sm overflow-hidden bg-muted border border-border">
+                <img 
+                  src={formData.image} 
+                  alt="Preview" 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+              <div className="mt-3 flex justify-center gap-3">
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full px-4 py-2 border border-border rounded-lg text-foreground hover:bg-muted transition-colors"
+                  className="px-4 py-2 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors text-sm font-medium"
                 >
-                  Chọn ảnh
+                  Thay đổi
                 </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-              </div>
-              {formData.image && (
                 <button
                   type="button"
-                  onClick={() => setFormData((prev) => ({ ...prev, image: null }))}
-                  className="px-4 py-2 border border-destructive text-destructive rounded-lg hover:bg-destructive/10 transition-colors"
+                  onClick={() => {
+                    const newData = { ...formData, image: null }
+                    setFormData(newData)
+                    onChange(newData)
+                  }}
+                  className="px-4 py-2 border border-destructive text-destructive rounded-sm hover:bg-destructive/10 transition-colors text-sm font-medium"
                 >
                   Xóa ảnh
                 </button>
-              )}
-            </div>
-            {formData.image && (
-              <div className="mt-3 aspect-video rounded-lg overflow-hidden bg-muted">
-                <img src={formData.image || "/placeholder.svg"} alt="Preview" className="w-full h-full object-cover" />
               </div>
-            )}
+            </div>
+            <input 
+              ref={fileInputRef} 
+              type="file" 
+              accept="image/*" 
+              onChange={handleImageChange} 
+              className="hidden" 
+            />
           </div>
+        )}
+
+        <p className="mt-4 text-xs text-muted-foreground text-center">
+          💡 Show your backers what they'll receive for their support. Images should be{" "}
+          <span className="text-primary">honest</span>, and should avoid banners, badges, and overlaid text.
+        </p>
+      </div>
 
           {rewards.length > 0 && (
             <div>
@@ -143,6 +191,16 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
               <p className="text-sm text-muted-foreground">💡 Chưa có Reward, bạn có thể tạo ở tab Reward tiers</p>
             </div>
           )}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3 justify-end mt-6 pt-6 border-t border-border">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Hủy
+          </Button>
+          <Button type="submit" variant="primary">
+            Lưu
+          </Button>
         </div>
       </div>
     </form>
