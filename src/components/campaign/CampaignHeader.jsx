@@ -151,7 +151,7 @@ const CampaignHeader = ({
           <div className="space-y-3">
             {/* Primary CTA */}
             <Button
-              variant="primary"
+              variant="gradient"
               size="lg"
               className="w-full"
               onClick={onPickPerk}

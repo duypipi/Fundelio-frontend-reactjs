@@ -26,7 +26,7 @@ import {
 import Button from './Button';
 import { useTheme } from '../../contexts/ThemeContext';
 
-export const Header = ({ variant = 'transparent' }) => {
+export const Header = ({ variant = 'transparent', isFixed = true }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -160,9 +160,9 @@ export const Header = ({ variant = 'transparent' }) => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 py-3 px-4 sm:py-4 sm:px-6 transition-all duration-300 ${currentVariant.container}`}
+      className={`${isFixed ? 'fixed' : 'relative'} top-0 left-0 right-0 z-50 py-3 px-4 sm:py-4 sm:px-6 transition-all duration-300 ${currentVariant.container}`}
     >
-      <div className="mx-auto max-w-[1400px] flex items-center justify-between gap-4">
+      <div className="mx-auto max-w-container flex items-center justify-between gap-4">
         {/* Left - Logo & Explore */}
         <div className="flex items-center gap-2 sm:gap-4">
           <Link to="/home">

@@ -57,7 +57,7 @@ export default function CreateCampaignPage() {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-background-light dark:bg-black transition-colors duration-300">
+      <div className="min-h-screen flex flex-col bg-[#f6f8ff] dark:bg-black transition-colors duration-300">
         {/* New Header with Tabs */}
         <CreateCampaignHeader
           activeTab={activeTab}
@@ -71,7 +71,7 @@ export default function CreateCampaignPage() {
         {/* Main Content */}
         <main className="flex-1 w-full">
           <div
-            className="w-full mx-auto px-4 sm:px-6 pt-36 md:pt-24 pb-12"
+            className="w-full mx-auto px-4 sm:px-20 pt-36 md:pt-24 pb-12"
             style={{ maxWidth: 'var(--max-width-container)' }}
           >
             <CreateCampaignTabs

@@ -25,6 +25,8 @@ export const ProjectCard = ({
     bookmarked = false,
   } = project;
 
+  // No GSAP: keep component simple with CSS hover only
+
   const handleBookmarkClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -56,29 +58,29 @@ export const ProjectCard = ({
       role="article"
       className={`
         group relative bg-white dark:bg-black overflow-visible
-        transition-all duration-300 ease-out
-        hover:z-20 hover:shadow-lg
+        transition-all duration-200 ease-out
+        drop-shadow-sm hover:-translate-y-1
+        hover:shadow-[0_6px_18px_2px_rgba(25,90,254,0.45)] hover:backdrop-blur-[2px]
         break-inside-avoid mb-6 rounded-t-lg 
         ${getSizeClasses()}
         ${className}
       `}
     >
       <div
-        className={`relative transition-transform duration-300 ${
-          mode === 'default' ? 'group-hover:-translate-y-2' : ''
-        }`}
+        className="relative"
       >
         {/* Image Container */}
         <div className="relative aspect-[16/9] overflow-hidden rounded-t-md">
           <img
             src={imageUrl || '/placeholder.svg'}
             alt={`Cover image for ${title} project`}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover transform-gpu transition-transform duration-300 group-hover:scale-[1.03]"
+            style={{ willChange: 'transform' }}
             loading="lazy"
           />
 
           {/* Progress Bar */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gray-200/80 backdrop-blur-sm h-2">
+          <div className="absolute bottom-0 left-0 right-0 bg-gray-200/80 h-2">
             <div
               className="h-full bg-primary transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
@@ -93,16 +95,14 @@ export const ProjectCard = ({
           {/* Bookmark Button */}
           <button
             onClick={handleBookmarkClick}
-            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full
+            className="absolute top-3 right-3 p-2 bg-white/90 rounded-full
                       hover:bg-white hover:scale-110 transition-all duration-200
                       focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 z-10"
             aria-pressed={bookmarked}
             aria-label={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
           >
             <Bookmark
-              className={`w-4 h-4 transition-colors ${
-                bookmarked ? 'fill-primary text-primary' : 'text-gray-600'
-              }`}
+              className={`w-4 h-4 transition-colors ${bookmarked ? 'fill-primary text-primary' : 'text-gray-600'}`}
             />
           </button>
         </div>
@@ -116,8 +116,8 @@ export const ProjectCard = ({
               alt={`${authorName}'s avatar`}
               className="w-8 h-8 rounded-full mr-3 object-cover"
             />
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-text-primary dark:text-text-white line-clamp-2 text-md leading-tight">
+            <div className="flex-1 min-w-0 space-y-1">
+              <h3 className="font-semibold text-text-primary dark:text-text-white text-lg line-clamp-2 leading-tight">
                 {title}
               </h3>
               <p className="text-xs text-text-secondary dark:text-text-white">
@@ -128,28 +128,28 @@ export const ProjectCard = ({
 
           {/* Funding Stats */}
           <div className="mb-0">
-            <div className="flex items-center justify-between gap-2 mb-1 text-sm text-primary dark:text-text-white">
+            <div className="flex items-center justify-between gap-2 mb-1 text-primary dark:text-text-white">
               <div className="flex flex-col sm:flex-col">
                 {project.startingPrice != null && (
                   <div className="mt-3">
                     <span className="block text-xs text-text-secondary dark:text-text-white">
                       Mức ủng hộ từ
                     </span>
-                    <span className="text-xl font-bold text-secondary">
+                    <span className="text-2xl font-bold text-primary">
                       {formatCurrency(project.startingPrice)}
                     </span>
                   </div>
                 )}
               </div>
             </div>
-            <div className="mt-2 flex items-center justify-between text-sm text-text-secondary dark:text-text-white">
+            <div className="mt-2 flex items-center justify-between text-text-secondary dark:text-text-white">
               <span>
-                <span className="text-sm font-medium text-text-primary dark:text-text-white">
+                <span className="text-md text-secondary font-bold">
                   {progressPercent}%
                 </span>{' '}
-                đã huy động
+                <span className="text-sm">đã huy động</span>
               </span>
-              <span className="inline-flex items-center gap-1">
+              <span className="inline-flex items-center gap-1 text-sm">
                 <Clock className="w-3 h-3" />
                 Còn {daysLeft} ngày
               </span>
@@ -157,60 +157,7 @@ export const ProjectCard = ({
           </div>
         </div>
 
-        {/* Expanded Details - Show on hover (default) or always (expanded mode) */}
-        <div
-          className={`absolute left-0 right-0 top-full bg-white dark:bg-black rounded-b-xl z-30 transition-all duration-100 ease-out ${
-            mode === 'expanded'
-              ? 'opacity-100 visible translate-y-0'
-              : 'opacity-0 shadow-lg invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0'
-          }`}
-        >
-          <div className="px-4 pb-4">
-            {/* Description */}
-            {description && (
-              <p className="text-sm text-text-secondary dark:text-text-white line-clamp-3 leading-relaxed">
-                {description}
-              </p>
-            )}
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 pt-1">
-              {category && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                  {category}
-                </span>
-              )}
-              {location && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-black/10 text-text-primary dark:text-text-white border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-                  <MapPin className="w-3 h-3 mr-1" />
-                  {location}
-                </span>
-              )}
-            </div>
-
-            {/* Progress Detail */}
-            <div className="pt-2">
-              <div className="flex justify-between text-xs text-primary dark:text-text-white mb-1 transition-colors duration-300">
-                <span>Tiến độ</span>
-                <span className="font-semibold">{progressPercent}%</span>
-              </div>
-              <div className="flex items-baseline gap-2 mb-1">
-                <span className="text-sm font-bold text-primary">
-                  {formatCurrency(pledged)}
-                </span>
-                <span className="text-xs text-text-secondary dark:text-text-white">
-                  / {formatCurrency(goal)}
-                </span>
-              </div>
-              <div className="w-full bg-background-light dark:bg-gray-600 rounded-full h-1.5 transition-colors duration-300">
-                <div
-                  className="bg-primary h-1.5 rounded-full transition-all duration-500"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Removed bottom content as requested; emphasis handled by GSAP hover */}
       </div>
     </article>
   );

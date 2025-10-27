@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CampaignPage from './CampaignPage';
+import RewardsPage from './RewardsPage';
 
 /**
  * CampaignTabs Component
@@ -18,7 +19,7 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
   return (
     <div>
       {/* Tabs Navigation */}
-      <div className="sticky top-[72px] bg-background z-20 border-b border-border">
+      <div className="sticky top-0 bg-background z-20 border-b border-border">
         <div className="max-w-container mx-auto px-4 lg:px-6">
           <nav
             className="flex gap-6 overflow-x-auto scrollbar-hide"
@@ -67,20 +68,11 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
             role="tabpanel"
             id="rewards-panel"
             aria-labelledby="rewards-tab"
-            className="py-16 text-center"
           >
-            <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🎁</span>
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                Rewards Gallery
-              </h3>
-              <p className="text-secondary">
-                Coming soon... Browse all available rewards in a beautiful
-                gallery view.
-              </p>
-            </div>
+            <RewardsPage
+              rewards={campaignProps.rewards || []}
+              onPledge={campaignProps.onPledge}
+            />
           </div>
         )}
 

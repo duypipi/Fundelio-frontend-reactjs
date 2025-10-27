@@ -35,7 +35,7 @@ export const PrimaryCTA = ({
             </div>
 
             {/* Heading */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+            <h2 className="text-3xl sm:text-hero font-bold text-white mb-4 sm:mb-6 leading-tight">
               {heading}
             </h2>
 

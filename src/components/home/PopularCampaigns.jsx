@@ -33,8 +33,8 @@ export const PopularCampaigns = () => {
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Title and Navigation */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary dark:text-text-white transition-colors duration-300">
-            Các chiến dịch phổ biến
+          <h2 className="text-2xl sm:text-hero font-bold text-text-primary dark:text-text-white transition-colors duration-300">
+            Chiến dịch phổ biến
           </h2>
 
           {/* Pagination Controls */}

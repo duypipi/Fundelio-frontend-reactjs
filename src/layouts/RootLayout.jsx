@@ -9,9 +9,11 @@ import Footer from '../components/common/Footer';
 export default function RootLayout() {
   const location = useLocation();
   const headerVariant = location.pathname === '/home' ? 'transparent' : 'light';
+  const isHeaderFixed = !location.pathname.includes('/campaigns/detail');
+  
   return (
     <div className="flex flex-col min-h-screen">
-      {location.pathname !== '/' && <Header variant={headerVariant} />}
+      {location.pathname !== '/' && <Header variant={headerVariant} isFixed={isHeaderFixed} />}
 
       <main className="flex-1">
         <Outlet />

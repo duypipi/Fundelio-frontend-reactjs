@@ -150,7 +150,7 @@ export default function CampaignDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black pt-20">
+    <div className="min-h-screen bg-white dark:bg-black">
       {/* Campaign Header Section */}
       <CampaignHeader
         campaign={campaignData}

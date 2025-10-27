@@ -4,10 +4,11 @@ import Input from "@/components/common/Input"
 import Checkbox from "@/components/common/Checkbox"
 import ItemSelector from "@/components/common/ItemSelector"
 import Textarea from "@/components/common/Textarea"
+import Tip from "@/components/common/Tip"
 
 export default function RewardForm({ reward, items, rewards, onSave, onCancel, onChange, type = 'reward' }) {
   const isAddon = type === 'addon'
-  
+
   const [formData, setFormData] = useState(
     reward || {
       id: isAddon ? `a${Date.now()}` : `r${Date.now()}`,
@@ -116,7 +117,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
         <h3 className="text-lg font-semibold text-foreground mb-4">Cơ bản</h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Tiêu đề *</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Tiêu đề<span className="text-lg font-bold text-primary">*</span></label>
             <Input
               type="text"
               name="title"
@@ -137,45 +138,49 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
               placeholder="Mô tả giá trị khác biệt của phần thưởng này..."
               rows={3}
             />
-            <p className="mt-2 text-xs text-muted-foreground">
-              💡 Hãy nêu giá trị khác biệt của phần thưởng này trong 1–2 câu.
-            </p>
+            <Tip className="mt-2">
+              Tạo ấn tượng đầu tiên tốt nhất cho <strong>nhà tài trợ</strong> với tiêu đề tuyệt vời.
+            </Tip>
           </div>
         </div>
       </div>
 
       {/* Image Section */}
       <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Hình ảnh</h3>
-        
+        <h3 className="text-lg font-semibold text-foreground">Hình ảnh</h3>
+        <p className="text-sm text-text-primary dark:text-text-white mb-4">
+          Thêm hình ảnh sản phẩm của bạn để giúp người ủng hộ hiểu chính xác phần thưởng của họ là gì.
+        </p>
+
         {/* Upload Area - Only show when no image */}
         {!formData.image && (
           <div className="flex flex-col items-center">
             <div className="w-full max-w-2xl">
               <div className="border-2 border-dashed border-border rounded-sm p-8 bg-muted/30 hover:bg-muted/50 transition-colors">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <button
+                  <Button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
+                    variant="gradient"
+                    onClick={() => imageInputRef.current?.click()}
                     className="px-6 py-3 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors font-medium"
                   >
-                    Upload a file
-                  </button>
-                  
-                  <p className="text-sm text-muted-foreground">Select a file.</p>
-                  
-                  <p className="text-xs text-muted-foreground">
-                    Image specifications: JPG, PNG, GIF, or WEBP, 3:2 ratio, 348 × 232 pixels, 50 MB maximum
+                    Tải ảnh lên
+                  </Button>
+
+                  <p className="text-md text-text-primary dark:text-white">Chọn một tệp.</p>
+
+                  <p className="text-xs text-text-primary dark:text-white">
+                    Thông số kỹ thuật hình ảnh: JPG, PNG, GIF hoặc WEBP, tỷ lệ 16:9, tối thiểu 1024 × 576 pixel, tối đa 50 MB
                   </p>
                 </div>
               </div>
-              
-              <input 
-                ref={fileInputRef} 
-                type="file" 
-                accept="image/*" 
-                onChange={handleImageChange} 
-                className="hidden" 
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
               />
             </div>
           </div>
@@ -186,10 +191,10 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
           <div className="flex flex-col items-center">
             <div className="w-full max-w-2xl">
               <div className="relative aspect-video rounded-sm overflow-hidden bg-muted border border-border">
-                <img 
-                  src={formData.image} 
-                  alt="Preview" 
-                  className="w-full h-full object-cover" 
+                <img
+                  src={formData.image}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div className="mt-3 flex justify-center gap-3">
@@ -213,20 +218,15 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
                 </button>
               </div>
             </div>
-            <input 
-              ref={fileInputRef} 
-              type="file" 
-              accept="image/*" 
-              onChange={handleImageChange} 
-              className="hidden" 
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
             />
           </div>
         )}
-
-        <p className="mt-4 text-xs text-muted-foreground text-center">
-          💡 Show your backers what they'll receive for their support. Images should be{" "}
-          <span className="text-primary">honest</span>, and should avoid banners, badges, and overlaid text.
-        </p>
       </div>
 
       {/* Pricing Section */}
@@ -234,7 +234,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
         <h3 className="text-lg font-semibold text-foreground mb-4">Giá ủng hộ</h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Giá (CA$) *</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Giá ($)<span className="text-lg font-bold text-primary">*</span></label>
             <Input
               type="number"
               name="price"
@@ -249,7 +249,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
           </div>
 
           <div className="p-3 bg-muted/50 rounded-sm border border-border">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-text-primary dark:text-white">
               ℹ️ <strong>Thuế thu ở Pledge Manager:</strong> Để sử dụng Pledge Manager của Kickstarter, giá được đặt cho
               mỗi phần thưởng không được bao gồm thuế. Chúng tôi sẽ tính toán và thu bất kỳ thuế áp dụng nào từ mỗi
               backer dựa trên vị trí của họ, sau khi chiến dịch của bạn kết thúc.
@@ -294,10 +294,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
               })}
             </div>
           )}
-
-          <p className="text-xs text-muted-foreground">
-            💡 Ít nhất 1 component. Mỗi component tương ứng 1 món sẽ giao cho backer.
-          </p>
+          <Tip className="mt-2">Ít nhất 1 component. Mỗi component tương ứng 1 món sẽ giao cho backer.</Tip>
         </div>
       </div>
 
@@ -334,7 +331,9 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
             </select>
           </div>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">💡 Chọn dư thời gian để tránh giao trễ.</p>
+        <Tip className="mt-4">
+          Thời gian giao hàng ước tính giúp bạn và nhà tài trợ của bạn biết khi nào họ có thể mong đợi phần thưởng của mình.
+        </Tip>
       </div>
 
       {/* Shipping Section - Only for rewards */}
@@ -372,7 +371,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
       {isAddon && rewards && rewards.length > 0 && (
         <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
           <h3 className="text-lg font-semibold text-foreground mb-4">Áp dụng cho phần thưởng</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-sm text-text-primary dark:text-white mb-4">
             Chọn các phần thưởng mà add-on này có thể được thêm vào
           </p>
           <div className="space-y-2">

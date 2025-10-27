@@ -56,7 +56,7 @@ export const CreateCampaignHeader = ({
     <header className={`fixed top-0 left-0 right-0 py-3 px-4 sm:py-4 sm:px-6 z-50 bg-white dark:bg-darker border-b border-gray-200 dark:border-gray-700 transition-all duration-300 md:h-20`}>
       {/* Desktop - Single Row */}
       <div className="hidden md:block">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 h-full flex items-center justify-between gap-4">
+        <div className="mx-auto max-w-container px-4 sm:px-6 h-full flex items-center justify-between gap-4">
           {/* Left - Logo */}
           <Link to="/home" className="flex-shrink-0">
             <h1 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-text-white cursor-pointer hover:opacity-80 transition-opacity">
@@ -98,10 +98,10 @@ export const CreateCampaignHeader = ({
             {/* Conditional Buttons - Preview OR Cancel/Save */}
             {!isEditing ? (
               <Button
-                variant="outline"
+                variant="gradient"
                 size="md"
                 onClick={onPreview}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 rounded-sm"
               >
                 <Eye className="w-4 h-4" />
                 <span>Xem trước</span>
@@ -119,7 +119,7 @@ export const CreateCampaignHeader = ({
                 </Button>
 
                 <Button
-                  variant="primary"
+                  variant="gradient"
                   size="md"
                   onClick={onSave}
                   className="flex items-center gap-2 rounded-sm"

@@ -22,7 +22,7 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
 
   return (
     <nav
-      className="sticky top-[150px] max-h-[calc(100vh-88px)] overflow-auto pr-2 scrollbar-primary"
+      className="sticky top-[88px] max-h-[calc(100vh-88px)] overflow-auto pr-2 scrollbar-primary"
       aria-label="Story sections"
     >
       {/* Timeline wrapper */}

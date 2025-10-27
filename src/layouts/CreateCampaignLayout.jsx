@@ -26,7 +26,7 @@ export const CreateCampaignLayout = ({
 
       {/* Main Content */}
       <main className="flex-1 w-full">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 pt-20 pb-12">
+        <div className="mx-auto max-w-container px-4 sm:px-6 pt-20 pb-12">
           <Outlet />
         </div>
       </main>

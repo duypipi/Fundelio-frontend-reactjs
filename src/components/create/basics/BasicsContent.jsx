@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Input from '@/components/common/Input';
 import Textarea from '@/components/common/Textarea';
 import { useLocalStorage } from '@/hooks/useLocalStorge';
-
+import Button from '@/components/common/Button';
 const CATEGORIES = [
   'Nghệ thuật',
   'Truyện tranh & Minh họa',
@@ -16,7 +16,7 @@ const CATEGORIES = [
 
 export default function BasicsContent() {
   const { value: savedData, setValue: setSavedData } = useLocalStorage('ff:campaign-basics', null);
-  
+
   const [formData, setFormData] = useState({
     title: '',
     desc: '',
@@ -39,8 +39,8 @@ export default function BasicsContent() {
     } else {
       // Set default dates
       const today = new Date();
-      const endDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
-      
+      const endDate = new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000); // 60 days from now
+
       setFormData(prev => ({
         ...prev,
         start_date: today.toISOString().split('T')[0],
@@ -52,7 +52,7 @@ export default function BasicsContent() {
   // Auto-save to localStorage with debounce
   useEffect(() => {
     if (!mounted) return;
-    
+
     const timer = setTimeout(() => {
       setSavedData(formData);
     }, 500);
@@ -101,21 +101,21 @@ export default function BasicsContent() {
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-2">Tiêu đề dự án</h3>
-          <p className="text-sm text-muted-foreground">
-            Viết một tiêu đề ngắn gọn, súc tích để giúp mọi người nhanh chóng hiểu về dự án của bạn. 
+          <p className="text-md text-muted-foreground">
+            Viết một tiêu đề ngắn gọn, súc tích để giúp mọi người nhanh chóng hiểu về dự án của bạn.
             Cả hai sẽ xuất hiện trên trang dự án và trang khởi chạy trước.
           </p>
-          <p className="text-sm text-muted-foreground mt-3">
-            Các nhà tài trợ tiềm năng cũng sẽ thấy chúng nếu dự án của bạn xuất hiện trên các trang danh mục, 
-            kết quả tìm kiếm hoặc trong email chúng tôi gửi đến cộng đồng của mình.
+          <p className="text-md text-muted-foreground mt-3">
+            Các <strong>nhà tài trợ tiềm năng</strong> cũng sẽ thấy chúng nếu <strong>dự án</strong> của bạn xuất hiện trên các trang danh mục,
+            kết quả tìm kiếm hoặc trong email chúng tôi gửi đến <strong>cộng đồng</strong> của mình.
           </p>
         </div>
 
-        <div className="bg-white dark:bg-darker border border-border rounded-lg p-6">
+        <div className="bg-white dark:bg-darker border border-border rounded-sm p-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Tiêu đề
+              <label className="block text-md font-medium text-foreground mb-2">
+                Tiêu đề <span className="text-primary">*</span>
               </label>
               <Input
                 type="text"
@@ -131,8 +131,8 @@ export default function BasicsContent() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Mô tả ngắn
+              <label className="block text-md font-medium text-foreground mb-2">
+                Mô tả ngắn <span className="text-primary">*</span>
               </label>
               <Textarea
                 name="desc"
@@ -147,35 +147,36 @@ export default function BasicsContent() {
               </div>
             </div>
 
-            <div className="flex items-start gap-2 p-3 bg-primary/5 border border-primary/20 rounded-lg">
-              <span className="text-primary mt-0.5">💡</span>
+            <div className="flex items-start gap-2 p-3 bg-primary/10 border-l-4 border-primary">
               <p className="text-sm text-foreground">
-                Tạo ấn tượng đầu tiên tốt nhất cho nhà tài trợ với tiêu đề tuyệt vời.
+                Tạo ấn tượng đầu tiên tốt nhất cho <strong>nhà tài trợ</strong> với tiêu đề tuyệt vời.
               </p>
             </div>
           </div>
         </div>
       </div>
 
+      <hr className="my-12 border-t border-border" />
+
       {/* Section 2: Category */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-2">Danh mục</h3>
-          <p className="text-sm text-muted-foreground">
-            Chọn danh mục phù hợp nhất cho dự án của bạn. 
-            Điều này giúp mọi người dễ dàng tìm thấy dự án của bạn.
+          <p className="text-md text-muted-foreground">
+            Chọn <strong>danh mục</strong> phù hợp nhất cho <strong>dự án</strong> của bạn.
+            Điều này giúp mọi người dễ dàng tìm thấy <strong>dự án</strong> của bạn.
           </p>
         </div>
 
-        <div className="bg-white dark:bg-darker border border-border rounded-lg p-6">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Danh mục dự án
+        <div className="bg-white dark:bg-darker border border-border rounded-sm p-6">
+          <label className="block text-md font-medium text-foreground mb-2">
+            Danh mục dự án <span className="text-primary">*</span>
           </label>
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            className="w-full px-4 py-2 border border-border rounded-sm bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
           >
             <option value="">Chọn danh mục</option>
             {CATEGORIES.map((cat) => (
@@ -187,57 +188,60 @@ export default function BasicsContent() {
         </div>
       </div>
 
+      <hr className="my-12 border-t border-border" />
+
       {/* Section 3: Project Image */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-2">Ảnh dự án</h3>
-          <p className="text-sm text-muted-foreground mb-3">
-            Thêm một hình ảnh đại diện rõ ràng cho dự án của bạn. 
-            Chọn một hình ảnh trông đẹp ở các kích thước khác nhau—nó sẽ xuất hiện trên trang dự án của bạn, 
-            trên trang web Kickstarter và ứng dụng di động, và (khi được chia sẻ) trên các kênh mạng xã hội.
+          <p className="text-md text-muted-foreground mb-3">
+            Thêm một <strong>hình ảnh đại diện</strong> rõ ràng cho <strong>dự án</strong> của bạn.
+            Chọn một <strong>hình ảnh</strong> trông đẹp ở các kích thước khác nhau—nó sẽ xuất hiện trên trang <strong>dự án</strong> của bạn,
+            trên trang web Kickstarter và ứng dụng di động, và (khi được chia sẻ) trên các kênh <strong>mạng xã hội</strong>.
           </p>
-          <p className="text-sm text-muted-foreground mb-3">
-            Hình ảnh của bạn phải có kích thước ít nhất 1024×576 pixel. 
+          <p className="text-md text-muted-foreground mb-3">
+            Hình ảnh của bạn phải có kích thước ít nhất 1024×576 pixel.
             Nó sẽ được cắt theo tỷ lệ 16:9.
           </p>
           <p className="text-sm text-primary font-medium">
-            Tránh hình ảnh có banner, huy hiệu hoặc văn bản—chúng khó đọc ở kích thước nhỏ hơn, 
-            có thể bị phạt bởi thuật toán Facebook và giảm cơ hội có được các tính năng trang chủ 
-            và bản tin của Kickstarter.
+            Tránh <strong>hình ảnh</strong> có <strong>banner</strong>, <strong>huy hiệu</strong> hoặc <strong>văn bản</strong>—chúng khó đọc ở kích thước nhỏ hơn,
+            có thể bị phạt bởi <strong>thuật toán Facebook</strong> và giảm cơ hội có được các <strong>tính năng trang chủ</strong>
+            và <strong>bản tin</strong> của Kickstarter.
           </p>
         </div>
 
         <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Hình ảnh</h3>
-          
+          <h3 className="text-md font-semibold text-foreground mb-4">Hình ảnh <span className="text-primary">*</span></h3>
+
           {/* Upload Area - Only show when no image */}
           {!formData.image_url && (
             <div className="flex flex-col items-center">
               <div className="w-full max-w-2xl">
                 <div className="border-2 border-dashed border-border rounded-sm p-8 bg-muted/30 hover:bg-muted/50 transition-colors">
                   <div className="flex flex-col items-center text-center space-y-4">
-                    <button
+                    <Button
                       type="button"
+                      variant="gradient"
                       onClick={() => imageInputRef.current?.click()}
                       className="px-6 py-3 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors font-medium"
                     >
-                      Upload a file
-                    </button>
-                    
-                    <p className="text-sm text-muted-foreground">Select a file.</p>
-                    
+                      Tải ảnh lên
+                    </Button>
+
+                    <p className="text-md text-muted-foreground">Chọn một tệp.</p>
+
                     <p className="text-xs text-muted-foreground">
-                      Image specifications: JPG, PNG, GIF, or WEBP, 16:9 ratio, 1024 × 576 pixels minimum, 50 MB maximum
+                      Thông số kỹ thuật hình ảnh: JPG, PNG, GIF hoặc WEBP, tỷ lệ 16:9, tối thiểu 1024 × 576 pixel, tối đa 50 MB
                     </p>
                   </div>
                 </div>
-                
-                <input 
-                  ref={imageInputRef} 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleImageChange} 
-                  className="hidden" 
+
+                <input
+                  ref={imageInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
                 />
               </div>
             </div>
@@ -248,10 +252,10 @@ export default function BasicsContent() {
             <div className="flex flex-col items-center">
               <div className="w-full max-w-2xl">
                 <div className="relative aspect-video rounded-sm overflow-hidden bg-muted border border-border">
-                  <img 
-                    src={formData.image_url} 
-                    alt="Preview" 
-                    className="w-full h-full object-cover" 
+                  <img
+                    src={formData.image_url}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="mt-3 flex justify-center gap-3">
@@ -271,72 +275,77 @@ export default function BasicsContent() {
                   </button>
                 </div>
               </div>
-              <input 
-                ref={imageInputRef} 
-                type="file" 
-                accept="image/*" 
-                onChange={handleImageChange} 
-                className="hidden" 
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
               />
             </div>
           )}
 
-          <p className="mt-4 text-xs text-muted-foreground text-center">
-            💡 Show your backers what they'll receive for their support. Images should be{" "}
-            <span className="text-primary">honest</span>, and should avoid banners, badges, and overlaid text.
-          </p>
+          <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
+            <p className="text-xs text-muted-foreground">
+              Cho <strong>nhà tài trợ</strong> thấy họ sẽ nhận được gì từ sự hỗ trợ của mình. <strong>Hình ảnh</strong> nên{" "}
+              <span className="text-primary">chân thực</span>, và tránh <strong>banner</strong>, <strong>huy hiệu</strong> hoặc <strong>văn bản</strong> chồng lên.
+            </p>
+          </div>
         </div>
       </div>
+
+      <hr className="my-12 border-t border-border" />
 
       {/* Section 4: Project Video */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-2">Video dự án (tùy chọn)</h3>
-          <p className="text-sm text-muted-foreground mb-3">
-            Thêm một video mô tả dự án của bạn.
+          <p className="text-md text-muted-foreground mb-3">
+            Thêm một <strong>video</strong> mô tả <strong>dự án</strong> của bạn.
           </p>
-          <p className="text-sm text-muted-foreground mb-3">
-            Hãy cho mọi người biết bạn đang gây quỹ để làm gì, 
-            bạn có kế hoạch thực hiện nó như thế nào, bạn là ai, 
+          <p className="text-md text-muted-foreground mb-3">
+            Hãy cho mọi người biết bạn đang gây quỹ để làm gì,
+            bạn có kế hoạch thực hiện nó như thế nào, bạn là ai,
             và tại sao bạn quan tâm đến dự án này.
           </p>
-          <p className="text-sm text-muted-foreground">
-            Sau khi bạn tải video lên, hãy sử dụng trình chỉnh sửa của chúng tôi 
-            để thêm chú thích và phụ đề để dự án của bạn dễ tiếp cận hơn với mọi người.
+          <p className="text-md text-muted-foreground">
+            Sau khi bạn tải <strong>video</strong> lên, hãy sử dụng trình chỉnh sửa của chúng tôi
+            để thêm <strong>chú thích</strong> và <strong>phụ đề</strong> để <strong>dự án</strong> của bạn dễ tiếp cận hơn với mọi người.
           </p>
         </div>
 
         <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Video giới thiệu</h3>
-          
+          <h3 className="text-md font-semibold text-foreground mb-4">Video giới thiệu</h3>
+
           {/* Upload Area - Only show when no video */}
           {!formData.intro_video_url && (
             <div className="flex flex-col items-center">
               <div className="w-full max-w-2xl">
                 <div className="border-2 border-dashed border-border rounded-sm p-8 bg-muted/30 hover:bg-muted/50 transition-colors">
                   <div className="flex flex-col items-center text-center space-y-4">
-                    <button
+                    <Button
                       type="button"
+                      variant="gradient"
                       onClick={() => videoInputRef.current?.click()}
                       className="px-6 py-3 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors font-medium"
                     >
-                      Upload a video
-                    </button>
-                    
-                    <p className="text-sm text-muted-foreground">Select a video file.</p>
-                    
+                      Tải lên video
+                    </Button>
+
+                    <p className="text-md text-muted-foreground">Chọn một tệp video.</p>
+
                     <p className="text-xs text-muted-foreground">
-                      Video specifications: MP4, MOV, AVI, or WEBM, 16:9 ratio recommended, 500 MB maximum
+                      Thông số kỹ thuật video: MP4, MOV, AVI hoặc WEBM, tỷ lệ 16:9, tối đa 500 MB
                     </p>
                   </div>
                 </div>
-                
-                <input 
-                  ref={videoInputRef} 
-                  type="file" 
-                  accept="video/*" 
-                  onChange={handleVideoChange} 
-                  className="hidden" 
+
+                <input
+                  ref={videoInputRef}
+                  type="file"
+                  accept="video/*"
+                  onChange={handleVideoChange}
+                  className="hidden"
                 />
               </div>
             </div>
@@ -347,10 +356,10 @@ export default function BasicsContent() {
             <div className="flex flex-col items-center">
               <div className="w-full max-w-2xl">
                 <div className="relative aspect-video rounded-sm overflow-hidden bg-muted border border-border">
-                  <video 
-                    src={formData.intro_video_url} 
-                    className="w-full h-full object-cover" 
-                    controls 
+                  <video
+                    src={formData.intro_video_url}
+                    className="w-full h-full object-cover"
+                    controls
                   />
                 </div>
                 <div className="mt-3 flex justify-center gap-3">
@@ -370,37 +379,41 @@ export default function BasicsContent() {
                   </button>
                 </div>
               </div>
-              <input 
-                ref={videoInputRef} 
-                type="file" 
-                accept="video/*" 
-                onChange={handleVideoChange} 
-                className="hidden" 
+              <input
+                ref={videoInputRef}
+                type="file"
+                accept="video/*"
+                onChange={handleVideoChange}
+                className="hidden"
               />
             </div>
           )}
-
-          <p className="mt-4 text-xs text-muted-foreground text-center">
-            💡 Tell people what you're raising funds to do, how you plan to make it happen, who you are, and why you care about this project.
+          <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
+          <p className="text-xs text-muted-foreground ">
+            Hãy cho mọi người biết bạn đang gây quỹ để làm gì, bạn có kế hoạch thực hiện nó như thế nào, bạn là ai, và tại sao bạn quan tâm đến dự án này.
           </p>
+          </div>
+
         </div>
       </div>
+
+      <hr className="my-12 border-t border-border" />
 
       {/* Section 5: Campaign Duration */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-2">Thời gian chiến dịch</h3>
-          <p className="text-sm text-muted-foreground">
-            Chọn ngày bắt đầu và kết thúc cho chiến dịch gây quỹ của bạn. 
-            Hầu hết các chiến dịch thành công kéo dài từ 30-60 ngày.
+          <p className="text-md text-muted-foreground">
+            Chọn ngày bắt đầu và kết thúc cho <strong>chiến dịch gây quỹ</strong> của bạn.
+            Hầu hết các <strong>chiến dịch</strong> thành công kéo dài từ 30-60 ngày.
           </p>
         </div>
 
-        <div className="bg-white dark:bg-darker border border-border rounded-lg p-6">
+        <div className="bg-white dark:bg-darker border border-border rounded-sm p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Ngày bắt đầu
+              <label className="block text-md font-medium text-foreground mb-2">
+                Ngày bắt đầu <span className="text-primary">*</span>
               </label>
               <Input
                 type="date"
@@ -411,8 +424,8 @@ export default function BasicsContent() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Ngày kết thúc
+              <label className="block text-md font-medium text-foreground mb-2">
+                Ngày kết thúc <span className="text-primary">*</span>
               </label>
               <Input
                 type="date"
@@ -425,9 +438,9 @@ export default function BasicsContent() {
           </div>
 
           {formData.start_date && formData.end_date && (
-            <div className="mt-4 p-3 bg-primary/5 border border-primary/20 rounded-lg">
+            <div className="mt-4 p-3 bg-primary/10 border-l-4 border-primary">
               <p className="text-sm text-foreground">
-                <span className="font-medium">Thời gian chiến dịch:</span>{' '}
+                <span className="font-medium"><strong>Thời gian chiến dịch</strong>:</span>{' '}
                 {Math.ceil((new Date(formData.end_date) - new Date(formData.start_date)) / (1000 * 60 * 60 * 24))} ngày
               </p>
             </div>

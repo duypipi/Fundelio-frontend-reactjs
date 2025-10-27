@@ -71,7 +71,7 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Tiêu đề *</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Tiêu đề<span className="text-lg font-bold text-primary">*</span></label>
             <Input
               type="text"
               name="title"
@@ -81,9 +81,11 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
               error={errors.title}
             />
             {errors.title && <p className="mt-1 text-sm text-destructive">{errors.title}</p>}
-            <p className="mt-2 text-xs text-muted-foreground">
-              💡 Tên cần ngắn gọn, mô tả đúng 'một món hàng' (SKU). Ảnh nên theo tỉ lệ 3:2 để hiển thị đẹp.
-            </p>
+            <div className="flex items-start gap-2 p-3 mt-4 bg-primary/10 border-l-4 border-primary">
+              <p className="text-sm text-foreground">
+                Tên cần ngắn gọn, mô tả đúng 'một món hàng' (SKU). Ảnh nên theo tỉ lệ 3:2 để hiển thị đẹp.
+              </p>
+            </div>
           </div>
 
                <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
@@ -95,19 +97,20 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
             <div className="w-full max-w-2xl">
               <div className="border-2 border-dashed border-border rounded-sm p-8 bg-muted/30 hover:bg-muted/50 transition-colors">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <button
+                  <Button
+                    variant="gradient"
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     className="px-6 py-3 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors font-medium"
                   >
-                    Upload a file
-                  </button>
+                    Tải ảnh lên
+                  </Button>
                   
-                  <p className="text-sm text-muted-foreground">Select a file.</p>
-                  
-                  <p className="text-xs text-muted-foreground">
-                    Image specifications: JPG, PNG, GIF, or WEBP, 3:2 ratio, 348 × 232 pixels, 50 MB maximum
-                  </p>
+                  <p className="text-md text-muted-foreground">Chọn một tệp.</p>
+
+                    <p className="text-xs text-muted-foreground">
+                      Thông số kỹ thuật hình ảnh: JPG, PNG, GIF hoặc WEBP, tỷ lệ 16:9, tối thiểu 1024 × 576 pixel, tối đa 50 MB
+                    </p>
                 </div>
               </div>
               
@@ -164,13 +167,15 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
           </div>
         )}
 
-        <p className="mt-4 text-xs text-muted-foreground text-center">
-          💡 Show your backers what they'll receive for their support. Images should be{" "}
-          <span className="text-primary">honest</span>, and should avoid banners, badges, and overlaid text.
-        </p>
+        <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
+            <p className="text-xs text-muted-foreground">
+              Cho <strong>nhà tài trợ</strong> thấy họ sẽ nhận được gì từ sự hỗ trợ của mình. <strong>Hình ảnh</strong> nên{" "}
+              <span className="text-primary">chân thực</span>, và tránh <strong>banner</strong>, <strong>huy hiệu</strong> hoặc <strong>văn bản</strong> chồng lên.
+            </p>
+          </div>
       </div>
 
-          {rewards.length > 0 && (
+          {/* {rewards.length > 0 && (
             <div>
               <label className="block text-sm font-medium text-foreground mb-3">Gán vào phần thưởng (tùy chọn)</label>
               <div className="space-y-2">
@@ -190,18 +195,18 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
             <div className="p-3 bg-muted/50 rounded-lg border border-border">
               <p className="text-sm text-muted-foreground">💡 Chưa có Reward, bạn có thể tạo ở tab Reward tiers</p>
             </div>
-          )}
+          )} */}
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 justify-end mt-6 pt-6 border-t border-border">
+        {/* <div className="flex gap-3 justify-end mt-6 pt-6 border-t border-border">
           <Button type="button" variant="outline" onClick={onCancel}>
             Hủy
           </Button>
           <Button type="submit" variant="primary">
             Lưu
           </Button>
-        </div>
+        </div> */}
       </div>
     </form>
   )

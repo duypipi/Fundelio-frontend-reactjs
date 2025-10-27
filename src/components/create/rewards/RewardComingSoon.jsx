@@ -195,10 +195,10 @@ export default function RewardComingSoon({ setIsEditing }) {
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors whitespace-nowrap ${
+              className={`flex items-center gap-2 px-4 py-3 font-semibold text-md border-b-2 transition-colors whitespace-nowrap ${
                 activeTab === tab.id
                   ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-primary/50 hover:border-primary/50"
+                  : "border-transparent text-text-primary dark:text-white hover:text-primary/70 hover:border-primary/70"
               }`}
             >
               <span>{tab.label}</span>

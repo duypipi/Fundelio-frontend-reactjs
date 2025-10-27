@@ -38,7 +38,7 @@ export const NearGoalMasonry = ({
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-10 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary dark:text-text-white mb-4 transition-colors duration-300">
+          <h2 className="text-3xl sm:text-hero font-bold text-text-primary dark:text-text-white mb-4 transition-colors duration-300">
             {title}
           </h2>
           <p className="text-lg text-text-secondary dark:text-gray-400 max-w-2xl transition-colors duration-300">
