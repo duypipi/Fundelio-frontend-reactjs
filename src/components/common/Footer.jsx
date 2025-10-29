@@ -40,7 +40,7 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="sticky top-[100vh] bg-white dark:bg-black border-t border-gray-200 dark:border-gray-700 text-text-primary dark:text-white py-8 sm:py-10 lg:py-12 transition-colors duration-300">
+    <footer className="sticky top-[100vh] bg-white dark:bg-darker-light border-t border-gray-200 dark:border-gray-700 text-text-primary dark:text-white py-8 sm:py-10 lg:py-12 transition-colors duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-container">
         {/* Main Grid - 4 sections */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">

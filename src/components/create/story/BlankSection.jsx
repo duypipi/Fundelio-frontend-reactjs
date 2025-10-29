@@ -95,7 +95,7 @@ function BlankSection({ blank, onTitleChange, onContentChange, onFocus }) {
   return (
     <section
       id={blank.id}
-      className="bg-white dark:bg-black border border-gray-300 dark:border-gray-700 
+      className="bg-white dark:bg-darker-light border border-gray-300 dark:border-gray-700 
       rounded-lg p-6 mb-4 scroll-mt-32 shadow-sm hover:shadow-md transition-shadow"
     >
       {/* Title */}

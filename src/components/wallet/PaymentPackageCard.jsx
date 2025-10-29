@@ -29,12 +29,12 @@ const PaymentPackageCard = ({
     <div
       onClick={onSelect}
       className={`
-        group relative cursor-pointer rounded-lg overflow-hidden
+        group relative cursor-pointer rounded-md overflow-hidden
         transition-all duration-300 ease-in-out
         hover:scale-105 hover:shadow-xl
         ${selected 
           ? 'ring-2 ring-primary' 
-          : 'ring-1 ring-border-light dark:ring-white/10 hover:ring-primary/50'
+          : 'drop-shadow-md'
         }
       `}
     >

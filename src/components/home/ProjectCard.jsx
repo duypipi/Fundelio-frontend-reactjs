@@ -75,11 +75,11 @@ export const ProjectCard = ({
 
         {/* Stats Overlay - Bottom Left */}
         <div className="absolute bottom-4 left-4 flex items-center gap-4 text-white z-10">
-          <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <div className="flex items-center gap-1.5 bg-darker-light/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
             <Heart className="w-4 h-4 fill-white" />
             <span className="text-sm font-semibold">{formatNumber(likeCount || 22700)}</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <div className="flex items-center gap-1.5 bg-darker-light/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
             <Users className="w-4 h-4" />
             <span className="text-sm font-semibold">{formatNumber(backerCount || 8700)}</span>
           </div>

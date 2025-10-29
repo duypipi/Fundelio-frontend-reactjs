@@ -57,7 +57,7 @@ export default function CreateCampaignPage() {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-[#f6f8ff] dark:bg-black transition-colors duration-300">
+      <div className="min-h-screen flex flex-col bg-[#f6f8ff] dark:bg-darker-light transition-colors duration-300">
         {/* New Header with Tabs */}
         <CreateCampaignHeader
           activeTab={activeTab}

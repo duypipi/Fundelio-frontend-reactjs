@@ -106,7 +106,7 @@ const PaymentPage = () => {
 
                     {/* Right Column - Order Summary */}
                     <div className="lg:sticky lg:top-8 h-fit">
-                        <div className="bg-white dark:bg-[#1c2237] rounded-lg shadow-xl border border-border-light dark:border-white/10 overflow-hidden">
+                        <div className="bg-white dark:bg-[#1c2237] rounded-lg shadow-md overflow-hidden">
                             {/* Header */}
                             <div className="bg-primary px-4 py-3">
                                 <h2 className="text-lg font-bold text-white">
@@ -118,7 +118,7 @@ const PaymentPage = () => {
                             <div className="p-4 space-y-4">
                                 {/* Selected Package */}
                                 {selectedPackage ? (
-                                    <div className="flex items-center gap-3 p-3 bg-background-lighter dark:bg-black rounded-lg border border-border-light dark:border-white/10">
+                                    <div className="flex items-center gap-3 p-3 bg-background-lighter dark:bg-darker-light rounded-lg border border-border-light dark:border-white/10">
                                         <img
                                             src={selectedPackage.image}
                                             alt="Package"
@@ -178,7 +178,7 @@ const PaymentPage = () => {
                           w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all duration-200
                           ${selectedPaymentMethod === method.id
                                                         ? 'border-primary bg-primary/5 dark:bg-primary/10'
-                                                        : 'border-border-light dark:border-white/10 hover:border-primary/50 bg-white dark:bg-black'
+                                                        : 'border-border-light dark:border-white/10 hover:border-primary/50 bg-white dark:bg-darker-light'
                                                     }
                         `}
                                             >

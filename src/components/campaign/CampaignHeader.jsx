@@ -129,7 +129,7 @@ const CampaignHeader = ({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-container mx-auto px-4 lg:px-6 py-12 lg:py-14">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-4 lg:px-6 py-12 lg:py-14">
         {/* Title & Description Section */}
         <div className="mb-12 lg:mb-16 flex justify-center">
           <div className="max-w-4xl">

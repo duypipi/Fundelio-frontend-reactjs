@@ -40,7 +40,7 @@ export const FeaturedSpotlight = () => {
   };
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-gray-50 dark:bg-black transition-colors duration-300">
+    <section className="py-12 sm:py-16 lg:py-20 bg-gray-50 dark:bg-darker-light transition-colors duration-300">
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Sidebar: Project Lists & Categories */}

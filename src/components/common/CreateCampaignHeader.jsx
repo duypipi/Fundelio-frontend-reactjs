@@ -145,7 +145,7 @@ export const CreateCampaignHeader = ({
 
               {/* User Dropdown Menu */}
               {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker-light rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
                   <div className="flex flex-col md:flex-row">
                     {/* Left Column */}
                     <div className="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">

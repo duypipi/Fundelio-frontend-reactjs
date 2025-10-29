@@ -10,7 +10,7 @@ import { Plus, FileText } from 'lucide-react';
 export default function SidebarTOC({ blanks, onAddBlank, onNavigate }) {
   return (
     <div
-      className="flex flex-col bg-white dark:bg-black p-4
+      className="flex flex-col bg-white dark:bg-darker-light p-4
 +                 lg:sticky lg:top-20 lg:max-h-[80vh] lg:rounded-xl lg:border lg:border-gray-200 dark:lg:border-gray-800"
     >
       {/* Header */}

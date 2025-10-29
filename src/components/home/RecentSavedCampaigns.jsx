@@ -52,7 +52,7 @@ export const RecentSavedCampaigns = () => {
   // Empty State Component
   const EmptyState = () => (
     <div className="flex flex-col items-center justify-center py-16 sm:py-20 lg:py-24 px-4">
-      <div className="bg-background-lighter dark:bg-black rounded-full p-6 sm:p-8 mb-6 transition-colors duration-300">
+      <div className="bg-background-lighter dark:bg-darker-light rounded-full p-6 sm:p-8 mb-6 transition-colors duration-300">
         <Bookmark className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 dark:text-gray-500" />
       </div>
       <h3 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-text-white mb-3 transition-colors duration-300">
@@ -70,7 +70,7 @@ export const RecentSavedCampaigns = () => {
   );
 
   return (
-    <section className="py-8 sm:py-10 lg:py-12 bg-background-lighter dark:bg-black/95 transition-colors duration-300">
+    <section className="py-8 sm:py-10 lg:py-12 bg-background-lighter dark:bg-darker-light/95 transition-colors duration-300">
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Tabs and Pagination */}
         <div className="flex items-center justify-between mb-6 sm:mb-8 border-b border-gray-200 dark:border-gray-600 transition-colors duration-300">

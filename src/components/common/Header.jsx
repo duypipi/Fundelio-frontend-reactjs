@@ -121,7 +121,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
         ? 'text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300'
         : 'text-text-white hover:text-secondary',
       dropdown:
-        'bg-white dark:bg-black border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
+        'bg-white dark:bg-darker-light border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
       dropdownItem:
         'hover:bg-gray-50 dark:hover:bg-gray-900 text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       button: isScrolled
@@ -136,7 +136,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
       navLink:
         'text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       dropdown:
-        'bg-white dark:bg-black border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
+        'bg-white dark:bg-darker-light border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
       dropdownItem:
         'hover:bg-gray-50 dark:hover:bg-gray-700 text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       button:
@@ -232,7 +232,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 onFocus={() => setIsSearchFocused(true)}
                 className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
                   isScrolled || variant !== 'transparent'
-                    ? 'bg-white dark:bg-black border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white'
+                    ? 'bg-white dark:bg-darker-light border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white'
                     : 'bg-white/20 border-white/30 text-white placeholder-white/70'
                 } focus:outline-none focus:ring-2 focus:ring-primary transition-colors`}
               />
@@ -240,7 +240,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
 
             {/* Search Results Dropdown */}
             {isSearchFocused && searchQuery.length >= 3 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker-light rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto z-50">
                 {/* Categories */}
                 {searchResults.categories.length > 0 && (
                   <div className="p-2">
@@ -322,7 +322,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             )}
 
             {searchQuery.length > 0 && searchQuery.length < 3 && isSearchFocused && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker-light rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                   Nhập ít nhất 3 ký tự để tìm kiếm
                 </p>
@@ -372,7 +372,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
 
               {/* User Dropdown Menu */}
               {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker-light rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
                   <div className="flex flex-col md:flex-row">
                     {/* Left Column - Your Account + Bottom Section */}
                     <div className="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">
@@ -570,7 +570,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
               to="/home"
               className={`block px-4 py-2 rounded-lg ${
                 currentVariant.navLink
-              } hover:bg-white/10 dark:hover:bg-black/40 transition-colors font-medium ${
+              } hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors font-medium ${
                 location.pathname === '/home'
                   ? 'text-primary dark:text-primary-400'
                   : ''
@@ -583,7 +583,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
               to="/campaigns/create"
               className={`block px-4 py-2 rounded-lg ${
                 currentVariant.navLink
-              } hover:bg-white/10 dark:hover:bg-black/40 transition-colors font-medium ${
+              } hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors font-medium ${
                 location.pathname === '/campaigns/create'
                   ? 'text-primary dark:text-primary-400'
                   : ''
@@ -594,14 +594,14 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             </Link>
             <a
               href="#about"
-              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-black/40 transition-colors font-medium`}
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors font-medium`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Về chúng tôi
             </a>
             <a
               href="#contact"
-              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-black/40 transition-colors font-medium`}
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors font-medium`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Liên hệ
@@ -620,7 +620,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                   <a
                     key={index}
                     href={category.href}
-                    className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-black/40 transition-colors`}
+                    className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors`}
                   >
                     <IconComponent className="w-4 h-4" />
                     <span className="text-sm">{category.name}</span>
@@ -633,7 +633,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             <div className="px-4 py-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300">
               <button
                 onClick={toggleTheme}
-                className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-black/40 transition-colors`}
+                className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors`}
               >
                 {isDark ? (
                   <>

@@ -29,7 +29,7 @@ export const PopularCampaigns = () => {
   const canGoNext = currentPage < totalPages - 1;
 
   return (
-    <section className="py-12 sm:py-12 lg:py-18 bg-white dark:bg-black transition-colors duration-300">
+    <section className="py-12 sm:py-12 lg:py-18 bg-white dark:bg-darker-light transition-colors duration-300">
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Title and Navigation */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">

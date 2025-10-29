@@ -177,7 +177,7 @@ export default function CampaignDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
+    <div className="min-h-screen bg-white dark:bg-darker-light">
       {/* Campaign Header Section */}
       <CampaignHeader
         campaign={campaignData}
