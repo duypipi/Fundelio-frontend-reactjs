@@ -17,26 +17,25 @@
   --color-primary-900: #023956;
   --color-primary: #0894e2;
 
-  /* Secondary colors with shades - Orange #FFB700 */
-  --color-secondary-50: #fff9e6;
-  --color-secondary-100: #ffecb3;
-  --color-secondary-200: #ffdf80;
-  --color-secondary-300: #ffd24d;
-  --color-secondary-400: #ffc526;
-  --color-secondary-500: #ffb700;
-  --color-secondary-600: #e6a500;
-  --color-secondary-700: #b38100;
-  --color-secondary-800: #805d00;
-  --color-secondary-900: #4d3800;
-  --color-secondary: #ffb700; 
-  /* #fce65a */
+  /* Secondary colors with shades - Orange #FFC63F */
+  --color-secondary-50: #fffaeb;
+  --color-secondary-100: #fff0c7;
+  --color-secondary-200: #ffe5a3;
+  --color-secondary-300: #ffd97f;
+  --color-secondary-400: #ffcf5f;
+  --color-secondary-500: #ffc63f;
+  --color-secondary-600: #e6b038;
+  --color-secondary-700: #b38a2c;
+  --color-secondary-800: #806320;
+  --color-secondary-900: #4d3b13;
+  --color-secondary: #ffc63f;
 
   /* Text colors */
   --color-text-primary: #1f1f22;
   --color-text-secondary: #4d4d4d;
   --color-text-white: #dfdfe3;
   --color-text-blue: #0894e2;
-  --color-text-orange: #ffb700;
+  --color-text-orange: #ffc63f;
 
   /* Font sizes */
   --text-hero: 2.5rem; /* 40px */
@@ -202,8 +201,8 @@ body {
   /* Primary màu xanh dương #0894E2 */
   --primary: oklch(0.65 0.15 230);
   --primary-foreground: oklch(1 0 0);
-  /* Secondary màu cam #FFB700 */
-  --secondary: oklch(0.8 0.16 75);
+  /* Secondary màu vàng #FFC63F */
+  --secondary: oklch(0.82 0.14 80);
   --secondary-foreground: oklch(0.12 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -238,8 +237,8 @@ body {
   /* Primary màu xanh dương sáng hơn cho dark mode */
   --primary: oklch(0.7 0.15 230);
   --primary-foreground: oklch(0.12 0 0);
-  /* Secondary màu cam cho dark mode */
-  --secondary: oklch(0.82 0.16 75);
+  /* Secondary màu vàng #FFC63F cho dark mode */
+  --secondary: oklch(0.82 0.14 80);
   --secondary-foreground: oklch(0.12 0 0);
   --muted: oklch(0.25 0 0);
   --muted-foreground: oklch(0.708 0 0);
@@ -318,13 +317,13 @@ body {
 
   @keyframes gradient-shift {
     0% {
-      background: linear-gradient(45deg, #0894e2 0%, #ffb700 100%);
+      background: linear-gradient(45deg, #0894e2 0%, #ffc63f 100%);
     }
     50% {
-      background: linear-gradient(45deg, #ffb700 0%, #0894e2 100%);
+      background: linear-gradient(45deg, #ffc63f 0%, #0894e2 100%);
     }
     100% {
-      background: linear-gradient(45deg, #0894e2 0%, #ffb700 100%);
+      background: linear-gradient(45deg, #0894e2 0%, #ffc63f 100%);
     }
   }
 

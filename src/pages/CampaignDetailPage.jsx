@@ -1,6 +1,7 @@
 import React from 'react';
 import CampaignHeader from '@/components/campaign/CampaignHeader';
 import CampaignTabs from '@/components/campaign/CampaignTabs';
+import { mockProjects } from '@/data/mockProjects';
 
 /**
  * CampaignDetailPage Component
@@ -74,13 +75,39 @@ export default function CampaignDetailPage() {
 
   // Mock creator data
   const creator = {
-    name: 'BEAVERLAB TECH',
-    created: 5,
-    backed: 9,
-    avatarUrl: 'https://i.pravatar.cc/150?img=12',
-    bio: "BEAVERLAB is a trailblazer in merging optics and technology innovation. We create cutting-edge products that push the boundaries of what's possible.",
+    name: 'Restoration Games',
+    username: 'Justin Jacobson',
+    avatar: 'https://i.pravatar.cc/150?img=12',
+    bio: 'We take all those games you remember from back-in-the-day, fix them up, and bring them back for the modern gamer. Publishers of Return To Dark Tower, Unmatched, Thunder Road: Vendetta, and more. Every game deserves another turn.',
+    badges: [
+      { type: 'favorite', label: 'Backer Favorite' },
+      { type: 'repeat', label: 'Repeat Creator' },
+      { type: 'super', label: 'Superbacker' }
+    ],
+    stats: {
+      createdProjects: 11,
+      backedProjects: 227,
+      lastLogin: 'Oct 23 2025',
+      accountCreated: 'Dec 2016'
+    },
+    socials: {
+      website: 'restorationgames.com',
+      twitter: 'RestorationGame',
+      facebook: 'RestorationGames',
+      location: 'Sunrise, FL'
+    },
+    isVerified: true,
     moreHref: '#creator-profile',
   };
+
+  // Mock other projects by this creator (import from mockProjects)
+  const otherProjects = mockProjects.slice(0, 4).map(project => ({
+    ...project,
+    image: project.imageUrl,
+    fundingGoal: project.goal,
+    currentFunding: project.pledged,
+    backers: project.backerCount,
+  }));
 
   // Mock story blanks
   const blanks = [
@@ -165,6 +192,7 @@ export default function CampaignDetailPage() {
         campaignProps={{
           rewards,
           creator,
+          otherProjects,
           blanks,
           currency: campaignData.currency,
           onPledge: handlePledge,

@@ -4,6 +4,7 @@ import HomePage from '../pages/HomePage';
 import CreateCampaignPage from '../pages/CreateCampaignPage';
 import CampaignDetailPage from '../pages/CampaignDetailPage';
 import LandingPage from '@/pages/LandingPage';
+import WalletPage from '@/pages/WalletPage';
 
 /**
  * Application routes configuration
@@ -24,6 +25,9 @@ export const router = createBrowserRouter([
           { path: 'detail', element: <CampaignDetailPage /> },
         ],
       },
+      
+      { path: 'wallet', element: <WalletPage /> },
+
       // {
       //   path: 'auth',
       //   children: [

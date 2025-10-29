@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CampaignPage from './CampaignPage';
 import RewardsPage from './RewardsPage';
+import CreatorProfile from './creator/CreatorProfile';
 
 /**
  * CampaignTabs Component
@@ -82,20 +83,11 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
             role="tabpanel"
             id="creator-panel"
             aria-labelledby="creator-tab"
-            className="py-16 text-center"
           >
-            <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">👤</span>
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                Creator Profile
-              </h3>
-              <p className="text-secondary">
-                Coming soon... Learn more about the creator, their projects, and
-                history.
-              </p>
-            </div>
+            <CreatorProfile
+              creator={campaignProps.creator}
+              otherProjects={campaignProps.otherProjects || []}
+            />
           </div>
         )}
 
