@@ -30,7 +30,7 @@ export default function ItemSelector({ items, selectedItems, onConfirm, onClose 
   }
 
   return (
-    <div className="fixed inset-0 bg-darker-light/50 flex items-end z-50">
+    <div className="fixed inset-0 bg-darker-2-light/50 flex items-end z-50">
       <div className="w-full bg-card rounded-t-2xl p-6 max-h-[80vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-foreground">Chọn thành phần</h3>

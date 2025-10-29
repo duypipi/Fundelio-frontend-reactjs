@@ -5,6 +5,7 @@ import CreateCampaignPage from '../pages/CreateCampaignPage';
 import CampaignDetailPage from '../pages/CampaignDetailPage';
 import LandingPage from '@/pages/LandingPage';
 import WalletPage from '@/pages/WalletPage';
+import YourProjectsPage from '@/pages/YourProjectsPage';
 
 /**
  * Application routes configuration
@@ -27,6 +28,8 @@ export const router = createBrowserRouter([
       },
       
       { path: 'wallet', element: <WalletPage /> },
+      
+      { path: 'your-projects', element: <YourProjectsPage /> },
 
       // {
       //   path: 'auth',
@@ -37,7 +40,6 @@ export const router = createBrowserRouter([
       // }
     ],
   },
-  // CreateCampaignPage has its own layout (CreateCampaignHeader + Footer)
   {
     path: '/campaigns/create',
     element: <CreateCampaignPage />,

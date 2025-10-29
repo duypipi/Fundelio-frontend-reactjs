@@ -66,7 +66,7 @@ const RewardsPage = ({ rewards = [], onPledge }) => {
             <div key={reward.id}>
               <div
                 id={reward.id}
-                className="scroll-mt-20"
+                className="scroll-mt-28"
               >
                 <RewardDetailSection reward={reward} />
               </div>

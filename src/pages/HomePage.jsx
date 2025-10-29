@@ -11,7 +11,7 @@ import FeaturedSpotlight from '@/components/home/FeaturedSpotlight';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-darker-light">
+    <div className="min-h-screen bg-background-light-2 dark:bg-darker">
       {/* Hero Section */}
       <Hero />
 

@@ -47,7 +47,7 @@ const ProjectLists = ({ className = '' }) => {
                 <a
                   key={list.id}
                   href={`/projects/${list.id}`}
-                  className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 group"
+                  className="flex items-center justify-between p-4 bg-white dark:bg-darker-2 rounded-lg dark:hover:bg-gray-700 shadow-md cursor-pointer transition-all duration-200 group"
                 >
                   <span className="text-lg font-medium text-gray-900 dark:text-gray-200 group-hover:text-primary transition-colors">
                     {list.name}
@@ -75,7 +75,7 @@ const ProjectLists = ({ className = '' }) => {
                 <a
                   key={category.id}
                   href={`/category/${category.id}`}
-                  className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 group"
+                  className="flex items-center justify-between p-4 bg-white dark:bg-darker-2 rounded-lg shadow-md dark:hover:bg-gray-700 transition-all duration-200 group"
                 >
                   <span className="text-lg font-medium text-gray-900 dark:text-gray-200 group-hover:text-primary transition-colors">
                     {category.name}

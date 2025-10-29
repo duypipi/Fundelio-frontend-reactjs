@@ -64,7 +64,7 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">
           {item ? "Chỉnh sửa thành phần" : "Tạo thành phần mới"}
         </h3>
@@ -88,7 +88,7 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
             </div>
           </div>
 
-               <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+               <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Hình ảnh</h3>
         
         {/* Upload Area - Only show when no image */}

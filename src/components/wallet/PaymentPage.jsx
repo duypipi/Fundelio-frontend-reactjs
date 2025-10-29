@@ -84,7 +84,7 @@ const PaymentPage = () => {
                 <h2 className="text-xl font-bold text-text-primary dark:text-white mb-4">
                     Chọn gói nạp
                 </h2>
-                <div className="grid lg:grid-cols-[1fr_380px] gap-6">
+                <div className="grid lg:grid-cols-[1fr_360px] gap-12">
                     {/* Left Column - Payment Packages */}
                     <div>
 
@@ -118,7 +118,7 @@ const PaymentPage = () => {
                             <div className="p-4 space-y-4">
                                 {/* Selected Package */}
                                 {selectedPackage ? (
-                                    <div className="flex items-center gap-3 p-3 bg-background-lighter dark:bg-darker-light rounded-lg border border-border-light dark:border-white/10">
+                                    <div className="flex items-center gap-3 p-3 bg-background-lighter dark:bg-darker rounded-lg border border-border-light dark:border-white/10">
                                         <img
                                             src={selectedPackage.image}
                                             alt="Package"
@@ -133,7 +133,7 @@ const PaymentPage = () => {
                                             </p>
                                         </div>
                                         {/* Quantity Selector */}
-                                        <div className="flex items-center gap-2 bg-white dark:bg-darker rounded-lg border border-border-light dark:border-white/10 px-2 py-1">
+                                        <div className="flex items-center gap-2 bg-white dark:bg-darker-2 rounded-lg border border-border-light dark:border-white/10 px-2 py-1">
                                             <button
                                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                                                 className="text-text-primary dark:text-white hover:text-primary transition-colors"
@@ -178,7 +178,7 @@ const PaymentPage = () => {
                           w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all duration-200
                           ${selectedPaymentMethod === method.id
                                                         ? 'border-primary bg-primary/5 dark:bg-primary/10'
-                                                        : 'border-border-light dark:border-white/10 hover:border-primary/50 bg-white dark:bg-darker-light'
+                                                        : 'border-border-light dark:border-white/10 hover:border-primary/50 bg-white dark:bg-darker'
                                                     }
                         `}
                                             >

@@ -1,20 +1,5 @@
 import { motion } from 'framer-motion';
 
-/**
- * RewardItem Component
- * Reusable component for displaying included items and add-ons
- * 
- * @param {Object} item - Item data
- * @param {string} item.id - Unique identifier
- * @param {string} item.name - Item name
- * @param {number} item.quantity - Item quantity
- * @param {string} [item.image] - Optional item image URL
- * @param {string} [item.badge] - Optional badge text (e.g., "INCLUDED", "BONUS")
- * @param {string} [item.description] - Optional item description
- * @param {React.ReactNode} [rightContent] - Optional content to display on the right (e.g., badge, price)
- * @param {boolean} [showQuantity=true] - Whether to show quantity text
- * @param {string} [variant='default'] - Variant styling ('default' or 'addon')
- */
 export function RewardItem({ 
   item, 
   rightContent, 
@@ -25,16 +10,15 @@ export function RewardItem({
 
   return (
     <motion.div
-      className={`flex items-start justify-between p-5 rounded-sm border border-border/50 ${
-        isAddon ? 'hover:border-primary/30' : 'bg-gradient-to-r from-success/5 to-transparent'
-      } transition-colors`}
+      className={`bg-white dark:bg-darker-2 flex items-start justify-between p-5 rounded-sm ${
+        isAddon ? 'hover:border-primary/30 shadow-sm' : 'shadow-md'
+      } `}
       whileHover={{ scale: isAddon ? 1 : 1.01 }}
-      transition={{ type: 'spring', stiffness: 300 }}
     >
       <div className="flex items-start gap-4 flex-1 min-w-0">
         {/* Image */}
         {item.image && (
-          <div className={`${isAddon ? 'w-20 h-20' : 'w-16 h-16'} rounded-sm overflow-hidden bg-gray-100 flex-shrink-0`}>
+          <div className={`${isAddon ? 'w-20 h-20' : 'w-16 h-16'} rounded-sm overflow-hidden flex-shrink-0`}>
             <img
               src={item.image}
               alt={item.name}

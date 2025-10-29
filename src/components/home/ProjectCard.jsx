@@ -1,6 +1,6 @@
 'use client';
 import { Clock, Bookmark, Heart, Users } from 'lucide-react';
-
+import expired from '/expired.svg';
 export const ProjectCard = ({
   project,
   onBookmarkToggle,
@@ -8,6 +8,7 @@ export const ProjectCard = ({
   asLink,
   size = 'default',
   mode = 'default',
+  variant = 'default', // 'default' | 'expired'
 }) => {
   const {
     id,
@@ -25,6 +26,7 @@ export const ProjectCard = ({
     bookmarked = false,
     backerCount = 0,
     likeCount = 0,
+    status,
   } = project;
 
   const handleBookmarkClick = (e) => {
@@ -52,8 +54,9 @@ export const ProjectCard = ({
     <article
       role="article"
       className={`
-        group relative bg-white dark:bg-[#2a2d3a] overflow-hidden
+        group relative bg-white dark:bg-darker-2 overflow-hidden
         transition-all duration-300 ease-out
+        shadow-md
         hover:-translate-y-2
         hover:shadow-[0_8px_24px_4px_rgba(25,90,254,0.35)]
         break-inside-avoid mb-6 rounded-lg
@@ -73,13 +76,29 @@ export const ProjectCard = ({
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
+        {/* Expired Overlay */}
+        {variant === 'expired' && (
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-20">
+            <div className="text-center">
+              <img 
+                src={expired} 
+                alt="Expired" 
+                className="w-40 h-40 mx-auto mb-4 drop-shadow-lg"
+              />
+              <p className="text-white text-xl font-bold drop-shadow-lg">
+                Chiến dịch đã kết thúc
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Stats Overlay - Bottom Left */}
         <div className="absolute bottom-4 left-4 flex items-center gap-4 text-white z-10">
-          <div className="flex items-center gap-1.5 bg-darker-light/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <div className="flex items-center gap-1.5 bg-darker-2-light/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
             <Heart className="w-4 h-4 fill-white" />
             <span className="text-sm font-semibold">{formatNumber(likeCount || 22700)}</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-darker-light/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <div className="flex items-center gap-1.5 bg-darker-2-light/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
             <Users className="w-4 h-4" />
             <span className="text-sm font-semibold">{formatNumber(backerCount || 8700)}</span>
           </div>
@@ -107,10 +126,12 @@ export const ProjectCard = ({
           <span className="inline-flex items-center px-3 py-1 bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary text-xs font-semibold rounded-full">
             {category || 'Crowdfunding'}
           </span>
-          <span className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {daysLeft} ngày
-          </span>
+          {variant !== 'expired' && daysLeft > 0 && (
+            <span className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              {daysLeft} ngày
+            </span>
+          )}
         </div>
 
         {/* Title */}
@@ -118,21 +139,23 @@ export const ProjectCard = ({
           {title}
         </h3>
 
-        {/* Author */}
-        <div className="flex items-center gap-2">
-          <img
-            src={authorAvatarUrl || '/api/placeholder/32/32'}
-            alt={`${authorName}'s avatar`}
-            className="w-8 h-8 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-xs text-text-secondary dark:text-gray-400">by</p>
-            <p className="text-text-primary dark:text-white text-sm font-medium truncate">{authorName}</p>
+        {/* Author - Fixed height for consistency */}
+        <div className="min-h-[2.5rem]">
+          <div className="flex items-center gap-2">
+            <img
+              src={authorAvatarUrl || '/api/placeholder/32/32'}
+              alt={`${authorName}'s avatar`}
+              className="w-8 h-8 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs text-text-secondary dark:text-gray-400">by</p>
+              <p className="text-text-primary dark:text-white text-sm font-medium truncate">{authorName}</p>
+            </div>
           </div>
         </div>
 
         {/* Total Funding & Circular Progress */}
-        <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+        <div className="">
           <div className="flex items-center justify-between gap-3">
             {/* Total Funding */}
             <div className="flex-1 min-w-0">

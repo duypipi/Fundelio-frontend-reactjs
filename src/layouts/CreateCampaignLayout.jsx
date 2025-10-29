@@ -16,7 +16,7 @@ export const CreateCampaignLayout = ({
   onPreview 
 }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-background-light dark:bg-darker-light transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-background-light dark:bg-darker transition-colors duration-300">
       {/* Header */}
       <CreateCampaignHeader 
         activeTab={activeTab}

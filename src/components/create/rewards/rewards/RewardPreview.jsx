@@ -3,7 +3,7 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
   
   if (!reward) {
     return (
-      <div className="sticky top-6 rounded-xl border border-border bg-white dark:bg-darker p-6 space-y-4">
+      <div className="sticky top-6 rounded-xl border border-border bg-white dark:bg-darker-2 p-6 space-y-4">
         <h3 className="text-lg font-semibold text-foreground">Xem trước</h3>
         <div className="space-y-4">
           <div className="aspect-video rounded-lg border-2 border-dashed border-border bg-muted/30 flex items-center justify-center">
@@ -46,7 +46,7 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
     : []
 
   return (
-    <div className="sticky top-6 rounded-xl border border-border bg-white dark:bg-darker p-6 space-y-4">
+    <div className="sticky top-6 rounded-xl border border-border bg-white dark:bg-darker-2 p-6 space-y-4">
       <h3 className="text-lg font-semibold text-foreground">Xem trước</h3>
 
       {reward.image && (
@@ -57,8 +57,9 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
 
       <div>
         <h4 className="font-semibold text-foreground line-clamp-2">{reward.title}</h4>
-        <p className={`text-2xl font-bold mt-2 ${isAddon ? 'text-secondary' : 'text-primary'}`}>
-          ${reward.price}
+        <p className={`text-2xl font-bold mt-2 flex items-center gap-2 ${isAddon ? 'text-secondary' : 'text-primary'}`}>
+          {reward.price}
+          <img src="/packages/coin.svg" alt="Coin" className="w-6 h-6" />
         </p>
       </div>
 

@@ -111,7 +111,7 @@ export default function BasicsContent() {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-darker border border-border rounded-sm p-6">
+        <div className="bg-white dark:bg-darker-2 border border-border rounded-sm p-6">
           <div className="space-y-4">
             <div>
               <label className="block text-md font-medium text-foreground mb-2">
@@ -168,7 +168,7 @@ export default function BasicsContent() {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-darker border border-border rounded-sm p-6">
+        <div className="bg-white dark:bg-darker-2 border border-border rounded-sm p-6">
           <label className="block text-md font-medium text-foreground mb-2">
             Danh mục dự án <span className="text-primary">*</span>
           </label>
@@ -210,7 +210,7 @@ export default function BasicsContent() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+        <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
           <h3 className="text-md font-semibold text-foreground mb-4">Hình ảnh <span className="text-primary">*</span></h3>
 
           {/* Upload Area - Only show when no image */}
@@ -314,7 +314,7 @@ export default function BasicsContent() {
           </p>
         </div>
 
-        <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+        <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
           <h3 className="text-md font-semibold text-foreground mb-4">Video giới thiệu</h3>
 
           {/* Upload Area - Only show when no video */}
@@ -409,7 +409,7 @@ export default function BasicsContent() {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-darker border border-border rounded-sm p-6">
+        <div className="bg-white dark:bg-darker-2 border border-border rounded-sm p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-md font-medium text-foreground mb-2">

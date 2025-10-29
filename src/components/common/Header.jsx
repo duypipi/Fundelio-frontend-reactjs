@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
   Monitor,
@@ -16,12 +16,13 @@ import {
   Search,
   User,
   Settings,
-  MessageSquare,
+  Wallet,
   Activity,
   LogOut,
   Plus,
   Bookmark,
   Star,
+  FolderOpen,
 } from 'lucide-react';
 import Button from './Button';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -33,14 +34,17 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [showCoinModal, setShowCoinModal] = useState(false);
   const { toggleTheme, isDark } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Mock user state - Default is logged in
   const [isLoggedIn] = useState(true);
   const [user] = useState({
     name: 'Nguyen Van A',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
+    coins: 0, // Set to 0 to test modal, change to any number > 0 for normal display
   });
 
   // Mock search results
@@ -68,6 +72,9 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
       }
       if (!event.target.closest('.search-container')) {
         setIsSearchFocused(false);
+      }
+      if (!event.target.closest('.coin-modal') && !event.target.closest('.coin-button')) {
+        setShowCoinModal(false);
       }
     };
 
@@ -112,7 +119,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
   const headerVariants = {
     transparent: {
       container: isScrolled
-        ? 'bg-white/95 dark:bg-darker backdrop-blur-md text-text-primary dark:text-text-white shadow-md transition-colors duration-300'
+        ? 'bg-white/95 dark:bg-darker-2 backdrop-blur-md text-text-primary dark:text-text-white shadow-md transition-colors duration-300'
         : 'bg-transparent text-text-white',
       title: isScrolled
         ? 'text-text-primary dark:text-text-white transition-colors duration-300'
@@ -121,7 +128,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
         ? 'text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300'
         : 'text-text-white hover:text-secondary',
       dropdown:
-        'bg-white dark:bg-darker-light border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
+        'bg-white dark:bg-darker border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
       dropdownItem:
         'hover:bg-gray-50 dark:hover:bg-gray-900 text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       button: isScrolled
@@ -130,13 +137,13 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
     },
     light: {
       container:
-        'bg-white dark:bg-darker text-text-primary dark:text-text-white shadow-md transition-colors duration-300',
+        'bg-white dark:bg-darker-2 text-text-primary dark:text-text-white shadow-md transition-colors duration-300',
       title:
         'text-text-primary dark:text-text-white transition-colors duration-300',
       navLink:
         'text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       dropdown:
-        'bg-white dark:bg-darker-light border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
+        'bg-white dark:bg-darker border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
       dropdownItem:
         'hover:bg-gray-50 dark:hover:bg-gray-700 text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       button:
@@ -157,6 +164,23 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
   };
 
   const currentVariant = headerVariants[variant];
+
+  const handleCoinClick = () => {
+    if (user.coins === 0) {
+      setShowCoinModal(true);
+    }
+  };
+
+  const handleTopUpConfirm = () => {
+    setShowCoinModal(false);
+    navigate('/wallet');
+  };
+
+  const formatNumber = (num) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num.toString();
+  };
 
   return (
     <header
@@ -232,7 +256,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 onFocus={() => setIsSearchFocused(true)}
                 className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
                   isScrolled || variant !== 'transparent'
-                    ? 'bg-white dark:bg-darker-light border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white'
+                    ? 'bg-white dark:bg-darker border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white'
                     : 'bg-white/20 border-white/30 text-white placeholder-white/70'
                 } focus:outline-none focus:ring-2 focus:ring-primary transition-colors`}
               />
@@ -240,7 +264,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
 
             {/* Search Results Dropdown */}
             {isSearchFocused && searchQuery.length >= 3 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker-light rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto z-50">
                 {/* Categories */}
                 {searchResults.categories.length > 0 && (
                   <div className="p-2">
@@ -303,7 +327,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                           <p className="text-xs text-gray-500 dark:text-gray-400">{campaign.category}</p>
                         </div>
                         <span className="text-xs font-semibold text-primary">
-                          ${campaign.raised.toLocaleString()}
+                          {campaign.raised.toLocaleString()} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-4 h-4 mb-0.5" />
                         </span>
                       </a>
                     ))}
@@ -322,7 +346,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             )}
 
             {searchQuery.length > 0 && searchQuery.length < 3 && isSearchFocused && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker-light rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                   Nhập ít nhất 3 ký tự để tìm kiếm
                 </p>
@@ -333,6 +357,57 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
 
         {/* Right - Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Coin Display - Desktop only */}
+          <button
+            onClick={handleCoinClick}
+            className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg ${
+              user.coins === 0 
+                ? 'hover:bg-red-100 dark:hover:bg-red-900/30' 
+                : 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30'
+            } transition-all duration-200 hover:scale-105 coin-button relative`}
+            title={user.coins === 0 ? 'Nạp coin' : 'Số coin hiện có'}
+          >
+            <img src="/packages/coin.svg" alt="Coin" className="w-5 h-5" />
+            <span className={`text-md font-bold ${
+              user.coins === 0 
+                ? 'text-red-600 dark:text-red-400' 
+                : 'text-primary dark:text-primary-400'
+            }`}>
+              {formatNumber(user.coins)}
+            </span>
+          </button>
+
+          {/* Coin Modal */}
+          {showCoinModal && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] coin-modal">
+              <div className="bg-white dark:bg-darker rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+                <div className="text-center mb-6">
+                  <img src="/packages/coin.svg" alt="Coin" className="w-16 h-16 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-text-primary dark:text-text-white mb-2">
+                    Bạn chưa có coin
+                  </h3>
+                  <p className="text-muted-foreground dark:text-gray-400">
+                    Bạn có muốn nạp coin để tham gia các chiến dịch không?
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowCoinModal(false)}
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
+                  >
+                    Để sau
+                  </button>
+                  <button
+                    onClick={handleTopUpConfirm}
+                    className="flex-1 px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:opacity-90 transition-opacity font-medium"
+                  >
+                    Nạp ngay
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Theme Toggle - Desktop only */}
           <button
             onClick={toggleTheme}
@@ -361,18 +436,22 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             <div className="relative user-menu-container">
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-primary transition-all"
+                className="flex items-center gap-2 p-1 rounded-full transition-all group relative"
               >
+                {/* Gradient border effect */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-[2px]">
+                  <div className="w-full h-full rounded-full bg-white dark:bg-darker-2"></div>
+                </div>
                 <img
                   src={user.avatar}
                   alt={user.name}
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white/20"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white/20 group-hover:border-transparent transition-colors relative z-10"
                 />
               </button>
 
               {/* User Dropdown Menu */}
               {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker-light rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
                   <div className="flex flex-col md:flex-row">
                     {/* Left Column - Your Account + Bottom Section */}
                     <div className="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">
@@ -380,31 +459,8 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                         Tài khoản
                       </h4>
                       <div className="space-y-1 mb-4">
-                        <a
-                          href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <Bookmark className="w-4 h-4" />
-                          <span>Dự án đã lưu</span>
-                        </a>
-                        <a
-                          href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <Star className="w-4 h-4" />
-                          <span>Đề xuất cho bạn</span>
-                        </a>
-                        <a
-                          href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <User className="w-4 h-4" />
-                          <span>Đang theo dõi</span>
-                        </a>
+                        
                       </div>
-
-                      {/* Divider */}
-                      <div className="border-t border-gray-200 dark:border-gray-700 my-3"></div>
 
                       {/* Bottom Section */}
                       <div className="space-y-1">
@@ -422,20 +478,21 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                           <Settings className="w-4 h-4" />
                           <span>Cài đặt</span>
                         </a>
-                        <a
-                          href="#"
+                        <Link
+                          to="/your-projects"
+                          onClick={() => setIsUserMenuOpen(false)}
                           className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
-                          <MessageSquare className="w-4 h-4" />
-                          <span>Tin nhắn</span>
-                        </a>
-                        <a
-                          href="#"
+                          <FolderOpen className="w-4 h-4" />
+                          <span>Dự án của bạn</span>
+                        </Link>
+                        <Link
+                          href="/wallet"
                           className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
-                          <Activity className="w-4 h-4" />
-                          <span>Hoạt động</span>
-                        </a>
+                          <Wallet className="w-4 h-4" />
+                          <span>Ví</span>
+                        </Link>
                       </div>
 
                       {/* Logout */}
@@ -570,7 +627,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
               to="/home"
               className={`block px-4 py-2 rounded-lg ${
                 currentVariant.navLink
-              } hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors font-medium ${
+              } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${
                 location.pathname === '/home'
                   ? 'text-primary dark:text-primary-400'
                   : ''
@@ -583,7 +640,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
               to="/campaigns/create"
               className={`block px-4 py-2 rounded-lg ${
                 currentVariant.navLink
-              } hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors font-medium ${
+              } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${
                 location.pathname === '/campaigns/create'
                   ? 'text-primary dark:text-primary-400'
                   : ''
@@ -594,14 +651,14 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             </Link>
             <a
               href="#about"
-              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors font-medium`}
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Về chúng tôi
             </a>
             <a
               href="#contact"
-              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors font-medium`}
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Liên hệ
@@ -620,7 +677,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                   <a
                     key={index}
                     href={category.href}
-                    className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors`}
+                    className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors`}
                   >
                     <IconComponent className="w-4 h-4" />
                     <span className="text-sm">{category.name}</span>
@@ -633,7 +690,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             <div className="px-4 py-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300">
               <button
                 onClick={toggleTheme}
-                className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-light/40 transition-colors`}
+                className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors`}
               >
                 {isDark ? (
                   <>

@@ -60,6 +60,7 @@ export function RewardDetailSection({ reward }) {
     {
       id: '1',
       name: 'Core Product Access',
+      image: 'https://c.animaapp.com/mh96kubogMaabT/img/ai_1.png',
       quantity: 1,
       badge: 'INCLUDED',
       description: 'Full access to the core product with all standard features',
@@ -118,8 +119,7 @@ export function RewardDetailSection({ reward }) {
         </Card>
 
         {/* Included Items */}
-        <Card className="p-6 border border-border/50">
-          <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center justify-between mb-5 mt-12">
             <h3 className="text-lg font-bold text-foreground">
               {includedItems.length} Items Included
             </h3>
@@ -149,11 +149,10 @@ export function RewardDetailSection({ reward }) {
               />
             ))}
           </div>
-        </Card>
+        
 
         {/* Add-ons */}
-        <Card className="p-6 border border-border/50">
-          <h3 className="text-lg font-bold text-foreground mb-5">
+          <h3 className="text-lg font-bold text-foreground mb-5 mt-12">
             Optional Add-ons
           </h3>
 
@@ -164,7 +163,6 @@ export function RewardDetailSection({ reward }) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="overflow-hidden"
               >
                 <RewardItem
                   item={addon}
@@ -175,10 +173,12 @@ export function RewardDetailSection({ reward }) {
                       <div
                         className="px-4 py-2 rounded-sm font-bold text-white shadow-md whitespace-nowrap text-center"
                         style={{
-                          background: 'linear-gradient(135deg, #FFB700 0%, #FF9603 100%)',
+                          // changed from yellow gradient to a teal/blue gradient
+                          // so it doesn't clash with the coin's yellow color
+                          background: 'linear-gradient(135deg, #0894E2 0%, #1EC794 100%)',
                         }}
                       >
-                        +${addon.price}
+                        {addon.price} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-5 h-5 mb-0.5" />
                       </div>
                       
                       {/* Quantity Controls */}
@@ -213,9 +213,13 @@ export function RewardDetailSection({ reward }) {
                   <motion.div
                     initial={{ height: 0 }}
                     animate={{ height: 'auto' }}
-                    className="px-4 py-2 gradient-2 text-white text-sm font-semibold mt-0 rounded-b-sm"
+                    className="px-4 py-2 gradient-2 text-white text-sm font-semibold mt-0 rounded-b-sm flex items-center justify-between"
                   >
-                    Added: {addon.quantity} × ${addon.price} = ${addon.quantity * addon.price}
+                    <span>Added: {addon.quantity} ×</span>
+                    <span className="flex items-center gap-1">
+                      {addon.price} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-4 h-4" />
+                      = {addon.quantity * addon.price} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-4 h-4" />
+                    </span>
                   </motion.div>
                 )}
               </motion.div>
@@ -235,17 +239,19 @@ export function RewardDetailSection({ reward }) {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="font-semibold text-foreground">Add-ons Total:</span>
-                <span className="text-xl font-bold text-accent">+${totalAddOnsPrice}</span>
+                <span className="text-xl font-bold text-accent flex items-center gap-1">
+                  +{totalAddOnsPrice} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-5 h-5" />
+                </span>
               </div>
               <div className="flex items-center justify-between pt-2 border-t border-accent/20">
                 <span className="text-lg font-bold text-foreground">Grand Total:</span>
-                <span className="text-2xl font-bold text-primary">
-                  ${reward.price + totalAddOnsPrice}
+                <span className="text-2xl font-bold text-primary flex items-center gap-1">
+                  {reward.price + totalAddOnsPrice} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-6 h-6" />
                 </span>
               </div>
             </motion.div>
           )}
-        </Card>
+       
       </motion.div>
     </div>
   );

@@ -16,7 +16,7 @@ export function RewardDetailCard({ reward }) {
   return (
     <Card className="overflow-hidden border border-border/50 h-fit sticky top-8 max-w-[380px] mx-auto">
       {/* Image Section - 16:9 aspect ratio */}
-      <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="relative aspect-[16/9] overflow-hidden bg-white dark:bg-darker-2">
         <img
           src={reward.coverUrl || reward.image}
           alt={reward.imageAlt || reward.title}
@@ -35,7 +35,7 @@ export function RewardDetailCard({ reward }) {
       </div>
 
       {/* Content Section - Reduced padding */}
-      <div className="p-4">
+      <div className="p-4 bg-white dark:bg-darker-2">
         <h3 className="text-base font-bold text-foreground mb-3 leading-tight">
           {reward.title}
         </h3>
@@ -112,12 +112,13 @@ export function RewardDetailCard({ reward }) {
 
         {/* CTA Button - Smaller */}
         <Button
-          className="w-full font-bold text-white shadow-lg h-10 text-sm"
+          className="w-full font-bold text-white shadow-lg h-10 text-sm flex items-center justify-center gap-2"
           style={{
             background: 'linear-gradient(135deg, #1EC794 0%, #0894E2 100%)',
           }}
         >
-          {reward.pledgeActionLabel || `Pledge $${reward.price}`}
+          <span>Pledge {reward.price}</span>
+          <img src="/packages/coin.svg" alt="Coin" className="w-5 h-5" />
         </Button>
       </div>
     </Card>

@@ -53,7 +53,7 @@ export const CreateCampaignHeader = ({
 //   const headerHeight = isEditing ? 'md:h-20' : 'md:h-16';
 
   return (
-    <header className={`fixed top-0 left-0 right-0 py-3 px-4 sm:py-4 sm:px-6 z-50 bg-white dark:bg-darker border-b border-gray-200 dark:border-gray-700 transition-all duration-300 md:h-20`}>
+    <header className={`fixed top-0 left-0 right-0 py-3 px-4 sm:py-4 sm:px-6 z-50 bg-white dark:bg-darker-2 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 md:h-20`}>
       {/* Desktop - Single Row */}
       <div className="hidden md:block">
         <div className="mx-auto max-w-container px-4 sm:px-6 h-full flex items-center justify-between gap-4">
@@ -145,7 +145,7 @@ export const CreateCampaignHeader = ({
 
               {/* User Dropdown Menu */}
               {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker-light rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-2 w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
                   <div className="flex flex-col md:flex-row">
                     {/* Left Column */}
                     <div className="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">

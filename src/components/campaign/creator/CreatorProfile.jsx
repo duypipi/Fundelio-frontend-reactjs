@@ -135,7 +135,7 @@ const CreatorProfile = ({ creator = {}, otherProjects = [] }) => {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <button
             onClick={handleMessage}
-            className="px-6 py-3 bg-background border-2 border-border hover:border-primary text-foreground font-semibold rounded-sm transition-all duration-200 flex items-center justify-center gap-2"
+            className="px-6 py-3 bg-background text-foreground font-semibold rounded-sm transition-all duration-200 flex items-center justify-center gap-2"
           >
             <Mail size={20} />
             <span>Message</span>

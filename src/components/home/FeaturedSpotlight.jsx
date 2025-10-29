@@ -40,14 +40,14 @@ export const FeaturedSpotlight = () => {
   };
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-gray-50 dark:bg-darker-light transition-colors duration-300">
+    <section className="py-12 sm:py-16 lg:py-20 transition-colors duration-300">
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Sidebar: Project Lists & Categories */}
           <ProjectLists className="hidden lg:block" />
 
           {/* Main Content Area */}
-          <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-8">
+          <div className="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6">
             {/* Center: Featured Projects (2x2 Grid) */}
             <div className="xl:col-span-8">
               {/* Header with Navigation */}
@@ -137,7 +137,7 @@ export const FeaturedSpotlight = () => {
               <div className="relative">
                 {/* Scrollable Container */}
                 <div 
-                  className="space-y-2 overflow-y-auto pr-2 scrollbar-primary"
+                  className="space-y-2 overflow-y-auto pr-2 pl-2 scrollbar-primary"
                   style={{ 
                     maxHeight: 'calc(2 * 400px + 1.5rem)', // Height of 2 cards + gap
                     minHeight: 'calc(2 * 400px + 1.5rem)',
@@ -147,7 +147,7 @@ export const FeaturedSpotlight = () => {
                     <a 
                       key={campaign.id}
                       href={`/campaign/${campaign.id}`}
-                      className="flex items-center gap-2 p-3 bg-white dark:bg-darker rounded-lg hover:scale-[1.02] transition-all duration-200 group"
+                      className="flex items-center gap-2 p-2 bg-white dark:bg-darker-2 inset-shadow-2xs shadow-md rounded-lg hover:scale-[1.02] transition-all duration-200 group"
                     >
                       {/* Thumbnail */}
                       <div className="relative w-15 h-15 flex-shrink-0 rounded-lg overflow-hidden">
@@ -156,11 +156,11 @@ export const FeaturedSpotlight = () => {
                           alt={campaign.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         />
-                        {campaign.daysLeft <= 2 && (
+                        {/* {campaign.daysLeft <= 2 && (
                           <div className="absolute top-1 left-1 bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded">
                             FINAL DAYS
                           </div>
-                        )}
+                        )} */}
                       </div>
 
                       {/* Content */}

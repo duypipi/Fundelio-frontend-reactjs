@@ -33,20 +33,16 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
       className="h-full group"
     >
       <Card
-        className={`overflow-hidden border border-border/50 hover:border-transparent transition-all duration-300 h-full flex relative ${
+        className={`overflow-hidden transition-all duration-300 h-full flex relative ${
           isVertical ? 'flex-col' : 'flex-col sm:flex-row'
         }`}
-        style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)',
-          boxShadow: '0 4px 20px rgba(8, 148, 226, 0.08)',
-        }}
       >
         {/* Gradient Border Effect on Hover */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-sm">
+        {/* <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-sm">
           <div className="absolute inset-0 p-[2px] gradient-3">
             <div className="w-full h-full bg-white"></div>
           </div>
-        </div>
+        </div> */}
 
         {/* Image Section */}
         <div
@@ -68,14 +64,15 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
           
           {/* Price Badge with Gradient */}
           <motion.div
-            className="absolute top-4 right-4 px-4 py-2 rounded-sm font-bold text-white shadow-lg"
+            className="absolute top-4 right-4 px-4 py-2 rounded-sm font-bold text-white shadow-lg flex items-center gap-1"
             style={{
               background: 'linear-gradient(135deg, #FFB700 0%, #FF9603 100%)',
             }}
             whileHover={{ scale: 1.1, rotate: 2 }}
             transition={{ type: 'spring', stiffness: 300 }}
           >
-            <span className="text-lg">{priceLabel || `$${reward.price}`}</span>
+            <span className="text-lg">{reward.price}</span>
+            <img src="/packages/coin.svg" alt="Coin" className="w-5 h-5" />
           </motion.div>
 
           {/* Sparkle Effect */}
@@ -96,7 +93,7 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
         </div>
 
         {/* Content Section */}
-        <div className={`p-6 border flex flex-col flex-1 relative z-10 ${isVertical ? '' : 'sm:w-3/5'}`}>
+        <div className={`p-6 bg-white dark:bg-darker-2 flex flex-col flex-1 relative z-10 ${isVertical ? '' : 'sm:w-3/5'}`}>
           {/* Title with Animated Gradient Underline */}
           <div className="mb-4">
             <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
@@ -118,10 +115,10 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
           {/* Info Section with Glassmorphism */}
           <div
             className="space-y-3 mb-5 p-4 rounded-sm backdrop-blur-sm"
-            style={{
-              background: 'linear-gradient(135deg, rgba(8, 148, 226, 0.05) 0%, rgba(30, 199, 148, 0.05) 100%)',
-              border: '1px solid rgba(8, 148, 226, 0.1)',
-            }}
+            // style={{
+            //   background: 'linear-gradient(135deg, rgba(8, 148, 226, 0.05) 0%, rgba(30, 199, 148, 0.05) 100%)',
+            //   border: '1px solid rgba(8, 148, 226, 0.1)',
+            // }}
           >
             <motion.div
               className="flex items-center gap-3 text-sm text-foreground"
@@ -183,11 +180,11 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
               <Button
                 variant="outline"
                 className="w-full font-semibold relative overflow-hidden group/btn"
-                style={{
-                  borderWidth: '2px',
-                  borderImage: 'linear-gradient(135deg, #0894E2 0%, #1EC794 100%) 1',
-                  color: '#0894E2',
-                }}
+                // style={{
+                //   borderWidth: '2px',
+                //   borderImage: 'linear-gradient(135deg, #0894E2 0%, #1EC794 100%) 1',
+                //   color: '#0894E2',
+                // }}
               >
                 {detailsHref ? (
                   <a href={detailsHref} className="relative z-10 group-hover/btn:text-white transition-colors duration-300">

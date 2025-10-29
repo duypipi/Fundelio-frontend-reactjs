@@ -19,7 +19,7 @@
 //   );
 
 //   return (
-//     <section className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-darker-light transition-colors duration-300">
+//     <section className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-darker transition-colors duration-300">
 //       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
 //         {/* Section Header */}
 //         <div className="flex items-center justify-between mb-10 sm:mb-12">

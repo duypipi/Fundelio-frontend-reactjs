@@ -51,7 +51,7 @@ export default function RewardCard({
   const gridCols = type === 'item' ? 'md:grid-cols-3' : 'md:grid-cols-4';
 
   return (
-    <div className="rounded-sm border border-border bg-white dark:bg-darker overflow-hidden hover:shadow-md transition-shadow">
+    <div className="rounded-sm border border-border bg-white dark:bg-darker-2 overflow-hidden hover:shadow-md transition-shadow">
       {/* Content Grid - 3-4 columns on desktop, stack on mobile */}
       <div className={`grid grid-cols-1 ${gridCols} gap-4 md:gap-6 p-4 md:p-6`}>
         {/* Column 1: Pledge Amount / Component Name */}

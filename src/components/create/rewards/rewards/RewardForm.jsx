@@ -113,7 +113,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basics Section */}
-      <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Cơ bản</h3>
         <div className="space-y-4">
           <div>
@@ -146,7 +146,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
       </div>
 
       {/* Image Section */}
-      <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground">Hình ảnh</h3>
         <p className="text-sm text-text-primary dark:text-text-white mb-4">
           Thêm hình ảnh sản phẩm của bạn để giúp người ủng hộ hiểu chính xác phần thưởng của họ là gì.
@@ -230,7 +230,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
       </div>
 
       {/* Pricing Section */}
-      <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Giá ủng hộ</h3>
         <div className="space-y-4">
           <div>
@@ -259,7 +259,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
       </div>
 
       {/* Items Section */}
-      <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Thành phần</h3>
         <div className="space-y-4">
           <Button type="button" onClick={() => setShowItemSelector(true)} variant="secondary" className="w-full">
@@ -299,7 +299,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
       </div>
 
       {/* Delivery Section */}
-      <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Thời gian giao dự kiến</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -338,7 +338,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
 
       {/* Shipping Section - Only for rewards */}
       {!isAddon && (
-        <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+        <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
           <h3 className="text-lg font-semibold text-foreground mb-4">Vận chuyển</h3>
           <div className="space-y-3">
             <label className="flex items-center gap-3 cursor-pointer">
@@ -369,7 +369,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
 
       {/* Offered With Section - Only for addons */}
       {isAddon && rewards && rewards.length > 0 && (
-        <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+        <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
           <h3 className="text-lg font-semibold text-foreground mb-4">Áp dụng cho phần thưởng</h3>
           <p className="text-sm text-text-primary dark:text-white mb-4">
             Chọn các phần thưởng mà add-on này có thể được thêm vào
@@ -388,7 +388,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
       )}
 
       {/* Limits Section */}
-      <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Giới hạn</h3>
         <div className="space-y-4">
           <div>
@@ -432,7 +432,7 @@ export default function RewardForm({ reward, items, rewards, onSave, onCancel, o
 
       {/* Add-ons Section - Only for rewards */}
       {!isAddon && (
-        <div className="rounded-sm border border-border bg-white dark:bg-darker p-6">
+        <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
           <Checkbox
             checked={formData.allowAddOns}
             onChange={(checked) => {
