@@ -1,9 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../layouts/RootLayout';
+import { AuthLayout } from '../layouts/AuthLayout';
+import AdminLayout from '../layouts/AdminLayout';
 import HomePage from '../pages/HomePage';
 import CreateCampaignPage from '../pages/CreateCampaignPage';
 import CampaignDetailPage from '../pages/CampaignDetailPage';
 import LandingPage from '@/pages/LandingPage';
+import { AuthPage } from '@/pages/AuthPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
+import AdminDashboard from '@/pages/admin/AdminDashboard';
+import UsersPage from '@/pages/admin/UsersPage';
+import RolesPage from '@/pages/admin/RolesPage';
+import PermissionsPage from '@/pages/admin/PermissionsPage';
+import AdminCampaignsPage from '@/pages/admin/AdminCampaignsPage';
 
 /**
  * Application routes configuration
@@ -12,7 +21,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
-    
+
     children: [
       { index: true, element: <LandingPage /> },
 
@@ -25,13 +34,29 @@ export const router = createBrowserRouter([
           { path: 'create', element: <CreateCampaignPage /> },
         ],
       },
-      // {
-      //   path: 'auth',
-      //   children: [
-      //     { path: 'login', element: <LoginPage /> },
-      //     { path: 'register', element: <RegisterPage /> },
-      //   ],
-      // }
+    ],
+  },
+  {
+    path: '/auth',
+    element: (
+      <AuthLayout>
+        <AuthPage />
+      </AuthLayout>
+    ),
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPasswordPage />,
+  },
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <AdminDashboard /> },
+      { path: 'users', element: <UsersPage /> },
+      { path: 'roles', element: <RolesPage /> },
+      { path: 'permissions', element: <PermissionsPage /> },
+      { path: 'campaigns', element: <AdminCampaignsPage /> },
     ],
   },
 ]);

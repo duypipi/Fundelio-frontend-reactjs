@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
   Monitor,
@@ -23,6 +23,7 @@ export const Header = ({ variant = 'transparent' }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { toggleTheme, isDark } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Theo dõi scroll để thay đổi background
   useEffect(() => {
@@ -98,10 +99,10 @@ export const Header = ({ variant = 'transparent' }) => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 py-3 px-4 sm:py-4 sm:px-6 transition-all duration-300 ${currentVariant.container}`}
     >
-      <div className="mx-auto max-w-[1400px] flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr]">
+      <div className='mx-auto max-w-[1400px] flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr]'>
         {/* Left - Logo & Explore */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          <Link to="/">
+        <div className='flex items-center gap-2 sm:gap-4'>
+          <Link to='/'>
             <h1
               className={`text-xl sm:text-2xl font-bold ${currentVariant.title} cursor-pointer hover:opacity-80 transition-opacity`}
             >
@@ -111,21 +112,21 @@ export const Header = ({ variant = 'transparent' }) => {
 
           {/* Dropdown menu danh mục - Desktop only */}
           <div
-            className="relative hidden lg:block"
+            className='relative hidden lg:block'
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
           >
             <button
               className={`flex items-center space-x-2 px-3 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
             >
-              <span className="font-medium text-sm">Khám phá</span>
-              <ChevronDown className="w-4 h-4" />
+              <span className='font-medium text-sm'>Khám phá</span>
+              <ChevronDown className='w-4 h-4' />
             </button>
 
             {isDropdownOpen && (
               <>
                 {/* Bridge vô hình để không bị tắt menu khi di chuột */}
-                <div className="absolute top-full left-0 w-48 h-4 bg-transparent"></div>
+                <div className='absolute top-full left-0 w-48 h-4 bg-transparent'></div>
 
                 <div
                   className={`absolute top-full left-0 mt-4 w-48 rounded-lg shadow-lg z-50 ${currentVariant.dropdown}`}
@@ -142,8 +143,8 @@ export const Header = ({ variant = 'transparent' }) => {
                           index === categories.length - 1 ? 'rounded-b-lg' : ''
                         }`}
                       >
-                        <IconComponent className="w-4 h-4" />
-                        <span className="text-sm font-medium">
+                        <IconComponent className='w-4 h-4' />
+                        <span className='text-sm font-medium'>
                           {category.name}
                         </span>
                       </a>
@@ -156,11 +157,11 @@ export const Header = ({ variant = 'transparent' }) => {
         </div>
 
         {/* Center - Navigation (Desktop only) */}
-        <nav className="hidden lg:block">
-          <ul className="flex space-x-6">
+        <nav className='hidden lg:block'>
+          <ul className='flex space-x-6'>
             <li>
               <Link
-                to="/home"
+                to='/home'
                 className={`${
                   currentVariant.navLink
                 } transition-colors font-medium text-sm ${
@@ -174,7 +175,7 @@ export const Header = ({ variant = 'transparent' }) => {
             </li>
             <li>
               <Link
-                to="/campaigns/create"
+                to='/campaigns/create'
                 className={`${
                   currentVariant.navLink
                 } transition-colors font-medium text-sm ${
@@ -188,7 +189,7 @@ export const Header = ({ variant = 'transparent' }) => {
             </li>
             <li>
               <a
-                href="#about"
+                href='#about'
                 className={`${currentVariant.navLink} transition-colors font-medium text-sm`}
               >
                 Về chúng tôi
@@ -196,7 +197,7 @@ export const Header = ({ variant = 'transparent' }) => {
             </li>
             <li>
               <a
-                href="#contact"
+                href='#contact'
                 className={`${currentVariant.navLink} transition-colors font-medium text-sm`}
               >
                 Liên hệ
@@ -206,7 +207,7 @@ export const Header = ({ variant = 'transparent' }) => {
         </nav>
 
         {/* Right - Actions */}
-        <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
+        <div className='flex items-center gap-2 sm:gap-3 justify-self-end'>
           {/* Theme Toggle - Desktop only */}
           <button
             onClick={toggleTheme}
@@ -216,28 +217,33 @@ export const Header = ({ variant = 'transparent' }) => {
             }
           >
             {isDark ? (
-              <Sun className="w-5 h-5" />
+              <Sun className='w-5 h-5' />
             ) : (
-              <Moon className="w-5 h-5" />
+              <Moon className='w-5 h-5' />
             )}
           </button>
 
           {/* Language Toggle - Desktop only */}
           <button
             className={`hidden md:block p-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 transition-colors`}
-            title="Chuyển đổi ngôn ngữ"
+            title='Chuyển đổi ngôn ngữ'
           >
-            <Globe className="w-5 h-5" />
+            <Globe className='w-5 h-5' />
           </button>
 
           {/* Auth Buttons - Desktop only */}
-          <Button size="md" className="hidden sm:inline-flex">
+          <Button
+            size='md'
+            className='hidden sm:inline-flex'
+            onClick={() => navigate('/auth', { state: { mode: 'register' } })}
+          >
             Đăng ký
           </Button>
           <Button
-            variant="outline"
-            size="md"
-            className="hidden sm:inline-flex border-current"
+            variant='outline'
+            size='md'
+            className='hidden sm:inline-flex border-current'
+            onClick={() => navigate('/auth', { state: { mode: 'login' } })}
           >
             Đăng nhập
           </Button>
@@ -246,12 +252,12 @@ export const Header = ({ variant = 'transparent' }) => {
           <button
             className={`lg:hidden p-2 rounded-lg ${currentVariant.button}`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label='Toggle menu'
           >
             {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className='w-6 h-6' />
             ) : (
-              <Menu className="w-6 h-6" />
+              <Menu className='w-6 h-6' />
             )}
           </button>
         </div>
@@ -259,10 +265,10 @@ export const Header = ({ variant = 'transparent' }) => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden mt-4 py-4 border-t border-white/20 dark:border-gray-700 transition-colors duration-300">
-          <nav className="space-y-2">
+        <div className='lg:hidden mt-4 py-4 border-t border-white/20 dark:border-gray-700 transition-colors duration-300'>
+          <nav className='space-y-2'>
             <Link
-              to="/home"
+              to='/home'
               className={`block px-4 py-2 rounded-lg ${
                 currentVariant.navLink
               } hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium ${
@@ -275,7 +281,7 @@ export const Header = ({ variant = 'transparent' }) => {
               Trang chủ
             </Link>
             <Link
-              to="/campaigns/create"
+              to='/campaigns/create'
               className={`block px-4 py-2 rounded-lg ${
                 currentVariant.navLink
               } hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium ${
@@ -288,14 +294,14 @@ export const Header = ({ variant = 'transparent' }) => {
               Tạo chiến dịch
             </Link>
             <a
-              href="#about"
+              href='#about'
               className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Về chúng tôi
             </a>
             <a
-              href="#contact"
+              href='#contact'
               className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors font-medium`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -303,7 +309,7 @@ export const Header = ({ variant = 'transparent' }) => {
             </a>
 
             {/* Categories in mobile */}
-            <div className="pt-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300">
+            <div className='pt-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300'>
               <p
                 className={`px-4 py-2 text-sm font-semibold ${currentVariant.title}`}
               >
@@ -317,42 +323,53 @@ export const Header = ({ variant = 'transparent' }) => {
                     href={category.href}
                     className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors`}
                   >
-                    <IconComponent className="w-4 h-4" />
-                    <span className="text-sm">{category.name}</span>
+                    <IconComponent className='w-4 h-4' />
+                    <span className='text-sm'>{category.name}</span>
                   </a>
                 );
               })}
             </div>
 
             {/* Mobile Theme Toggle */}
-            <div className="px-4 py-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300">
+            <div className='px-4 py-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300'>
               <button
                 onClick={toggleTheme}
                 className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-gray-800 transition-colors`}
               >
                 {isDark ? (
                   <>
-                    <Sun className="w-4 h-4" />
-                    <span className="text-sm">Chế độ sáng</span>
+                    <Sun className='w-4 h-4' />
+                    <span className='text-sm'>Chế độ sáng</span>
                   </>
                 ) : (
                   <>
-                    <Moon className="w-4 h-4" />
-                    <span className="text-sm">Chế độ tối</span>
+                    <Moon className='w-4 h-4' />
+                    <span className='text-sm'>Chế độ tối</span>
                   </>
                 )}
               </button>
             </div>
 
             {/* Mobile Auth Buttons */}
-            <div className="flex gap-2 px-4 pt-4 sm:hidden">
-              <Button size="sm" className="flex-1">
+            <div className='flex gap-2 px-4 pt-4 sm:hidden'>
+              <Button
+                size='sm'
+                className='flex-1'
+                onClick={() => {
+                  navigate('/auth', { state: { mode: 'register' } });
+                  setIsMobileMenuOpen(false);
+                }}
+              >
                 Đăng ký
               </Button>
               <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 border-current dark:border-gray-600"
+                variant='outline'
+                size='sm'
+                className='flex-1 border-current dark:border-gray-600'
+                onClick={() => {
+                  navigate('/auth', { state: { mode: 'login' } });
+                  setIsMobileMenuOpen(false);
+                }}
               >
                 Đăng nhập
               </Button>
