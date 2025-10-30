@@ -22,8 +22,8 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
    const isVertical = layoutMode === 'vertical';
    
    // Format price
-   const priceLabel = `US$ ${min_pledge_amount}`;
-   const pledgeActionLabel = `Pledge ${priceLabel}`;
+  //  const priceLabel = `US$ ${min_pledge_amount}`;
+  //  const pledgeActionLabel = `Pledge ${priceLabel}`;
    
    // Format delivery date
    const eta = estimated_delivery ? new Date(estimated_delivery).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'TBD';
@@ -55,7 +55,7 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
             isVertical ? 'w-full aspect-[3/2]' : 'w-full sm:w-2/5 aspect-[3/2] sm:aspect-auto'
           }`}
         >
-                    <img
+            <img
             src={image_url || reward.image}
             alt={title}
             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
@@ -73,7 +73,7 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
             whileHover={{ scale: 1.1, rotate: 2 }}
             transition={{ type: 'spring', stiffness: 300 }}
           >
-            <span className="text-lg">{reward.price}</span>
+            <span className="text-lg">{reward.min_pledge_amount}</span>
             <img src="/packages/coin.svg" alt="Coin" className="w-5 h-5" />
           </motion.div>
 
@@ -110,7 +110,7 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
           </div>
 
           {/* Description */}
-          <p className="text-sm text-muted-foreground mb-5 flex-1 leading-relaxed">
+          <p className="text-sm text-text-secondary dark:text-text-white mb-5 flex-1 leading-relaxed">
             {description}
           </p>
 
@@ -168,7 +168,7 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
                 }}
                 onClick={() => onPledge && onPledge(reward)}
               >
-                <span className="relative z-10">{pledgeActionLabel || 'Pledge Now'}</span>
+                <span className="relative z-10">{min_pledge_amount} <img src='/packages/coin.svg' alt="Coin" className="inline-block w-5 h-5" /></span>
                 <motion.div
                   className="absolute inset-0 bg-white/20"
                   initial={{ x: '-100%' }}
