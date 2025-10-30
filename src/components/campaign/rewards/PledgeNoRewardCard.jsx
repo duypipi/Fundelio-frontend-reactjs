@@ -17,7 +17,7 @@ const PledgeNoRewardCard = ({ currency = 'USD', onPledge }) => {
   };
 
   return (
-    <div className="border border-border rounded-xl p-4 bg-card">
+    <div className="border border-border rounded-sm p-4 bg-white dark:bg-darker-2 shadpw-sm">
       <h3 className="text-base font-semibold text-foreground mb-3">
         Make a pledge without a reward
       </h3>
@@ -33,7 +33,7 @@ const PledgeNoRewardCard = ({ currency = 'USD', onPledge }) => {
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary dark:text-text-white">
-              {currency === 'USD' ? '$' : currency}
+              <img src='/packages/coin.svg' alt='coin' className='w-5 h-5'/>
             </span>
             <input
               id="pledge-amount"
@@ -43,7 +43,7 @@ const PledgeNoRewardCard = ({ currency = 'USD', onPledge }) => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="1"
-              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background text-text-secondary dark:text-text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-white dark:bg-darker text-text-secondary dark:text-text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               required
             />
           </div>

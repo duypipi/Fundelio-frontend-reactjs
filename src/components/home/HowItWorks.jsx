@@ -24,11 +24,11 @@ const defaultSteps = [
 
 export const HowItWorks = ({ steps = defaultSteps }) => {
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-black transition-colors duration-300">
+    <section className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-darker transition-colors duration-300">
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary dark:text-text-white mb-4 transition-colors duration-300">
+          <h2 className="text-2xl sm:text-hero font-bold text-text-primary dark:text-text-white mb-4 transition-colors duration-300">
             Cách hoạt động
           </h2>
           <p className="text-lg text-text-secondary dark:text-gray-400 max-w-2xl mx-auto transition-colors duration-300">
