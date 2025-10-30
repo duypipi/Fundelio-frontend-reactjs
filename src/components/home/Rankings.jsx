@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Trophy, TrendingUp, Users } from 'lucide-react';
+import { Trophy, TrendingUp, Users, ChevronDown } from 'lucide-react';
 import RankingItem from './RankingItem';
 import { mockProjects } from '@/data/mockProjects';
 
@@ -9,6 +9,8 @@ export const Rankings = ({
 }) => {
   const [timeFilter, setTimeFilter] = useState('24h');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [showAllFunding, setShowAllFunding] = useState(false);
+  const [showAllAudience, setShowAllAudience] = useState(false);
 
   // Get top 10 by funding
   const topByFunding = useMemo(() => {
@@ -74,16 +76,26 @@ export const Rankings = ({
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">By funding</h3>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
-              {topByFunding.map((project, index) => (
+              {topByFunding.slice(0, showAllFunding ? 10 : window.innerWidth < 1024 ? 3 : 10).map((project, index) => (
                 <RankingItem
                   key={project.id}
                   rank={index + 1}
                   project={project}
                   type="funding"
                   isFirst={index === 0}
-                  isLast={index === topByFunding.length - 1}
+                  isLast={index === (showAllFunding ? topByFunding.length - 1 : window.innerWidth < 1024 ? 2 : topByFunding.length - 1)}
                 />
               ))}
+              {/* Show More Button - Only on Mobile */}
+              {!showAllFunding && topByFunding.length > 3 && (
+                <button
+                  onClick={() => setShowAllFunding(true)}
+                  className="lg:hidden w-full py-3 text-sm font-medium text-primary hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+                >
+                  <span>Xem thêm</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -94,16 +106,26 @@ export const Rankings = ({
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">By audience</h3>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
-              {topByAudience.map((project, index) => (
+              {topByAudience.slice(0, showAllAudience ? 10 : window.innerWidth < 1024 ? 3 : 10).map((project, index) => (
                 <RankingItem
                   key={project.id}
                   rank={index + 1}
                   project={project}
                   type="audience"
                   isFirst={index === 0}
-                  isLast={index === topByAudience.length - 1}
+                  isLast={index === (showAllAudience ? topByAudience.length - 1 : window.innerWidth < 1024 ? 2 : topByAudience.length - 1)}
                 />
               ))}
+              {/* Show More Button - Only on Mobile */}
+              {!showAllAudience && topByAudience.length > 3 && (
+                <button
+                  onClick={() => setShowAllAudience(true)}
+                  className="lg:hidden w-full py-3 text-sm font-medium text-primary hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+                >
+                  <span>Xem thêm</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
         </div>

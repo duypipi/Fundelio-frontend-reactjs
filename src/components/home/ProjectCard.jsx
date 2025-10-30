@@ -120,7 +120,7 @@ export const ProjectCard = ({
       </div>
 
       {/* Content Section */}
-      <div className="p-4 space-y-3 bg-white dark:bg-[#2a2d3a]">
+      <div className="p-4 space-y-3 bg-white dark:bg-darker-2">
         {/* Category Tag & Days Left */}
         <div className="flex items-center justify-between gap-2">
           <span className="inline-flex items-center px-3 py-1 bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary text-xs font-semibold rounded-full">
@@ -135,7 +135,7 @@ export const ProjectCard = ({
         </div>
 
         {/* Title */}
-        <h3 className="text-text-primary dark:text-white text-base md:text-lg font-bold leading-tight line-clamp-2 min-h-[2.8rem]">
+        <h3 className="text-text-primary dark:text-text-white text-base md:text-lg font-bold leading-tight line-clamp-2 min-h-[2.8rem]">
           {title}
         </h3>
 
@@ -160,35 +160,35 @@ export const ProjectCard = ({
             {/* Total Funding */}
             <div className="flex-1 min-w-0">
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Total funding</p>
-              <p className="text-xl md:text-2xl font-bold text-primary dark:text-primary truncate">
-                {formatCurrency(pledged)}
+              <p className="text-xl md:text-xl font-bold text-text-primary dark:text-text-white truncate">
+                {pledged} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-6 h-6 mb-1" />
               </p>
             </div>
 
             {/* Circular Progress */}
-            <div className="relative w-16 h-16 flex-shrink-0">
+            <div className="relative w-14 h-14 flex-shrink-0">
               {/* Background Circle */}
               <svg className="w-full h-full transform -rotate-90">
                 <circle
-                  cx="32"
-                  cy="32"
-                  r="28"
+                  cx="28"
+                  cy="28"
+                  r="24"
                   stroke="currentColor"
-                  strokeWidth="5"
+                  strokeWidth="4"
                   fill="none"
                   className="text-gray-200 dark:text-gray-700"
                 />
                 {/* Progress Circle with Gradient */}
                 <circle
-                  cx="32"
-                  cy="32"
-                  r="28"
+                  cx="28"
+                  cy="28"
+                  r="24"
                   stroke="url(#circularGradient)"
-                  strokeWidth="5"
+                  strokeWidth="4"
                   fill="none"
                   strokeLinecap="round"
-                  strokeDasharray={`${2 * Math.PI * 28}`}
-                  strokeDashoffset={`${2 * Math.PI * 28 * (1 - Math.min(progressPercent, 100) / 100)}`}
+                  strokeDasharray={`${2 * Math.PI * 24}`}
+                  strokeDashoffset={`${2 * Math.PI * 24 * (1 - Math.min(progressPercent, 100) / 100)}`}
                   className="transition-all duration-500"
                 />
                 {/* Gradient Definition - Using gradient-3 colors */}
@@ -202,7 +202,7 @@ export const ProjectCard = ({
               </svg>
               {/* Percentage Text */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-sm font-base text-text-primary dark:text-white">
+                <span className="text-xs font-semibold text-text-primary dark:text-white">
                   {progressPercent}%
                 </span>
               </div>

@@ -12,7 +12,7 @@ export const FeaturedSpotlight = () => {
   const featuredCampaigns = mockProjects.slice(0, 8);
   
   // Mock data cho Spotlight (lấy từ project 11-20 có featured flag)
-  const spotlightCampaigns = mockProjects.slice(10, 20);
+  const spotlightCampaigns = mockProjects.slice(0, 20);
   
   const totalPages = Math.ceil(featuredCampaigns.length / itemsPerPage);
 
@@ -53,8 +53,8 @@ export const FeaturedSpotlight = () => {
               {/* Header with Navigation */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <Flame className="w-6 h-6 text-orange-500" />
-                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+                  <Flame className="w-6 h-6 text-text-primary dark:text-text-white" />
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-text-white">
                     Featured
                   </h2>
                 </div>
@@ -123,12 +123,12 @@ export const FeaturedSpotlight = () => {
             {/* Right Side: Spotlight */}
             <div className="xl:col-span-4">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-6 h-6 text-text-primary dark:text-white">
+                <div className="w-6 h-6 text-text-primary dark:text-text-white">
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-text-white">
                   Spotlight
                 </h2>
               </div>
@@ -139,8 +139,8 @@ export const FeaturedSpotlight = () => {
                 <div 
                   className="space-y-2 overflow-y-auto pr-2 pl-2 scrollbar-primary"
                   style={{ 
-                    maxHeight: 'calc(2 * 400px + 1.5rem)', // Height of 2 cards + gap
-                    minHeight: 'calc(2 * 400px + 1.5rem)',
+                    maxHeight: 'calc(2 * 595px + 1.5rem)', // Height of 2 cards + gap
+                    minHeight: 'calc(2 * 595px + 1.5rem)',
                   }}
                 >
                   {spotlightCampaigns.map((campaign, index) => (

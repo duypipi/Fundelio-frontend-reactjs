@@ -12,10 +12,10 @@ export default function RootLayout() {
   const isHeaderFixed = !location.pathname.includes('/campaigns/detail');
   
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-x-hidden">
       {location.pathname !== '/' && <Header variant={headerVariant} isFixed={isHeaderFixed} />}
 
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-hidden">
         <Outlet />
       </main>
 
