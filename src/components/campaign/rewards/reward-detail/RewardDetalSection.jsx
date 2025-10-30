@@ -190,7 +190,7 @@ export function RewardDetailSection({ reward }) {
                           onClick={() => updateQuantity(addon.id, -1)}
                           disabled={addon.quantity === 0}
                         >
-                          <MinusIcon className="w-4 h-4" />
+                          <MinusIcon className="w-4 h-4 text-text-primary dark:text-text-white" />
                         </Button>
                         <span className="font-semibold text-foreground min-w-[2.5rem] text-center">
                           {addon.quantity > 0 ? `×${addon.quantity}` : '0'}
@@ -201,7 +201,7 @@ export function RewardDetailSection({ reward }) {
                           className="h-8 w-8 rounded-sm"
                           onClick={() => updateQuantity(addon.id, 1)}
                         >
-                          <PlusIcon className="w-4 h-4" />
+                          <PlusIcon className="w-4 h-4 text-text-primary dark:text-text-white" />
                         </Button>
                       </div>
                     </div>

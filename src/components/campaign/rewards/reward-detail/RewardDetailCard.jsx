@@ -13,25 +13,22 @@ export function RewardDetailCard({ reward }) {
     ? (reward.limitedQuantity.remaining / reward.limitedQuantity.total) * 100
     : 100;
 
+  console.log('reward in RewardDetailCard:', reward);
+  
+  // Format delivery date
+  const eta = reward.estimated_delivery 
+    ? new Date(reward.estimated_delivery).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    : 'TBD';
+
   return (
     <Card className="overflow-hidden border border-border/50 h-fit sticky top-8 max-w-[380px] mx-auto">
       {/* Image Section - 16:9 aspect ratio */}
       <div className="relative aspect-[16/9] overflow-hidden bg-white dark:bg-darker-2">
         <img
-          src={reward.coverUrl || reward.image}
+          src={reward.image_url || reward.image}
           alt={reward.imageAlt || reward.title}
           className="w-full h-full object-cover"
         />
-        
-        {/* Price Badge */}
-        {/* <div
-          className="absolute top-6 right-6 px-6 py-3 rounded-sm font-bold text-white bg-[#635bff] shadow-xl"
-          style={{
-            // background: 'linear-gradient(135deg, #FFB700 0%, #FF9603 100%)',
-          }}
-        >
-          <span className="text-2xl">{reward.priceLabel || `$${reward.price}`}</span>
-        </div> */}
       </div>
 
       {/* Content Section - Reduced padding */}
@@ -58,7 +55,7 @@ export function RewardDetailCard({ reward }) {
             </div>
             <div className="flex-1">
               <p className="text-xs text-muted-foreground">Ships to</p>
-              <p className="text-xs font-semibold text-foreground">{reward.shipsTo}</p>
+              <p className="text-xs font-semibold text-foreground">{reward.ships_to}</p>
             </div>
           </div>
         </div>
@@ -75,7 +72,7 @@ export function RewardDetailCard({ reward }) {
             <CalendarIcon className="w-4 h-4 text-primary" strokeWidth={2} />
             <div>
               <p className="text-xs text-muted-foreground">Estimated Delivery</p>
-              <p className="text-sm font-semibold text-foreground">{reward.eta || reward.deliveryDate}</p>
+              <p className="text-sm font-semibold text-foreground">{eta}</p>
             </div>
           </div>
         </div>
@@ -117,7 +114,7 @@ export function RewardDetailCard({ reward }) {
             background: 'linear-gradient(135deg, #1EC794 0%, #0894E2 100%)',
           }}
         >
-          <span>Pledge {reward.price}</span>
+          <span>Pledge {reward.min_pledge_amount}</span>
           <img src="/packages/coin.svg" alt="Coin" className="w-5 h-5" />
         </Button>
       </div>

@@ -30,46 +30,46 @@ export default function CampaignDetailPage() {
     daysLeft: 4,
   };
 
-  // Mock rewards data
+  // Mock rewards data - Based on ERD schema
   const rewards = [
     {
       id: 'reward-1',
+      campaign_id: 'campaign-1',
       title: 'DiskPro 1TB [Kickstarter Price]',
-      priceLabel: 'US$ 199',
       description: `DiskPro Kickstarter Price! 16.7% Off the retail price!\n\nBuilt-in 1TB SSD for massive storage capacity. Ultra-fast read/write speeds up to 550MB/s. Compact and portable design fits in your pocket.`,
-      coverUrl:
-        'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=600&auto=format&fit=crop',
+      image_url: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=600&auto=format&fit=crop',
+      min_pledge_amount: 199,
+      ships_to: 'Only certain countries',
+      estimated_delivery: '2025-12-01',
+      status: 'active',
+      // Additional fields for UI
       backers: 4,
-      shipsTo: 'Only certain countries',
-      eta: 'Dec 2025',
       itemsIncluded: 4,
+      addOnCount: 1,
       thumbnails: [
         'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=150&auto=format&fit=crop',
         'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=150&auto=format&fit=crop',
         'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=150&auto=format&fit=crop',
       ],
-      addOnCount: 1,
-      detailsHref: '#reward-1-details',
-      pledgeActionLabel: 'Pledge US$ 199',
     },
     {
       id: 'reward-2',
+      campaign_id: 'campaign-1',
       title: 'Early Bird Special - 2TB Edition',
-      priceLabel: 'US$ 349',
       description: `Limited Early Bird offer! 2TB storage for power users.\n\nDouble the storage, same blazing-fast speed. Perfect for professionals and content creators. Only 50 units available at this price!`,
-      coverUrl:
-        'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=600&auto=format&fit=crop',
+      image_url: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=600&auto=format&fit=crop',
+      min_pledge_amount: 349,
+      ships_to: 'Worldwide',
+      estimated_delivery: '2026-01-15',
+      status: 'active',
+      // Additional fields for UI
       backers: 12,
-      shipsTo: 'Worldwide',
-      eta: 'Jan 2026',
       itemsIncluded: 5,
+      addOnCount: 2,
       thumbnails: [
         'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=150&auto=format&fit=crop',
         'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=150&auto=format&fit=crop',
       ],
-      addOnCount: 2,
-      detailsHref: '#reward-2-details',
-      pledgeActionLabel: 'Pledge US$ 349',
     },
   ];
 

@@ -15,7 +15,7 @@ const CreatorInfoCard = ({ creator }) => {
   } = creator;
 
   return (
-    <div className="border border-border rounded-xl p-4 bg-card">
+    <div className="border border-border rounded-sm p-4 bg-white dark:bg-darker-2 shadpw-sm">
       {/* Avatar & Name */}
       <div className="flex items-center gap-3 mb-3">
         {avatarUrl ? (

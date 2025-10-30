@@ -21,7 +21,7 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
   return (
     <div>
       {/* Tabs Navigation */}
-      <div className="sticky top-0 bg-white dark:bg-darker z-20 ">
+      <div className="sticky top-0 bg-white dark:bg-darker z-20 shadow-sm">
         <div className="max-w-container mx-auto px-4 lg:px-6">
           <nav
             className="flex gap-3 overflow-x-auto scrollbar-hide"
