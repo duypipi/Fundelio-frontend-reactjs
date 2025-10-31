@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import CampaignHeader from '@/components/campaign/CampaignHeader';
 import CampaignTabs from '@/components/campaign/CampaignTabs';
+import RelatedCampaigns from '@/components/campaign/RelatedCampaigns';
 import { mockProjects } from '@/data/mockProjects';
 import { mockCampaignStory, getBlanksFromSections } from '@/data/mockCampaignStory';
 import { getPreviewData, isPreviewId } from '@/utils/previewStorage';
@@ -72,7 +73,7 @@ function getMockCampaignData() {
       goal_amount: 50000.00,
       pledged_amount: 7697612.00,
       backers_count: 2018,
-      category: 'gaming',
+      category: 'Game',
       intro_video_url: 'https://www.youtube.com/embed/example',
       start_date: '2025-10-15',
       end_date: '2025-11-19',
@@ -271,6 +272,14 @@ export default function CampaignDetailPage() {
           onPledge: handlePledge,
         }}
       />
+
+      {/* Related Campaigns Section */}
+      <RelatedCampaigns 
+        category={campaignData.campaign.category}
+        currentCampaignId={campaignData.campaign.campaign_id}
+      />
+
+      <div className="">Text</div>
     </div>
   );
 }
