@@ -183,7 +183,7 @@ const Leaderboard = () => {
             Top Backers
           </h2>
         </div>
-        <p className="text-text-secondary dark:text-white/70">
+        <p className="text-muted-foreground">
           Những người ủng hộ hàng đầu cho dự án này
         </p>
       </div>
@@ -215,7 +215,7 @@ const Leaderboard = () => {
                       {/* Wreath Background */}
                       <WreathLaurel rank={rank} className="absolute inset-0 w-full h-full opacity-60 -mt-0.5" />
                       {/* Rank Number on top */}
-                      <span className="relative z-10 text-xl font-bold text-text-primary dark:text-text-white drop-shadow-lg">
+                      <span className="relative z-10 text-xl font-bold text-text-primary dark:text-white drop-shadow-lg">
                         #{rank}
                       </span>
                     </div>

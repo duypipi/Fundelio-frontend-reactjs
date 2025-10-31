@@ -119,35 +119,35 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
   const headerVariants = {
     transparent: {
       container: isScrolled
-        ? 'bg-white/95 dark:bg-darker-2 backdrop-blur-md text-text-primary dark:text-text-white shadow-md transition-colors duration-300'
+        ? 'bg-white/95 dark:bg-darker-2 backdrop-blur-md text-text-primary dark:text-white shadow-md transition-colors duration-300'
         : 'bg-transparent text-text-white',
       title: isScrolled
-        ? 'text-text-primary dark:text-text-white transition-colors duration-300'
+        ? 'text-text-primary dark:text-white transition-colors duration-300'
         : 'text-text-white',
       navLink: isScrolled
-        ? 'text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300'
+        ? 'text-text-primary dark:text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300'
         : 'text-text-white hover:text-secondary',
       dropdown:
-        'bg-white dark:bg-darker border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
+        'bg-white dark:bg-darker border border-gray-200 dark:border-gray-700 text-text-primary dark:text-white transition-colors duration-300',
       dropdownItem:
-        'hover:bg-gray-50 dark:hover:bg-gray-900 text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
+        'hover:bg-gray-50 dark:hover:bg-gray-900 text-text-primary dark:text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       button: isScrolled
-        ? 'text-text-primary dark:text-text-white transition-colors duration-300'
+        ? 'text-text-primary dark:text-white transition-colors duration-300'
         : 'text-text-white',
     },
     light: {
       container:
-        'bg-white dark:bg-darker-2 text-text-primary dark:text-text-white shadow-md transition-colors duration-300',
+        'bg-white dark:bg-darker-2 text-text-primary dark:text-white shadow-md transition-colors duration-300',
       title:
-        'text-text-primary dark:text-text-white transition-colors duration-300',
+        'text-text-primary dark:text-white transition-colors duration-300',
       navLink:
-        'text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
+        'text-text-primary dark:text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       dropdown:
-        'bg-white dark:bg-darker border border-gray-200 dark:border-gray-700 text-text-primary dark:text-text-white transition-colors duration-300',
+        'bg-white dark:bg-darker border border-gray-200 dark:border-gray-700 text-text-primary dark:text-white transition-colors duration-300',
       dropdownItem:
-        'hover:bg-gray-50 dark:hover:bg-gray-700 text-text-primary dark:text-text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
+        'hover:bg-gray-50 dark:hover:bg-gray-700 text-text-primary dark:text-white hover:text-primary dark:hover:text-primary-400 transition-colors duration-300',
       button:
-        'text-text-primary dark:text-text-white transition-colors duration-300',
+        'text-text-primary dark:text-white transition-colors duration-300',
     },
     primary: {
       container:
@@ -256,7 +256,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 onFocus={() => setIsSearchFocused(true)}
                 className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
                   isScrolled || variant !== 'transparent'
-                    ? 'bg-white dark:bg-darker border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white'
+                    ? 'bg-white dark:bg-darker border-gray-300 dark:border-gray-600 text-text-primary dark:text-white'
                     : 'bg-white/20 border-white/30 text-white placeholder-white/70'
                 } focus:outline-none focus:ring-2 focus:ring-primary transition-colors`}
               />
@@ -268,7 +268,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 {/* Categories */}
                 {searchResults.categories.length > 0 && (
                   <div className="p-2">
-                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
+                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
                       Danh mục
                     </p>
                     {searchResults.categories.map((category) => {
@@ -280,7 +280,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                           className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
                         >
                           <IconComponent className="w-5 h-5 text-primary" />
-                          <span className="text-sm text-text-primary dark:text-text-white">{category.name}</span>
+                          <span className="text-sm text-text-primary dark:text-white">{category.name}</span>
                         </a>
                       );
                     })}
@@ -290,7 +290,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 {/* Creators */}
                 {searchResults.creators.length > 0 && (
                   <div className="p-2 border-t border-gray-200 dark:border-gray-700">
-                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
+                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
                       Nhà sáng tạo
                     </p>
                     {searchResults.creators.map((creator) => (
@@ -304,7 +304,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                           alt={creator.name}
                           className="w-8 h-8 rounded-full"
                         />
-                        <span className="text-sm text-text-primary dark:text-text-white">{creator.name}</span>
+                        <span className="text-sm text-text-primary dark:text-white">{creator.name}</span>
                       </a>
                     ))}
                   </div>
@@ -313,7 +313,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 {/* Campaigns */}
                 {searchResults.campaigns.length > 0 && (
                   <div className="p-2 border-t border-gray-200 dark:border-gray-700">
-                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
+                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
                       Chiến dịch
                     </p>
                     {searchResults.campaigns.map((campaign) => (
@@ -323,8 +323,8 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                         className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
                       >
                         <div>
-                          <p className="text-sm font-medium text-text-primary dark:text-text-white">{campaign.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{campaign.category}</p>
+                          <p className="text-sm font-medium text-text-primary dark:text-white">{campaign.name}</p>
+                          <p className="text-xs text-gray-500 dark:text-text-white">{campaign.category}</p>
                         </div>
                         <span className="text-xs font-semibold text-primary">
                           {campaign.raised.toLocaleString()} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-4 h-4 mb-0.5" />
@@ -338,7 +338,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 {searchResults.categories.length === 0 &&
                   searchResults.creators.length === 0 &&
                   searchResults.campaigns.length === 0 && (
-                    <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                    <div className="p-8 text-center text-gray-500 dark:text-text-white">
                       <p>Không tìm thấy kết quả</p>
                     </div>
                   )}
@@ -347,7 +347,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
 
             {searchQuery.length > 0 && searchQuery.length < 3 && isSearchFocused && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
-                <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                <p className="text-sm text-gray-500 dark:text-text-white text-center">
                   Nhập ít nhất 3 ký tự để tìm kiếm
                 </p>
               </div>
@@ -383,17 +383,17 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
               <div className="bg-white dark:bg-darker rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
                 <div className="text-center mb-6">
                   <img src="/packages/coin.svg" alt="Coin" className="w-16 h-16 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-text-primary dark:text-text-white mb-2">
+                  <h3 className="text-xl font-bold text-text-primary dark:text-white mb-2">
                     Bạn chưa có coin
                   </h3>
-                  <p className="text-muted-foreground dark:text-gray-400">
+                  <p className="text-muted-foreground dark:text-text-white">
                     Bạn có muốn nạp coin để tham gia các chiến dịch không?
                   </p>
                 </div>
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShowCoinModal(false)}
-                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-text-primary dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
                   >
                     Để sau
                   </button>
@@ -455,7 +455,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                   <div className="flex flex-col md:flex-row">
                     {/* Left Column - Your Account + Bottom Section */}
                     <div className="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">
-                      <h4 className="text-xs font-bold text-text-primary dark:text-text-white mb-3 uppercase">
+                      <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
                         Tài khoản
                       </h4>
                       <div className="space-y-1 mb-4">
@@ -466,14 +466,14 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                       <div className="space-y-1">
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <User className="w-4 h-4" />
                           <span>Hồ sơ</span>
                         </a>
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <Settings className="w-4 h-4" />
                           <span>Cài đặt</span>
@@ -481,14 +481,14 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                         <Link
                           to="/your-projects"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <FolderOpen className="w-4 h-4" />
                           <span>Dự án của bạn</span>
                         </Link>
                         <Link
                           href="/wallet"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <Wallet className="w-4 h-4" />
                           <span>Ví</span>
@@ -512,7 +512,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
 
                     {/* Right Column - Created Campaigns */}
                     <div className="flex-1 p-4">
-                      <h4 className="text-xs font-bold text-text-primary dark:text-text-white mb-3 uppercase">
+                      <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
                         Chiến dịch đã tạo
                       </h4>
                       <div className="space-y-2">
@@ -528,7 +528,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-sm text-text-primary dark:text-text-white line-clamp-2 flex-1">A Spaces project</span>
+                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">A Spaces project</span>
                         </a>
 
                         {/* Campaign 2 */}
@@ -543,7 +543,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-sm text-text-primary dark:text-text-white line-clamp-2 flex-1">A Product Design project</span>
+                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">A Product Design project</span>
                         </a>
 
                         {/* Campaign 3 */}
@@ -558,7 +558,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-sm text-text-primary dark:text-text-white line-clamp-2 flex-1">Tech Innovation Hub</span>
+                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">Tech Innovation Hub</span>
                         </a>
 
                         {/* View All Button - Show when more than 3 campaigns */}

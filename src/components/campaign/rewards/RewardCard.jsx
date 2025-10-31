@@ -110,7 +110,7 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
           </div>
 
           {/* Description */}
-          <p className="text-sm text-text-secondary dark:text-text-white mb-5 flex-1 leading-relaxed">
+          <p className="text-sm text-text-secondary dark:text-white mb-5 flex-1 leading-relaxed">
             {description}
           </p>
 
@@ -162,10 +162,7 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
           <div className="flex flex-col sm:flex-row gap-3 mt-auto">
             <motion.div className="flex-1" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
-                className="w-full font-semibold text-white shadow-lg relative overflow-hidden group/btn"
-                style={{
-                  background: 'linear-gradient(135deg, #0894E2 0%, #1EC794 100%)',
-                }}
+                className="w-full font-semibold bg-primary text-white shadow-lg relative overflow-hidden group/btn"
                 onClick={() => onPledge && onPledge(reward)}
               >
                 <span className="relative z-10">{min_pledge_amount} <img src='/packages/coin.svg' alt="Coin" className="inline-block w-5 h-5" /></span>

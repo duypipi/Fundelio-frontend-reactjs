@@ -125,7 +125,7 @@ const PaymentPage = () => {
                                             className="w-16 h-16 object-contain"
                                         />
                                         <div className="flex-1">
-                                            <p className="text-text-secondary dark:text-white/70 text-xs mb-1">
+                                            <p className="text-muted-foreground text-xs mb-1">
                                                 Gói {selectedPackage.amount + selectedPackage.bonus} RP
                                             </p>
                                             <p className="text-xl font-bold text-text-primary dark:text-white">
@@ -221,7 +221,7 @@ const PaymentPage = () => {
                                     </h3>
 
                                     <div className="space-y-2 p-3 bg-primary/10 rounded-md border border-primary/40">
-                                        <div className="flex justify-between text-text-secondary dark:text-white/70 text-sm">
+                                        <div className="flex justify-between text-muted-foreground text-sm">
                                             <span>Tổng tiền:</span>
                                             <span className="font-semibold text-text-primary dark:text-white">
                                                 {formatPrice(totalPrice)} VND

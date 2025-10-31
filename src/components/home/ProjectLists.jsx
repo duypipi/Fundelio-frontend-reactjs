@@ -34,8 +34,8 @@ const ProjectLists = ({ className = '' }) => {
         {/* Project Lists Section */}
         <div className="">
           <div className="flex items-center gap-3 mb-5">
-            <LayoutGrid className="w-6 h-6 text-text-primary dark:text-text-white" />
-            <h2 className="text-2xl font-bold text-text-primary dark:text-text-white">
+            <LayoutGrid className="w-6 h-6 text-text-primary dark:text-white" />
+            <h2 className="text-2xl font-bold text-text-primary dark:text-white">
               Project lists
             </h2>
           </div>
@@ -62,8 +62,8 @@ const ProjectLists = ({ className = '' }) => {
         {/* Categories Section */}
         <div className="">
           <div className="flex items-center gap-3 mb-5">
-            <Dices className="w-6 h-6 text-text-primary dark:text-text-white" />
-            <h2 className="text-xl font-bold text-gray-900 dark:text-text-white">
+            <Dices className="w-6 h-6 text-text-primary dark:text-white" />
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               Category
             </h2>
           </div>

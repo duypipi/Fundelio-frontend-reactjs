@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProjectCard from '../home/ProjectCard';
 import { mockProjects } from '@/data/mockProjects';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export const RelatedCampaigns = ({ category, currentCampaignId, className = '' }) => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const itemsPerPage = 4;
+  const [swiperRef, setSwiperRef] = useState(null);
+  const [isReady, setIsReady] = useState(false);
 
   // Filter campaigns by category and exclude current campaign
   // Use case-insensitive comparison for flexibility
@@ -16,40 +22,19 @@ export const RelatedCampaigns = ({ category, currentCampaignId, className = '' }
       project.id !== currentCampaignId
   );
 
-  const totalPages = Math.ceil(relatedCampaigns.length / itemsPerPage);
+  // Force layout calculation and enable smooth transitions after mount
+  useEffect(() => {
+    // Small delay to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      setIsReady(true);
+      // Force reflow
+      if (swiperRef) {
+        swiperRef.update();
+      }
+    }, 100);
 
-  const getCurrentPageItems = () => {
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return relatedCampaigns.slice(startIndex, endIndex);
-  };
-
-  const handlePageChange = (newPage) => {
-    if (newPage === currentPage || isTransitioning) return;
-    
-    setIsTransitioning(true);
-    setCurrentPage(newPage);
-    
-    // Reset transition state after animation completes
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 500);
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 0) {
-      handlePageChange(currentPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      handlePageChange(currentPage + 1);
-    }
-  };
-
-  const canGoPrev = currentPage > 0;
-  const canGoNext = currentPage < totalPages - 1;
+    return () => clearTimeout(timer);
+  }, [swiperRef]);
 
   // If no related campaigns, don't render anything
   if (relatedCampaigns.length === 0) {
@@ -62,42 +47,28 @@ export const RelatedCampaigns = ({ category, currentCampaignId, className = '' }
         {/* Header with Title and Navigation */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-text-primary dark:text-text-white transition-colors duration-300">
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-primary dark:text-white transition-colors duration-300">
               Dự án liên quan
             </h2>
-            <p className="text-sm text-text-secondary dark:text-gray-400 mt-1">
+            <p className="text-sm text-text-secondary dark:text-text-white mt-1">
               Các chiến dịch khác trong danh mục <span className="font-semibold text-primary">{category}</span>
             </p>
           </div>
 
           {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="flex items-center gap-2 ">
+          {relatedCampaigns.length > 4 && (
+            <div className="flex items-center gap-2">
               <button
-                onClick={handlePrevPage}
-                disabled={!canGoPrev || isTransitioning}
-                className={`p-2 rounded-lg transition-all duration-200 ${
-                  canGoPrev && !isTransitioning
-                    ? 'bg-primary text-white hover:bg-primary-600 hover:scale-105 active:scale-95'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-                }`}
+                onClick={() => swiperRef?.slidePrev()}
+                className="related-prev p-2 rounded-lg transition-all duration-200 bg-primary text-white hover:bg-primary-600 hover:scale-105 active:scale-95 disabled:bg-gray-200 disabled:dark:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
                 aria-label="Previous page"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
 
-              <span className="text-sm text-text-secondary dark:text-gray-400 font-medium min-w-[60px] text-center transition-colors duration-300">
-                {currentPage + 1} / {totalPages}
-              </span>
-
               <button
-                onClick={handleNextPage}
-                disabled={!canGoNext || isTransitioning}
-                className={`p-2 rounded-lg transition-all duration-200 ${
-                  canGoNext && !isTransitioning
-                    ? 'bg-primary text-white hover:bg-primary-600 hover:scale-105 active:scale-95'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-                }`}
+                onClick={() => swiperRef?.slideNext()}
+                className="related-next p-2 rounded-lg transition-all duration-200 bg-primary text-white hover:bg-primary-600 hover:scale-105 active:scale-95 disabled:bg-gray-200 disabled:dark:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100"
                 aria-label="Next page"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -106,52 +77,68 @@ export const RelatedCampaigns = ({ category, currentCampaignId, className = '' }
           )}
         </div>
 
-        {/* Grid of Campaign Cards with Animation */}
-        <div className="relative overflow-hidden">
-          <div
-            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 transition-all duration-500 ease-in-out pt-6 ${
-              isTransitioning 
-                ? 'opacity-0 transform translate-y-4' 
-                : 'opacity-100 transform translate-y-0'
-            }`}
-          >
-            {getCurrentPageItems().map((campaign, index) => (
-              <div
-                key={campaign.id}
-                className="transform transition-all duration-300"
-                style={{
-                  transitionDelay: isTransitioning ? '0ms' : `${index * 50}ms`
+        {/* Swiper Carousel */}
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay]}
+          spaceBetween={24}
+          slidesPerView={1}
+          slidesPerGroup={4}
+          speed={600}
+          loop={false}
+          observer={true}
+          observeParents={true}
+          watchSlidesProgress={true}
+          preloadImages={true}
+          updateOnWindowResize={true}
+          onSwiper={(swiper) => {
+            setSwiperRef(swiper);
+            // Force update after initialization
+            requestAnimationFrame(() => {
+              swiper.update();
+            });
+          }}
+          onInit={(swiper) => {
+            // Ensure smooth transitions from the start
+            swiper.update();
+          }}
+          navigation={{
+            prevEl: '.related-prev',
+            nextEl: '.related-next',
+          }}
+          pagination={{
+            clickable: true,
+            el: '.related-pagination',
+            bulletClass: 'inline-block w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300 cursor-pointer hover:bg-gray-400 dark:hover:bg-gray-500',
+            bulletActiveClass: '!w-8 !bg-primary',
+          }}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 16,
+            },
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 24,
+            },
+          }}
+          className={`!pb-2 transition-opacity duration-300 ${isReady ? 'opacity-100' : 'opacity-0'}`}
+        >
+          {relatedCampaigns.map((campaign) => (
+            <SwiperSlide key={campaign.id}>
+              <ProjectCard
+                project={campaign}
+                onBookmarkToggle={(id, bookmarked) => {
+                  console.log('Bookmark toggled:', id, bookmarked);
+                  // TODO: Implement bookmark logic
                 }}
-              >
-                <ProjectCard
-                  project={campaign}
-                  onBookmarkToggle={(id, bookmarked) => {
-                    console.log('Bookmark toggled:', id, bookmarked);
-                    // TODO: Implement bookmark logic
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
         {/* Page Indicators */}
-        {totalPages > 1 && (
-          <div className="flex justify-center gap-2 mt-8">
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index)}
-                disabled={isTransitioning}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentPage
-                    ? 'w-8 bg-primary'
-                    : 'w-2 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
-                } ${isTransitioning ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                aria-label={`Go to page ${index + 1}`}
-              />
-            ))}
-          </div>
+        {relatedCampaigns.length > 4 && (
+          <div className="related-pagination flex justify-center gap-2 mt-8"></div>
         )}
       </div>
     </section>

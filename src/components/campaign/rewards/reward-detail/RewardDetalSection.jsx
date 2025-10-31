@@ -137,10 +137,8 @@ export function RewardDetailSection({ reward }) {
                 rightContent={
                   item.badge && (
                     <span
-                      className="px-3 py-1 rounded-sm text-xs font-bold text-white"
-                      style={{
-                        background: 'linear-gradient(135deg, #1EC794 0%, #0894E2 100%)',
-                      }}
+                      className="px-3 py-1 rounded-sm text-xs font-bold text-white bg-primary"
+                      
                     >
                       {item.badge}
                     </span>
@@ -171,12 +169,7 @@ export function RewardDetailSection({ reward }) {
                   rightContent={
                     <div className="flex flex-col gap-3">
                       <div
-                        className="px-4 py-2 rounded-sm font-bold text-white shadow-md whitespace-nowrap text-center"
-                        style={{
-                          // changed from yellow gradient to a teal/blue gradient
-                          // so it doesn't clash with the coin's yellow color
-                          background: 'linear-gradient(135deg, #0894E2 0%, #1EC794 100%)',
-                        }}
+                        className="px-2 py-1 rounded-sm font-bold text-white bg-primary shadow-md whitespace-nowrap text-center"
                       >
                         {addon.price} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-5 h-5 mb-0.5" />
                       </div>
@@ -190,9 +183,9 @@ export function RewardDetailSection({ reward }) {
                           onClick={() => updateQuantity(addon.id, -1)}
                           disabled={addon.quantity === 0}
                         >
-                          <MinusIcon className="w-4 h-4 text-text-primary dark:text-text-white" />
+                          <MinusIcon className="w-4 h-4 text-text-primary dark:text-white" />
                         </Button>
-                        <span className="font-semibold text-foreground min-w-[2.5rem] text-center">
+                        <span className="font-semibold text-foreground min-w-[1.5rem] text-center">
                           {addon.quantity > 0 ? `×${addon.quantity}` : '0'}
                         </span>
                         <Button
@@ -201,7 +194,7 @@ export function RewardDetailSection({ reward }) {
                           className="h-8 w-8 rounded-sm"
                           onClick={() => updateQuantity(addon.id, 1)}
                         >
-                          <PlusIcon className="w-4 h-4 text-text-primary dark:text-text-white" />
+                          <PlusIcon className="w-4 h-4 text-text-primary dark:text-white" />
                         </Button>
                       </div>
                     </div>

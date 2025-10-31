@@ -160,7 +160,7 @@ const RewardForm = forwardRef(({ reward, items, rewards, onSave, onCancel, onCha
       {/* Image Section */}
       <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground">Hình ảnh</h3>
-        <p className="text-sm text-text-primary dark:text-text-white mb-4">
+        <p className="text-sm text-text-primary dark:text-white mb-4">
           Thêm hình ảnh sản phẩm của bạn để giúp người ủng hộ hiểu chính xác phần thưởng của họ là gì.
         </p>
 

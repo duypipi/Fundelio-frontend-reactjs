@@ -106,9 +106,9 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
                     Tải ảnh lên
                   </Button>
                   
-                  <p className="text-md text-muted-foreground">Chọn một tệp.</p>
+                  <p className="text-md text-text-primary dark:text-text-white">Chọn một tệp.</p>
 
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-text-primary dark:text-text-white">
                       Thông số kỹ thuật hình ảnh: JPG, PNG, GIF hoặc WEBP, tỷ lệ 16:9, tối thiểu 1024 × 576 pixel, tối đa 50 MB
                     </p>
                 </div>
@@ -168,7 +168,7 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
         )}
 
         <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-text-primary dark:text-text-white">
               Cho <strong>nhà tài trợ</strong> thấy họ sẽ nhận được gì từ sự hỗ trợ của mình. <strong>Hình ảnh</strong> nên{" "}
               <span className="text-primary">chân thực</span>, và tránh <strong>banner</strong>, <strong>huy hiệu</strong> hoặc <strong>văn bản</strong> chồng lên.
             </p>
@@ -193,7 +193,7 @@ export default function ItemForm({ item, rewards, onSave, onCancel }) {
 
           {rewards.length === 0 && (
             <div className="p-3 bg-muted/50 rounded-lg border border-border">
-              <p className="text-sm text-muted-foreground">💡 Chưa có Reward, bạn có thể tạo ở tab Reward tiers</p>
+              <p className="text-sm text-text-primary dark:text-text-white">💡 Chưa có Reward, bạn có thể tạo ở tab Reward tiers</p>
             </div>
           )} */}
         </div>

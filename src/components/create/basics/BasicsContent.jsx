@@ -100,12 +100,12 @@ export default function BasicsContent() {
       {/* Section 1: Title & Description */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">Tiêu đề dự án</h3>
-          <p className="text-md text-muted-foreground">
+          <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Tiêu đề dự án</h3>
+          <p className="text-md text-text-primary dark:text-text-white">
             Viết một tiêu đề ngắn gọn, súc tích để giúp mọi người nhanh chóng hiểu về dự án của bạn.
             Cả hai sẽ xuất hiện trên trang dự án và trang khởi chạy trước.
           </p>
-          <p className="text-md text-muted-foreground mt-3">
+          <p className="text-md text-text-primary dark:text-text-white mt-3">
             Các <strong>nhà tài trợ tiềm năng</strong> cũng sẽ thấy chúng nếu <strong>dự án</strong> của bạn xuất hiện trên các trang danh mục,
             kết quả tìm kiếm hoặc trong email chúng tôi gửi đến <strong>cộng đồng</strong> của mình.
           </p>
@@ -114,7 +114,7 @@ export default function BasicsContent() {
         <div className="bg-white dark:bg-darker-2 border border-border rounded-sm p-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-md font-medium text-foreground mb-2">
+              <label className="block text-md font-medium text-text-primary dark:text-white mb-2">
                 Tiêu đề <span className="text-primary">*</span>
               </label>
               <Input
@@ -126,12 +126,12 @@ export default function BasicsContent() {
                 maxLength={60}
               />
               <div className="flex justify-end mt-1">
-                <span className="text-xs text-muted-foreground">{formData.title.length}/60</span>
+                <span className="text-xs text-text-primary dark:text-text-white">{formData.title.length}/60</span>
               </div>
             </div>
 
             <div>
-              <label className="block text-md font-medium text-foreground mb-2">
+              <label className="block text-md font-medium text-text-primary dark:text-white mb-2">
                 Mô tả ngắn <span className="text-primary">*</span>
               </label>
               <Textarea
@@ -143,12 +143,12 @@ export default function BasicsContent() {
                 maxLength={135}
               />
               <div className="flex justify-end mt-1">
-                <span className="text-xs text-muted-foreground">{formData.desc.length}/135</span>
+                <span className="text-xs text-text-primary dark:text-text-white">{formData.desc.length}/135</span>
               </div>
             </div>
 
             <div className="flex items-start gap-2 p-3 bg-primary/10 border-l-4 border-primary">
-              <p className="text-sm text-foreground">
+              <p className="text-sm text-text-primary dark:text-white">
                 Tạo ấn tượng đầu tiên tốt nhất cho <strong>nhà tài trợ</strong> với tiêu đề tuyệt vời.
               </p>
             </div>
@@ -161,22 +161,22 @@ export default function BasicsContent() {
       {/* Section 2: Category */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">Danh mục</h3>
-          <p className="text-md text-muted-foreground">
+          <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Danh mục</h3>
+          <p className="text-md text-text-primary dark:text-text-white">
             Chọn <strong>danh mục</strong> phù hợp nhất cho <strong>dự án</strong> của bạn.
             Điều này giúp mọi người dễ dàng tìm thấy <strong>dự án</strong> của bạn.
           </p>
         </div>
 
         <div className="bg-white dark:bg-darker-2 border border-border rounded-sm p-6">
-          <label className="block text-md font-medium text-foreground mb-2">
+          <label className="block text-md font-medium text-text-primary dark:text-white mb-2">
             Danh mục dự án <span className="text-primary">*</span>
           </label>
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-border rounded-sm bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            className="w-full px-4 py-2 border border-border rounded-sm bg-background text-text-primary dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
           >
             <option value="">Chọn danh mục</option>
             {CATEGORIES.map((cat) => (
@@ -193,13 +193,13 @@ export default function BasicsContent() {
       {/* Section 3: Project Image */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">Ảnh dự án</h3>
-          <p className="text-md text-muted-foreground mb-3">
+          <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Ảnh dự án</h3>
+          <p className="text-md text-text-primary dark:text-text-white mb-3">
             Thêm một <strong>hình ảnh đại diện</strong> rõ ràng cho <strong>dự án</strong> của bạn.
             Chọn một <strong>hình ảnh</strong> trông đẹp ở các kích thước khác nhau—nó sẽ xuất hiện trên trang <strong>dự án</strong> của bạn,
             trên trang web Kickstarter và ứng dụng di động, và (khi được chia sẻ) trên các kênh <strong>mạng xã hội</strong>.
           </p>
-          <p className="text-md text-muted-foreground mb-3">
+          <p className="text-md text-text-primary dark:text-text-white mb-3">
             Hình ảnh của bạn phải có kích thước ít nhất 1024×576 pixel.
             Nó sẽ được cắt theo tỷ lệ 16:9.
           </p>
@@ -211,7 +211,7 @@ export default function BasicsContent() {
         </div>
 
         <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
-          <h3 className="text-md font-semibold text-foreground mb-4">Hình ảnh <span className="text-primary">*</span></h3>
+          <h3 className="text-md font-semibold text-text-primary dark:text-white mb-4">Hình ảnh <span className="text-primary">*</span></h3>
 
           {/* Upload Area - Only show when no image */}
           {!formData.image_url && (
@@ -223,14 +223,14 @@ export default function BasicsContent() {
                       type="button"
                       variant="gradient"
                       onClick={() => imageInputRef.current?.click()}
-                      className="px-6 py-3 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors font-medium"
+                      className="px-6 py-3 border border-border rounded-sm text-text-primary dark:text-white bg-background hover:bg-muted transition-colors font-medium"
                     >
                       Tải ảnh lên
                     </Button>
 
-                    <p className="text-md text-muted-foreground">Chọn một tệp.</p>
+                    <p className="text-md text-text-primary dark:text-text-white">Chọn một tệp.</p>
 
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-text-primary dark:text-text-white">
                       Thông số kỹ thuật hình ảnh: JPG, PNG, GIF hoặc WEBP, tỷ lệ 16:9, tối thiểu 1024 × 576 pixel, tối đa 50 MB
                     </p>
                   </div>
@@ -262,7 +262,7 @@ export default function BasicsContent() {
                   <button
                     type="button"
                     onClick={() => imageInputRef.current?.click()}
-                    className="px-4 py-2 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors text-sm font-medium"
+                    className="px-4 py-2 border border-border rounded-sm text-text-primary dark:text-white bg-background hover:bg-muted transition-colors text-sm font-medium"
                   >
                     Thay đổi
                   </button>
@@ -286,7 +286,7 @@ export default function BasicsContent() {
           )}
 
           <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-text-primary dark:text-text-white">
               Cho <strong>nhà tài trợ</strong> thấy họ sẽ nhận được gì từ sự hỗ trợ của mình. <strong>Hình ảnh</strong> nên{" "}
               <span className="text-primary">chân thực</span>, và tránh <strong>banner</strong>, <strong>huy hiệu</strong> hoặc <strong>văn bản</strong> chồng lên.
             </p>
@@ -299,23 +299,23 @@ export default function BasicsContent() {
       {/* Section 4: Project Video */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">Video dự án (tùy chọn)</h3>
-          <p className="text-md text-muted-foreground mb-3">
+          <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Video dự án (tùy chọn)</h3>
+          <p className="text-md text-text-primary dark:text-text-white mb-3">
             Thêm một <strong>video</strong> mô tả <strong>dự án</strong> của bạn.
           </p>
-          <p className="text-md text-muted-foreground mb-3">
+          <p className="text-md text-text-primary dark:text-text-white mb-3">
             Hãy cho mọi người biết bạn đang gây quỹ để làm gì,
             bạn có kế hoạch thực hiện nó như thế nào, bạn là ai,
             và tại sao bạn quan tâm đến dự án này.
           </p>
-          <p className="text-md text-muted-foreground">
+          <p className="text-md text-text-primary dark:text-text-white">
             Sau khi bạn tải <strong>video</strong> lên, hãy sử dụng trình chỉnh sửa của chúng tôi
             để thêm <strong>chú thích</strong> và <strong>phụ đề</strong> để <strong>dự án</strong> của bạn dễ tiếp cận hơn với mọi người.
           </p>
         </div>
 
         <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
-          <h3 className="text-md font-semibold text-foreground mb-4">Video giới thiệu</h3>
+          <h3 className="text-md font-semibold text-text-primary dark:text-white mb-4">Video giới thiệu</h3>
 
           {/* Upload Area - Only show when no video */}
           {!formData.intro_video_url && (
@@ -327,14 +327,14 @@ export default function BasicsContent() {
                       type="button"
                       variant="gradient"
                       onClick={() => videoInputRef.current?.click()}
-                      className="px-6 py-3 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors font-medium"
+                      className="px-6 py-3 border border-border rounded-sm text-text-primary dark:text-white bg-background hover:bg-muted transition-colors font-medium"
                     >
                       Tải lên video
                     </Button>
 
-                    <p className="text-md text-muted-foreground">Chọn một tệp video.</p>
+                    <p className="text-md text-text-primary dark:text-text-white">Chọn một tệp video.</p>
 
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-text-primary dark:text-text-white">
                       Thông số kỹ thuật video: MP4, MOV, AVI hoặc WEBM, tỷ lệ 16:9, tối đa 500 MB
                     </p>
                   </div>
@@ -366,7 +366,7 @@ export default function BasicsContent() {
                   <button
                     type="button"
                     onClick={() => videoInputRef.current?.click()}
-                    className="px-4 py-2 border border-border rounded-sm text-foreground bg-background hover:bg-muted transition-colors text-sm font-medium"
+                    className="px-4 py-2 border border-border rounded-sm text-text-primary dark:text-white bg-background hover:bg-muted transition-colors text-sm font-medium"
                   >
                     Thay đổi
                   </button>
@@ -389,7 +389,7 @@ export default function BasicsContent() {
             </div>
           )}
           <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
-          <p className="text-xs text-muted-foreground ">
+          <p className="text-xs text-text-primary dark:text-text-white ">
             Hãy cho mọi người biết bạn đang gây quỹ để làm gì, bạn có kế hoạch thực hiện nó như thế nào, bạn là ai, và tại sao bạn quan tâm đến dự án này.
           </p>
           </div>
@@ -402,8 +402,8 @@ export default function BasicsContent() {
       {/* Section 5: Campaign Duration */}
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">Thời gian chiến dịch</h3>
-          <p className="text-md text-muted-foreground">
+          <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Thời gian chiến dịch</h3>
+          <p className="text-md text-text-primary dark:text-text-white">
             Chọn ngày bắt đầu và kết thúc cho <strong>chiến dịch gây quỹ</strong> của bạn.
             Hầu hết các <strong>chiến dịch</strong> thành công kéo dài từ 30-60 ngày.
           </p>
@@ -412,7 +412,7 @@ export default function BasicsContent() {
         <div className="bg-white dark:bg-darker-2 border border-border rounded-sm p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-md font-medium text-foreground mb-2">
+              <label className="block text-md font-medium text-text-primary dark:text-white mb-2">
                 Ngày bắt đầu <span className="text-primary">*</span>
               </label>
               <Input
@@ -424,7 +424,7 @@ export default function BasicsContent() {
             </div>
 
             <div>
-              <label className="block text-md font-medium text-foreground mb-2">
+              <label className="block text-md font-medium text-text-primary dark:text-white mb-2">
                 Ngày kết thúc <span className="text-primary">*</span>
               </label>
               <Input
@@ -439,7 +439,7 @@ export default function BasicsContent() {
 
           {formData.start_date && formData.end_date && (
             <div className="mt-4 p-3 bg-primary/10 border-l-4 border-primary">
-              <p className="text-sm text-foreground">
+              <p className="text-sm text-text-primary dark:text-white">
                 <span className="font-medium"><strong>Thời gian chiến dịch</strong>:</span>{' '}
                 {Math.ceil((new Date(formData.end_date) - new Date(formData.start_date)) / (1000 * 60 * 60 * 24))} ngày
               </p>

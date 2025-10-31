@@ -59,7 +59,7 @@ export const CreateCampaignHeader = ({
         <div className="mx-auto max-w-container px-4 sm:px-6 h-full flex items-center justify-between gap-4">
           {/* Left - Logo */}
           <Link to="/home" className="flex-shrink-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-text-white cursor-pointer hover:opacity-80 transition-opacity">
+            <h1 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-white cursor-pointer hover:opacity-80 transition-opacity">
               Fundelio
             </h1>
           </Link>
@@ -89,7 +89,7 @@ export const CreateCampaignHeader = ({
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-105"
+              className="p-2 rounded-lg text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-105"
               title={isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -149,27 +149,27 @@ export const CreateCampaignHeader = ({
                   <div className="flex flex-col md:flex-row">
                     {/* Left Column */}
                     <div className="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">
-                      <h4 className="text-xs font-bold text-text-primary dark:text-text-white mb-3 uppercase">
+                      <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
                         Tài khoản
                       </h4>
                       <div className="space-y-1 mb-4">
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <Bookmark className="w-4 h-4" />
                           <span>Dự án đã lưu</span>
                         </a>
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <Star className="w-4 h-4" />
                           <span>Đề xuất cho bạn</span>
                         </a>
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <User className="w-4 h-4" />
                           <span>Đang theo dõi</span>
@@ -181,28 +181,28 @@ export const CreateCampaignHeader = ({
                       <div className="space-y-1">
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <User className="w-4 h-4" />
                           <span>Hồ sơ</span>
                         </a>
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <Settings className="w-4 h-4" />
                           <span>Cài đặt</span>
                         </a>
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <MessageSquare className="w-4 h-4" />
                           <span>Tin nhắn</span>
                         </a>
                         <a
                           href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >
                           <Activity className="w-4 h-4" />
                           <span>Hoạt động</span>
@@ -222,7 +222,7 @@ export const CreateCampaignHeader = ({
 
                     {/* Right Column */}
                     <div className="flex-1 p-4">
-                      <h4 className="text-xs font-bold text-text-primary dark:text-text-white mb-3 uppercase">
+                      <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
                         Chiến dịch đã tạo
                       </h4>
                       <div className="space-y-2">
@@ -237,7 +237,7 @@ export const CreateCampaignHeader = ({
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-sm text-text-primary dark:text-text-white line-clamp-2 flex-1">A Spaces project</span>
+                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">A Spaces project</span>
                         </a>
 
                         <a
@@ -251,7 +251,7 @@ export const CreateCampaignHeader = ({
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-sm text-text-primary dark:text-text-white line-clamp-2 flex-1">A Product Design project</span>
+                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">A Product Design project</span>
                         </a>
 
                         <a
@@ -265,7 +265,7 @@ export const CreateCampaignHeader = ({
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-sm text-text-primary dark:text-text-white line-clamp-2 flex-1">Tech Innovation Hub</span>
+                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">Tech Innovation Hub</span>
                         </a>
 
                         <div className="border-t border-gray-200 dark:border-gray-700 my-3"></div>
@@ -296,7 +296,7 @@ export const CreateCampaignHeader = ({
         <div className="flex items-center justify-between px-4 h-14 dark:border-gray-700">
           {/* Logo */}
           <Link to="/home" className="flex-shrink-0">
-            <h1 className="text-lg font-bold text-text-primary dark:text-text-white cursor-pointer hover:opacity-80 transition-opacity">
+            <h1 className="text-lg font-bold text-text-primary dark:text-white cursor-pointer hover:opacity-80 transition-opacity">
               Fundelio
             </h1>
           </Link>
@@ -307,7 +307,7 @@ export const CreateCampaignHeader = ({
             {!isEditing ? (
               <button
                 onClick={onPreview}
-                className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 title="Xem trước"
               >
                 <Eye className="w-5 h-5" />
@@ -316,7 +316,7 @@ export const CreateCampaignHeader = ({
               <>
                 <button
                   onClick={onCancel}
-                  className="p-2 rounded-sm border border-gray-300 dark:border-gray-600 text-text-primary dark:text-text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="p-2 rounded-sm border border-gray-300 dark:border-gray-600 text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                   title="Hủy"
                 >
                   <X className="w-5 h-5" />
@@ -355,7 +355,7 @@ export const CreateCampaignHeader = ({
                 className={`px-2 py-2 font-semibold text-sm whitespace-nowrap transition-all relative ${
                   activeTab === tab.id
                     ? 'text-primary'
-                    : 'text-text-primary dark:text-text-white hover:text-primary'
+                    : 'text-text-primary dark:text-white hover:text-primary'
                 }`}
               >
                 {tab.label}

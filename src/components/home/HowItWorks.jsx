@@ -28,10 +28,10 @@ export const HowItWorks = ({ steps = defaultSteps }) => {
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-          <h2 className="text-2xl sm:text-hero font-bold text-text-primary dark:text-text-white mb-4 transition-colors duration-300">
+          <h2 className="text-2xl sm:text-hero font-bold text-text-primary dark:text-white mb-4 transition-colors duration-300">
             Cách hoạt động
           </h2>
-          <p className="text-lg text-text-secondary dark:text-gray-400 max-w-2xl mx-auto transition-colors duration-300">
+          <p className="text-lg text-text-secondary dark:text-text-white max-w-2xl mx-auto transition-colors duration-300">
             Ba bước đơn giản để biến ý tưởng của bạn thành hiện thực
           </p>
         </div>
@@ -56,10 +56,10 @@ export const HowItWorks = ({ steps = defaultSteps }) => {
               </div>
 
               {/* Content */}
-              <h3 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-text-white mb-3 transition-colors duration-300">
+              <h3 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-white mb-3 transition-colors duration-300">
                 {step.title}
               </h3>
-              <p className="text-text-secondary dark:text-gray-400 leading-relaxed mb-4 transition-colors duration-300">
+              <p className="text-text-secondary dark:text-text-white leading-relaxed mb-4 transition-colors duration-300">
                 {step.desc}
               </p>
 

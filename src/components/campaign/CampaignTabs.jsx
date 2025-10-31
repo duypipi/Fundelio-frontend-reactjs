@@ -24,7 +24,7 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
       <div className="sticky top-0 bg-white dark:bg-darker z-20 shadow-sm">
         <div className="max-w-container mx-auto px-4 lg:px-6">
           <nav
-            className="flex gap-3 overflow-x-auto scrollbar-hide"
+            className="flex gap-x-0.5 overflow-x-auto scrollbar-hide"
             role="tablist"
           >
             {tabs.map((tab) => (
@@ -40,7 +40,7 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
                   ${
                     activeTab === tab.id
                       ? 'border-primary text-primary bg-white dark:bg-darker-2'
-                      : 'border-transparent text-text-secondary dark:text-text-white hover:text-primary hover:border-primary/40'
+                      : 'border-transparent text-text-secondary dark:text-white hover:text-primary hover:border-primary/40'
                   }
                 `}
               >

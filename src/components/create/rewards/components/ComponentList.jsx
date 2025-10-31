@@ -14,8 +14,8 @@ export default function ItemList({ items, onEdit, onDelete, onCreate }) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted/30 py-16 px-4">
         <div className="text-5xl mb-4">📦</div>
-        <h3 className="text-lg font-semibold text-foreground mb-2">Chưa có thành phần nào</h3>
-        <p className="text-muted-foreground mb-6 text-center max-w-sm">
+        <h3 className="text-lg font-semibold text-text-primary dark:text-text-white mb-2">Chưa có thành phần nào</h3>
+        <p className="text-text-primary dark:text-text-white mb-6 text-center max-w-sm">
           Tạo thành phần đầu tiên để bắt đầu xây dựng các phần thưởng của bạn
         </p>
         <Button onClick={onCreate} variant="primary">
@@ -28,7 +28,7 @@ export default function ItemList({ items, onEdit, onDelete, onCreate }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-foreground">Thành phần ({items.length})</h2>
+        <h2 className="text-xl font-semibold text-text-primary dark:text-text-white">Thành phần ({items.length})</h2>
         <Button onClick={onCreate} variant="primary" size="md">
           + Tạo mới
         </Button>
@@ -43,7 +43,7 @@ export default function ItemList({ items, onEdit, onDelete, onCreate }) {
       /> */}
 
       {/* Header - 3 columns for components */}
-      <div className="hidden md:grid md:grid-cols-3 gap-6 px-6 py-3 text-sm font-medium text-muted-foreground bg-white dark:bg-darker-2 rounded-sm inset-shadow-2xs shadow-md mb-4">
+      <div className="hidden md:grid md:grid-cols-3 gap-6 px-6 py-3 text-sm font-medium text-text-primary dark:text-text-white bg-white dark:bg-darker-2 rounded-sm inset-shadow-2xs shadow-md mb-4">
         <div>Tên thành phần</div>
         <div>Chi tiết</div>
         <div>Hình ảnh</div>

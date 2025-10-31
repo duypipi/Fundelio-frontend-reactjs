@@ -185,7 +185,7 @@ export default function RewardCreateTab({ setIsEditing, setSaveCallback, setCanc
     <div>
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-foreground mb-2">Phần thưởng & Add-ons</h2>
-        <p className="text-muted-foreground">Quản lý các phần thưởng, thành phần và add-ons cho dự án của bạn</p>
+        <p className="text-text-primary dark:text-text-white">Quản lý các phần thưởng, thành phần và add-ons cho dự án của bạn</p>
       </div>
 
       {/* Tab Navigation */}

@@ -47,10 +47,10 @@ const RankingItem = ({ rank, project, type = 'funding', isFirst = false, isLast 
 
   // Dynamic classes for first/last items
   const getItemClasses = () => {
-    let classes = 'flex items-center gap-4 p-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group';
+    let classes = 'flex items-center gap-4 p-3 bg-white dark:bg-darker-2 hover:bg-gray-50 dark:hover:bg-darker-2/70 transition-all duration-200 group';
 
     if (!isLast) {
-      classes += ' border-b border-gray-200 dark:border-gray-700';
+      classes += ' border-b border-gray-200 dark:border-darker';
     }
 
     return classes;
@@ -83,14 +83,14 @@ const RankingItem = ({ rank, project, type = 'funding', isFirst = false, isLast 
         <h3 className="text-sm font-bold text-gray-900 dark:text-white line-clamp-1 mb-1 group-hover:text-primary transition-colors">
           {project.title}
         </h3>
-        <p className="text-xs text-gray-600 dark:text-gray-400">
+        <p className="text-xs text-gray-600 dark:text-text-white">
           by {project.authorName}
         </p>
       </div>
 
       {/* Stats */}
       <div className="flex-shrink-0 text-right">
-        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+        <div className="text-xs text-gray-500 dark:text-text-white mb-1">
           {type === 'funding' ? 'FUNDING' : 'AUDIENCE'}
         </div>
         <div className="text-sm font-bold text-gray-900 dark:text-white">

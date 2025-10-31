@@ -38,7 +38,7 @@ const CreatorInfoCard = ({ creator }) => {
           <h3 className="text-base font-semibold text-foreground truncate">
             {name}
           </h3>
-          <p className="text-xs text-text-secondary dark:text-text-white">
+          <p className="text-xs text-text-secondary dark:text-white">
             {created} created • {backed} backed
           </p>
         </div>

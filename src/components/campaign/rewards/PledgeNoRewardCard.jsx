@@ -27,12 +27,12 @@ const PledgeNoRewardCard = ({ currency = 'USD', onPledge }) => {
         <div className="mb-4">
           <label
             htmlFor="pledge-amount"
-            className="block text-sm font-medium text-text-secondary dark:text-text-white mb-2"
+            className="block text-sm font-medium text-text-secondary dark:text-white mb-2"
           >
             Pledge amount
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary dark:text-text-white">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary dark:text-white">
               <img src='/packages/coin.svg' alt='coin' className='w-5 h-5'/>
             </span>
             <input
@@ -43,7 +43,7 @@ const PledgeNoRewardCard = ({ currency = 'USD', onPledge }) => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="1"
-              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-white dark:bg-darker text-text-secondary dark:text-text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-white dark:bg-darker text-text-secondary dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               required
             />
           </div>
@@ -51,7 +51,7 @@ const PledgeNoRewardCard = ({ currency = 'USD', onPledge }) => {
 
         {/* Info Box */}
         <div className="bg-gradient-to-b from-muted to-muted/40 rounded-xl p-4 mb-4">
-          <p className="text-sm text-text-secondary dark:text-text-white">
+          <p className="text-sm text-text-secondary dark:text-white">
             Simply want to support the project? You can pledge any amount
             without selecting a reward tier. Your contribution will still help
             make this campaign a success!
