@@ -7,7 +7,7 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
         <h3 className="text-lg font-semibold text-foreground">Xem trước</h3>
         <div className="space-y-4">
           <div className="aspect-video rounded-lg border-2 border-dashed border-border bg-muted/30 flex items-center justify-center">
-            <span className="text-text-primary dark:text-text-white text-sm">Chưa có ảnh</span>
+            <span className="text-muted-foreground text-sm">Chưa có ảnh</span>
           </div>
           <div className="space-y-2">
             <div>
@@ -17,11 +17,11 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
           </div>
           <div className="grid grid-cols-2 gap-3 pt-4 border-t border-border">
             <div>
-              <p className="text-xs text-text-primary dark:text-text-white">Backers</p>
+              <p className="text-xs text-muted-foreground">Backers</p>
               <p className="text-lg font-semibold text-foreground">0</p>
             </div>
             <div>
-              <p className="text-xs text-text-primary dark:text-text-white">Giao dự kiến</p>
+              <p className="text-xs text-muted-foreground">Giao dự kiến</p>
               <p className="text-lg font-semibold text-foreground">
                 Tháng/Năm
               </p>
@@ -65,7 +65,7 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
 
       {rewardItems.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-text-primary dark:text-text-white uppercase">Thành phần</p>
+          <p className="text-xs font-medium text-muted-foreground uppercase">Thành phần</p>
           {rewardItems.map((item) => (
             <div key={item.itemId} className="text-sm text-foreground">
               • {item.title} × {item.qty}
@@ -76,11 +76,11 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
 
       <div className="grid grid-cols-2 gap-3 pt-4 border-t border-border">
         <div>
-          <p className="text-xs text-text-primary dark:text-text-white">Backers</p>
+          <p className="text-xs text-muted-foreground">Backers</p>
           <p className="text-lg font-semibold text-foreground">0</p>
         </div>
         <div>
-          <p className="text-xs text-text-primary dark:text-text-white">Giao dự kiến</p>
+          <p className="text-xs text-muted-foreground">Giao dự kiến</p>
           <p className="text-lg font-semibold text-foreground">
             Tháng {reward.delivery?.month} {reward.delivery?.year}
           </p>
@@ -88,17 +88,17 @@ export default function RewardPreview({ reward, items, rewards, type = 'reward' 
       </div>
 
       {!isAddon && reward.shipping === "anywhere" && (
-        <div className="text-xs text-text-primary dark:text-text-white bg-muted/50 p-2 rounded">✓ Ship toàn cầu</div>
+        <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">✓ Ship toàn cầu</div>
       )}
 
       {isAddon && applicableRewards.length > 0 && (
-        <div className="text-xs text-text-primary dark:text-text-white bg-muted/50 p-2 rounded">
+        <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
           ✓ Áp dụng cho {applicableRewards.length} phần thưởng
         </div>
       )}
 
       {reward.limitTotal && (
-        <div className="text-xs text-text-primary dark:text-text-white bg-muted/50 p-2 rounded">
+        <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
           ⚠️ Giới hạn: {reward.limitTotal} suất
         </div>
       )}

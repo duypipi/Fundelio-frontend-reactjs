@@ -197,7 +197,7 @@ export const FeaturedSpotlight = () => {
                           </h3>
                           
                           {/* Campaign stats with icons */}
-                          <div className="flex items-center gap-2 text-[10px] text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
                             <div className="flex items-center gap-1">
                               <Users className="w-3 h-3" />
                               <span>{campaign.backers_count}</span>

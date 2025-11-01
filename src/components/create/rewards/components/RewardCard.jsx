@@ -61,7 +61,7 @@ export default function RewardCard({
               <h3 className="font-semibold text-lg text-foreground">
                 {data.title}
               </h3>
-              <p className="text-sm text-text-primary dark:text-text-white mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 {data.rewardRefs?.length || 0} phần thưởng
               </p>
             </div>
@@ -93,7 +93,7 @@ export default function RewardCard({
           )}
 
           {data.limitTotal && (
-            <p className="text-sm text-text-primary dark:text-text-white">
+            <p className="text-sm text-muted-foreground">
               Giới hạn: {data.limitTotal} suất
             </p>
           )}
@@ -101,7 +101,7 @@ export default function RewardCard({
           {/* Show applicable rewards for item in column 2 */}
           {type === 'item' && applicableRewards.length > 0 && (
             <div className="mt-2">
-              <p className="text-xs font-medium text-text-primary dark:text-text-white mb-1">Áp dụng cho:</p>
+              <p className="text-xs font-medium text-muted-foreground mb-1">Áp dụng cho:</p>
               <ul className="space-y-1">
                 {applicableRewards.map((rewardTitle, idx) => (
                   <li key={idx} className="text-sm text-foreground">
@@ -148,7 +148,7 @@ export default function RewardCard({
             />
           ) : (
             <div className="w-full h-32 md:h-40 rounded-sm bg-muted flex items-center justify-center">
-              <span className="text-text-primary dark:text-text-white text-sm">Không có ảnh</span>
+              <span className="text-muted-foreground text-sm">Không có ảnh</span>
             </div>
           )}
         </div>
@@ -156,7 +156,7 @@ export default function RewardCard({
 
       {/* Footer - Actions */}
       <div className="px-4 md:px-6 py-3 md:py-4 border-t border-border bg-muted/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="text-sm text-text-primary dark:text-text-white">
+        <div className="text-sm text-muted-foreground">
           0 backers
         </div>
 

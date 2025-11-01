@@ -1,6 +1,8 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
+import toast, { Toaster } from 'react-hot-toast';
+import { HeartHandshake } from 'lucide-react';
 import coin from '/packages/coin.svg';
 gsap.registerPlugin(Flip);
 
@@ -96,6 +98,33 @@ const Leaderboard = () => {
         // Lưu ID của backer được cập nhật để animate
         setUpdatedBackerId(selectedBacker.id);
         
+        // Hiển thị toast notification
+        toast.custom((t) => (
+          <div
+            className={`${
+              t.visible ? 'animate-enter' : 'animate-leave'
+            } max-w-xs w-full bg-white dark:bg-darker-2 shadow-lg rounded-sm pointer-events-auto flex items-center gap-3 p-2 border border-border-light dark:border-border`}
+          >
+            <div className="flex-shrink-0 bg-indigo-200 p-2 rounded-full">
+              <HeartHandshake className="w-6 h-6 text-indigo-700" />
+            </div>
+            <div className="flex-1 flex flex-col gap-1">
+              <p className="text-sm font-semibold text-text-primary dark:text-white">
+                {selectedBacker.name}
+              </p>
+              <div className="flex items-center gap-1.5">
+                <span className="text-md font-bold text-[#27e28b]">
+                  +{deltaAmount.toLocaleString('vi-VN')}
+                </span>
+                <img src={coin} alt="Coin" className="inline-block w-4 h-4" />
+              </div>
+            </div>
+          </div>
+        ), {
+          duration: 1500,
+          position: 'top-right',
+        });
+        
         // Animate số tiền tăng lên
         const oldAmount = selectedBacker.amount;
         const newAmount = oldAmount + deltaAmount;
@@ -175,6 +204,13 @@ const Leaderboard = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
+      <Toaster 
+        position="top-right"
+        containerStyle={{
+          top: 80,
+        }}
+      />
+      
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-3">
@@ -247,12 +283,7 @@ const Leaderboard = () => {
                 </div>
 
                 {/* Amount */}
-                <div 
-                  className={`
-                    text-right px-3 py-2 rounded-lg transition-all duration-300
-                    ${updatedBackerId === backer.id ? '' : ''}
-                  `}
-                >
+                <div className="text-right px-3 py-2 rounded-lg">
                   <div className="flex items-center gap-2 justify-end">
                     <span 
                       ref={(el) => amountRefs.current[backer.id] = el}
@@ -263,21 +294,9 @@ const Leaderboard = () => {
                     <img 
                       src={coin} 
                       alt="Coin" 
-                      className={`
-                        inline-block w-5 h-5 transition-transform duration-300
-                        ${updatedBackerId === backer.id ? 'animate-spin' : ''}
-                      `}
+                      className="inline-block w-5 h-5"
                     />
                   </div>
-                  {updatedBackerId === backer.id && (
-                    <div className="text-xs text-green-500 dark:text-green-400 font-semibold mt-1 animate-pulse">
-                      +{Math.floor(Math.random() * 500) + 1000}  <img 
-                      src={coin} 
-                      alt="Coin" 
-                      className={`inline-block w-5 h-5 `}
-                    />
-                    </div>
-                  )}
                 </div>
               </li>
             );

@@ -109,10 +109,7 @@ export function RewardDetailCard({ reward }) {
 
         {/* CTA Button - Smaller */}
         <Button
-          className="w-full font-bold text-white shadow-lg h-10 text-sm flex items-center justify-center gap-2"
-          style={{
-            background: 'linear-gradient(135deg, #1EC794 0%, #0894E2 100%)',
-          }}
+          className="w-full font-bold text-white bg-primary shadow-lg h-10 text-sm flex items-center justify-center gap-2"
         >
           <span>Pledge {reward.min_pledge_amount}</span>
           <img src="/packages/coin.svg" alt="Coin" className="w-5 h-5" />

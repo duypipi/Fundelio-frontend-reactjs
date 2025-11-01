@@ -7,7 +7,7 @@ export default function AddOnList({ addOns, items, rewards, onEdit, onDelete, on
       <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted/30 py-16 px-4">
         <div className="text-5xl mb-4">➕</div>
         <h3 className="text-lg font-semibold text-foreground mb-2">Chưa có add-on nào</h3>
-        <p className="text-text-primary dark:text-text-white mb-6 text-center max-w-sm">
+        <p className="text-muted-foreground mb-6 text-center max-w-sm">
           Tạo add-on để cho phép backer thêm các mục bổ sung vào phần thưởng của họ
         </p>
         <Button onClick={onCreate} variant="primary">
@@ -27,7 +27,7 @@ export default function AddOnList({ addOns, items, rewards, onEdit, onDelete, on
       </div>
 
       {/* Header - 4 columns for addons */}
-      <div className="hidden md:grid md:grid-cols-4 gap-6 px-6 py-3 text-sm font-medium text-text-primary dark:text-text-white bg-white dark:bg-darker-2 rounded-sm inset-shadow-2xs shadow-md">
+      <div className="hidden md:grid md:grid-cols-4 gap-6 px-6 py-3 text-sm font-medium text-muted-foreground bg-white dark:bg-darker-2 rounded-sm inset-shadow-2xs shadow-md">
         <div>Số tiền</div>
         <div>Chi tiết</div>
         <div>Bao gồm</div>

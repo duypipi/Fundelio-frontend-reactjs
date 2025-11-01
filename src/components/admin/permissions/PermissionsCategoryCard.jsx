@@ -20,7 +20,7 @@ export const PermissionsCategoryCard = ({
 }) => {
   return (
     <Card>
-      <div className='p-4 bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700'>
+      <div className='p-4 bg-gray-50 dark:bg-darker-2/10 border-b border-border'>
         <div className='flex items-center space-x-2'>
           <Key className='w-5 h-5 text-gray-600 dark:text-text-white' />
           <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>

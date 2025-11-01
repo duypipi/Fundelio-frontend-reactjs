@@ -101,11 +101,11 @@ export default function BasicsContent() {
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Tiêu đề dự án</h3>
-          <p className="text-md text-text-primary dark:text-text-white">
+          <p className="text-md text-muted-foreground">
             Viết một tiêu đề ngắn gọn, súc tích để giúp mọi người nhanh chóng hiểu về dự án của bạn.
             Cả hai sẽ xuất hiện trên trang dự án và trang khởi chạy trước.
           </p>
-          <p className="text-md text-text-primary dark:text-text-white mt-3">
+          <p className="text-md text-muted-foreground mt-3">
             Các <strong>nhà tài trợ tiềm năng</strong> cũng sẽ thấy chúng nếu <strong>dự án</strong> của bạn xuất hiện trên các trang danh mục,
             kết quả tìm kiếm hoặc trong email chúng tôi gửi đến <strong>cộng đồng</strong> của mình.
           </p>
@@ -126,7 +126,7 @@ export default function BasicsContent() {
                 maxLength={60}
               />
               <div className="flex justify-end mt-1">
-                <span className="text-xs text-text-primary dark:text-text-white">{formData.title.length}/60</span>
+                <span className="text-xs text-muted-foreground">{formData.title.length}/60</span>
               </div>
             </div>
 
@@ -143,7 +143,7 @@ export default function BasicsContent() {
                 maxLength={135}
               />
               <div className="flex justify-end mt-1">
-                <span className="text-xs text-text-primary dark:text-text-white">{formData.desc.length}/135</span>
+                <span className="text-xs text-muted-foreground">{formData.desc.length}/135</span>
               </div>
             </div>
 
@@ -162,7 +162,7 @@ export default function BasicsContent() {
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Danh mục</h3>
-          <p className="text-md text-text-primary dark:text-text-white">
+          <p className="text-md text-muted-foreground">
             Chọn <strong>danh mục</strong> phù hợp nhất cho <strong>dự án</strong> của bạn.
             Điều này giúp mọi người dễ dàng tìm thấy <strong>dự án</strong> của bạn.
           </p>
@@ -194,12 +194,12 @@ export default function BasicsContent() {
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Ảnh dự án</h3>
-          <p className="text-md text-text-primary dark:text-text-white mb-3">
+          <p className="text-md text-muted-foreground mb-3">
             Thêm một <strong>hình ảnh đại diện</strong> rõ ràng cho <strong>dự án</strong> của bạn.
             Chọn một <strong>hình ảnh</strong> trông đẹp ở các kích thước khác nhau—nó sẽ xuất hiện trên trang <strong>dự án</strong> của bạn,
             trên trang web Kickstarter và ứng dụng di động, và (khi được chia sẻ) trên các kênh <strong>mạng xã hội</strong>.
           </p>
-          <p className="text-md text-text-primary dark:text-text-white mb-3">
+          <p className="text-md text-muted-foreground mb-3">
             Hình ảnh của bạn phải có kích thước ít nhất 1024×576 pixel.
             Nó sẽ được cắt theo tỷ lệ 16:9.
           </p>
@@ -228,9 +228,9 @@ export default function BasicsContent() {
                       Tải ảnh lên
                     </Button>
 
-                    <p className="text-md text-text-primary dark:text-text-white">Chọn một tệp.</p>
+                    <p className="text-md text-muted-foreground">Chọn một tệp.</p>
 
-                    <p className="text-xs text-text-primary dark:text-text-white">
+                    <p className="text-xs text-muted-foreground">
                       Thông số kỹ thuật hình ảnh: JPG, PNG, GIF hoặc WEBP, tỷ lệ 16:9, tối thiểu 1024 × 576 pixel, tối đa 50 MB
                     </p>
                   </div>
@@ -286,7 +286,7 @@ export default function BasicsContent() {
           )}
 
           <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
-            <p className="text-xs text-text-primary dark:text-text-white">
+            <p className="text-xs text-muted-foreground">
               Cho <strong>nhà tài trợ</strong> thấy họ sẽ nhận được gì từ sự hỗ trợ của mình. <strong>Hình ảnh</strong> nên{" "}
               <span className="text-primary">chân thực</span>, và tránh <strong>banner</strong>, <strong>huy hiệu</strong> hoặc <strong>văn bản</strong> chồng lên.
             </p>
@@ -300,15 +300,15 @@ export default function BasicsContent() {
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Video dự án (tùy chọn)</h3>
-          <p className="text-md text-text-primary dark:text-text-white mb-3">
+          <p className="text-md text-muted-foreground mb-3">
             Thêm một <strong>video</strong> mô tả <strong>dự án</strong> của bạn.
           </p>
-          <p className="text-md text-text-primary dark:text-text-white mb-3">
+          <p className="text-md text-muted-foreground mb-3">
             Hãy cho mọi người biết bạn đang gây quỹ để làm gì,
             bạn có kế hoạch thực hiện nó như thế nào, bạn là ai,
             và tại sao bạn quan tâm đến dự án này.
           </p>
-          <p className="text-md text-text-primary dark:text-text-white">
+          <p className="text-md text-muted-foreground">
             Sau khi bạn tải <strong>video</strong> lên, hãy sử dụng trình chỉnh sửa của chúng tôi
             để thêm <strong>chú thích</strong> và <strong>phụ đề</strong> để <strong>dự án</strong> của bạn dễ tiếp cận hơn với mọi người.
           </p>
@@ -332,9 +332,9 @@ export default function BasicsContent() {
                       Tải lên video
                     </Button>
 
-                    <p className="text-md text-text-primary dark:text-text-white">Chọn một tệp video.</p>
+                    <p className="text-md text-muted-foreground">Chọn một tệp video.</p>
 
-                    <p className="text-xs text-text-primary dark:text-text-white">
+                    <p className="text-xs text-muted-foreground">
                       Thông số kỹ thuật video: MP4, MOV, AVI hoặc WEBM, tỷ lệ 16:9, tối đa 500 MB
                     </p>
                   </div>
@@ -389,7 +389,7 @@ export default function BasicsContent() {
             </div>
           )}
           <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
-          <p className="text-xs text-text-primary dark:text-text-white ">
+          <p className="text-xs text-muted-foreground ">
             Hãy cho mọi người biết bạn đang gây quỹ để làm gì, bạn có kế hoạch thực hiện nó như thế nào, bạn là ai, và tại sao bạn quan tâm đến dự án này.
           </p>
           </div>
@@ -403,7 +403,7 @@ export default function BasicsContent() {
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <div>
           <h3 className="text-lg font-semibold text-text-primary dark:text-white mb-2">Thời gian chiến dịch</h3>
-          <p className="text-md text-text-primary dark:text-text-white">
+          <p className="text-md text-muted-foreground">
             Chọn ngày bắt đầu và kết thúc cho <strong>chiến dịch gây quỹ</strong> của bạn.
             Hầu hết các <strong>chiến dịch</strong> thành công kéo dài từ 30-60 ngày.
           </p>

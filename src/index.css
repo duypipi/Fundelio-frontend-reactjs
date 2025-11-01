@@ -244,7 +244,7 @@ body {
   --secondary: oklch(0.82 0.14 80);
   --secondary-foreground: oklch(0.12 0 0);
   --muted: oklch(0.25 0 0);
-  --muted-foreground: #cbc6e7;  /* oklch(0.708 0 0); */
+  --muted-foreground: #e0dfe9;  /* oklch(0.708 0 0);   #cbc6e7*/ 
   --accent: oklch(0.25 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);

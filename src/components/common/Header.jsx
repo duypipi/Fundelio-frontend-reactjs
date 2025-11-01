@@ -451,139 +451,72 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
 
               {/* User Dropdown Menu */}
               {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-[280px] sm:w-[600px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
-                  <div className="flex flex-col md:flex-row">
-                    {/* Left Column - Your Account + Bottom Section */}
-                    <div className="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">
-                      <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
-                        Tài khoản
-                      </h4>
-                      <div className="space-y-1 mb-4">
-                        
-                      </div>
-
-                      {/* Bottom Section */}
-                      <div className="space-y-1">
-                        <a
-                          href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <User className="w-4 h-4" />
-                          <span>Hồ sơ</span>
-                        </a>
-                        <a
-                          href="#"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <Settings className="w-4 h-4" />
-                          <span>Cài đặt</span>
-                        </a>
-                        <Link
-                          to="/your-projects"
-                          onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <FolderOpen className="w-4 h-4" />
-                          <span>Dự án của bạn</span>
-                        </Link>
-                        <Link
-                          href="/wallet"
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <Wallet className="w-4 h-4" />
-                          <span>Ví</span>
-                        </Link>
-                      </div>
-
-                      {/* Logout */}
-                      <div className="border-t border-gray-200 dark:border-gray-700 mt-3 pt-3">
-                        <button
-                          onClick={() => {
-                            // Handle logout
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors w-full"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          <span>Đăng xuất</span>
-                        </button>
-                      </div>
+                <div className="absolute right-0 top-full mt-2 w-[280px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker rounded-lg shadow-xl border border-border overflow-hidden z-50">
+                  <div className="p-4">
+                    {/* Your Account Section */}
+                    <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
+                      Tài khoản
+                    </h4>
+                    <div className="space-y-1 mb-3">
+                      <a
+                        href="#"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        <span>Hồ sơ</span>
+                      </a>
+                      <a
+                        href="#"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <Settings className="w-4 h-4" />
+                        <span>Cài đặt</span>
+                      </a>
+                      <Link
+                        to="/your-projects"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <FolderOpen className="w-4 h-4" />
+                        <span>Dự án của bạn</span>
+                      </Link>
+                      <Link
+                        to="/wallet"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <Wallet className="w-4 h-4" />
+                        <span>Ví</span>
+                      </Link>
                     </div>
 
-                    {/* Right Column - Created Campaigns */}
-                    <div className="flex-1 p-4">
-                      <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
-                        Chiến dịch đã tạo
-                      </h4>
-                      <div className="space-y-2">
-                        {/* Campaign 1 */}
-                        <a
-                          href="#"
-                          className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <div className="w-12 h-12 flex-shrink-0 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden">
-                            <img
-                              src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&h=100&fit=crop"
-                              alt="Project"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">A Spaces project</span>
-                        </a>
+                    {/* Divider */}
+                    <div className="border-t-2 border-border my-3"></div>
 
-                        {/* Campaign 2 */}
-                        <a
-                          href="#"
-                          className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <div className="w-12 h-12 flex-shrink-0 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden">
-                            <img
-                              src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=100&h=100&fit=crop"
-                              alt="Project"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">A Product Design project</span>
-                        </a>
-
-                        {/* Campaign 3 */}
-                        <a
-                          href="#"
-                          className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                        >
-                          <div className="w-12 h-12 flex-shrink-0 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden">
-                            <img
-                              src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&h=100&fit=crop"
-                              alt="Project"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <span className="text-sm text-text-primary dark:text-white line-clamp-2 flex-1">Tech Innovation Hub</span>
-                        </a>
-
-                        {/* View All Button - Show when more than 3 campaigns */}
-                        {/* Uncomment when you have more than 3 campaigns */}
-                        {/* <button
-                          className="w-full px-3 py-2 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors text-center font-medium"
-                        >
-                          Xem tất cả
-                        </button> */}
-
-                        {/* Divider */}
-                        <div className="border-t border-gray-200 dark:border-gray-700 my-3"></div>
-
-                        {/* Create New Campaign Button */}
-                        <Link
-                          to="/campaigns/create"
-                          onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-3 px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                        >
-                          <div className="w-12 h-12 flex-shrink-0 bg-primary/10 rounded flex items-center justify-center border-2 border-dashed border-primary">
-                            <Plus className="w-6 h-6" />
-                          </div>
-                          <span className="text-sm font-medium">Tạo chiến dịch mới</span>
-                        </Link>
+                    {/* Create New Campaign Button */}
+                    <Link
+                      to="/campaigns/create"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-3 px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                    >
+                      <div className="w-10 h-10 flex-shrink-0 bg-primary/10 rounded flex items-center justify-center border-2 border-dashed border-primary">
+                        <Plus className="w-5 h-5" />
                       </div>
+                      <span className="text-sm font-medium">Tạo chiến dịch mới</span>
+                    </Link>
+
+                    {/* Logout */}
+                    <div className="border-t-2 border-border mt-3 pt-3">
+                      <button
+                        onClick={() => {
+                          // Handle logout
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors w-full"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Đăng xuất</span>
+                      </button>
                     </div>
                   </div>
                 </div>

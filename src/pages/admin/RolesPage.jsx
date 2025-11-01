@@ -586,7 +586,7 @@ export default function RolesPage() {
                       open={openModules[module]}
                       onOpenChange={() => toggleModule(module)}
                     >
-                      <div className='w-full rounded-t-lg border bg-white dark:bg-zinc-800 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors px-4 py-3'>
+                      <div className='w-full rounded-t-lg border bg-white dark:bg-darker-2 border-border hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors px-4 py-3'>
                         <div className='flex items-center justify-between w-full'>
                           <CollapsibleTrigger className='flex items-center gap-3 flex-1'>
                             <ChevronRight
@@ -612,7 +612,7 @@ export default function RolesPage() {
                           />
                         </div>
                       </div>
-                      <CollapsibleContent className='divide-y divide-slate-100 dark:divide-slate-700 border-x border-b rounded-b-lg bg-white dark:bg-zinc-800 dark:border-slate-600'>
+                      <CollapsibleContent className='divide-y divide-slate-100 dark:divide-slate-700 border-x border-b rounded-b-lg bg-white dark:bg-darker-2/50 border-border'>
                         {modulePermissions.map((permission) => (
                           <div
                             key={permission.id}
