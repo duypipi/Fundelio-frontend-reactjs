@@ -69,12 +69,7 @@ export default function AdminLayout() {
         <div className='h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800'>
           {sidebarOpen && (
             <Link to='/admin' className='flex items-center space-x-2'>
-              <div className='w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center'>
-                <span className='text-white font-bold text-sm'>F</span>
-              </div>
-              <span className='font-bold text-xl text-gray-800 dark:text-gray-100'>
-                Fundelio
-              </span>
+               <img src="/logo.png" alt="Fundelio" className="w-10 h-10 md:w-12 md:h-12" />
             </Link>
           )}
           <Button

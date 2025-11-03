@@ -14,8 +14,8 @@ import Button from './Button';
  * @param {Function} props.onCancel - Callback when cancel button clicked
  * @param {Function} props.onSave - Callback when save button clicked
  */
-export const CreateCampaignHeader = ({ 
-  activeTab = 'basic', 
+export const CreateCampaignHeader = ({
+  activeTab = 'basic',
   onTabChange,
   onPreview,
   isEditing = false,
@@ -50,18 +50,16 @@ export const CreateCampaignHeader = ({
   }, []);
 
   // Determine header height based on editing state
-//   const headerHeight = isEditing ? 'md:h-20' : 'md:h-16';
+  //   const headerHeight = isEditing ? 'md:h-20' : 'md:h-16';
 
   return (
-    <header className={`fixed top-0 left-0 right-0 py-3 px-4 sm:py-4 sm:px-6 z-50 bg-white dark:bg-darker-2 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 md:h-20`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-darker-2 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 h-20`}>
       {/* Desktop - Single Row */}
-      <div className="hidden md:block">
+      <div className="hidden md:block h-full">
         <div className="mx-auto max-w-container px-4 sm:px-6 h-full flex items-center justify-between gap-4">
           {/* Left - Logo */}
           <Link to="/home" className="flex-shrink-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-white cursor-pointer hover:opacity-80 transition-opacity">
-              Fundelio
-            </h1>
+            <img src="/logo.png" alt="Fundelio" className="w-16 h-16" />
           </Link>
 
           {/* Center - Tabs */}
@@ -70,11 +68,10 @@ export const CreateCampaignHeader = ({
               <button
                 key={tab.id}
                 onClick={() => onTabChange?.(tab.id)}
-                className={`px-2 py-3 font-semibold text-base transition-all relative ${
-                  activeTab === tab.id
+                className={`px-2 py-3 font-semibold text-base transition-all relative ${activeTab === tab.id
                     ? 'text-primary'
                     : 'text-text-primary dark:text-white hover:text-primary dark:hover:text-primary-400'
-                }`}
+                  }`}
               >
                 {tab.label}
                 {activeTab === tab.id && (
@@ -291,14 +288,12 @@ export const CreateCampaignHeader = ({
       </div>
 
       {/* Mobile - Two Rows */}
-      <div className="md:hidden">
+      <div className="md:hidden h-full flex flex-col">
         {/* Row 1 - Logo and Actions */}
-        <div className="flex items-center justify-between px-4 h-14 dark:border-gray-700">
+        <div className="flex items-center justify-between px-4 h-1/2 border-b border-gray-200 dark:border-gray-700">
           {/* Logo */}
           <Link to="/home" className="flex-shrink-0">
-            <h1 className="text-lg font-bold text-text-primary dark:text-white cursor-pointer hover:opacity-80 transition-opacity">
-              Fundelio
-            </h1>
+            <img src="/logo.png" alt="Fundelio" className="w-8 h-8" />
           </Link>
 
           {/* Right - Actions */}
@@ -346,17 +341,16 @@ export const CreateCampaignHeader = ({
         </div>
 
         {/* Row 2 - Tabs */}
-        <div className="flex items-center justify-center h-12 dark:border-gray-700">
+        <div className="flex items-center justify-center h-1/2">
           <nav className="flex items-center gap-4">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => onTabChange?.(tab.id)}
-                className={`px-2 py-2 font-semibold text-sm whitespace-nowrap transition-all relative ${
-                  activeTab === tab.id
+                className={`px-2 py-2 font-semibold text-sm whitespace-nowrap transition-all relative ${activeTab === tab.id
                     ? 'text-primary'
                     : 'text-text-primary dark:text-white hover:text-primary'
-                }`}
+                  }`}
               >
                 {tab.label}
                 {activeTab === tab.id && (
