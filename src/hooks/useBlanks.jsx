@@ -3,54 +3,92 @@ import { uid } from '@/utils/id';
 import toast from 'react-hot-toast';
 /**
  * Custom hook to manage blanks state and operations
+ * Uses blanksById (Record<id, Blank>) and order (string[]) for stable reordering
  */
 function useBlanks() {
-  const [blanks, setBlanks] = useState([]);
+  const [blanksById, setBlanksById] = useState({});
+  const [order, setOrder] = useState([]);
   const activeEditorRef = useRef(null);
   const autosaveTimerRef = useRef(null);
 
   // Initialize with first blank
   useEffect(() => {
     const firstId = uid();
-    setBlanks([
-      {
+    setBlanksById({
+      [firstId]: {
         id: firstId,
-        order: 0,
         titleHtml: 'Giới thiệu',
         titleText: 'Giới thiệu',
         contentHtml: '<p>Gõ nội dung câu chuyện dự án ở đây…</p>',
       },
-    ]);
+    });
+    setOrder([firstId]);
   }, []);
 
   const addBlank = () => {
     const newId = uid();
     const newBlank = {
       id: newId,
-      order: blanks.length,
       titleHtml: 'Untitled',
       titleText: 'Untitled',
       contentHtml: '',
     };
-    setBlanks((prev) => [...prev, newBlank]);
+    setBlanksById((prev) => ({
+      ...prev,
+      [newId]: newBlank,
+    }));
+    setOrder((prev) => [...prev, newId]);
     return newId;
   };
 
   const updateTitle = useCallback((id, titleHtml, titleText) => {
-    setBlanks((prev) =>
-      prev.map((blank) =>
-        blank.id === id ? { ...blank, titleHtml, titleText } : blank
-      )
-    );
+    setBlanksById((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        titleHtml,
+        titleText,
+      },
+    }));
     scheduleAutosave();
   }, []);
 
   const updateContent = useCallback((id, contentHtml) => {
-    setBlanks((prev) =>
-      prev.map((blank) => (blank.id === id ? { ...blank, contentHtml } : blank))
-    );
+    setBlanksById((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        contentHtml,
+      },
+    }));
     scheduleAutosave();
   }, []);
+
+  const reorderBlanks = useCallback((newOrder) => {
+    setOrder(newOrder);
+    scheduleAutosave();
+  }, []);
+
+  const deleteBlank = useCallback((id) => {
+    // Prevent deleting if it's the last blank
+    if (order.length <= 1) {
+      toast.error('Không thể xóa blank cuối cùng!');
+      return;
+    }
+
+    // Remove from order
+    setOrder((prev) => prev.filter((blankId) => blankId !== id));
+
+    // Remove from blanksById
+    setBlanksById((prev) => {
+      const newBlanks = { ...prev };
+      delete newBlanks[id];
+      return newBlanks;
+    });
+
+    toast.success('Đã xóa blank thành công!');
+    scheduleAutosave();
+  }, [order.length]);
 
   const setActiveEditor = (_id, editor) => {
     activeEditorRef.current = editor;
@@ -61,7 +99,7 @@ function useBlanks() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => {
-        const blank = blanks.find((b) => b.id === id);
+        const blank = blanksById[id];
         if (blank) {
           const editorElement = element.querySelector(
             '[contenteditable="true"]:last-child'
@@ -76,13 +114,16 @@ function useBlanks() {
     const payload = {
       version: 1,
       createdAt: new Date().toISOString(),
-      blanks: blanks.map((blank, index) => ({
-        id: blank.id,
-        order: index,
-        title_text: blank.titleText,
-        title_html: blank.titleHtml,
-        content_html: blank.contentHtml,
-      })),
+      blanks: order.map((id, index) => {
+        const blank = blanksById[id];
+        return {
+          id: blank.id,
+          order: index,
+          title_text: blank.titleText,
+          title_html: blank.titleHtml,
+          content_html: blank.contentHtml,
+        };
+      }),
     };
     return payload;
   };
@@ -104,12 +145,19 @@ function useBlanks() {
     toast.success('Đã lưu thành công!');
   };
 
+  // Derive blanks array from order and blanksById for rendering
+  const blanks = order.map((id) => blanksById[id]);
+
   return {
     blanks,
+    blanksById,
+    order,
     activeEditorRef,
     addBlank,
     updateTitle,
     updateContent,
+    reorderBlanks,
+    deleteBlank,
     setActiveEditor,
     scrollToBlank,
     save,

@@ -190,7 +190,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
         {/* Left - Logo & Explore */}
         <div className="flex items-center gap-2 sm:gap-4">
           <Link to="/home">
-            <img src="/logo.png" alt="Fundelio" className="w-10 h-10 md:w-16 md:h-16" />
+            <img src="/logo.png" alt="Fundelio" className="w-10 h-10 md:w-12 md:h-12" />
           </Link>
 
           {/* Dropdown menu danh mục - Desktop only */}

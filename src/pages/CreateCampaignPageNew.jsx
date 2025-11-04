@@ -20,6 +20,8 @@ export default function CreateCampaignPageNew() {
     addBlank,
     updateBlankTitle,
     updateBlankContent,
+    reorderBlanks,
+    deleteBlank,
     scrollToBlank,
     save,
   } = useBlanks();
@@ -58,6 +60,8 @@ export default function CreateCampaignPageNew() {
             onAddBlank={addBlank}
             onTitleChange={updateBlankTitle}
             onContentChange={updateBlankContent}
+            onReorderBlanks={reorderBlanks}
+            onDeleteBlank={deleteBlank}
             setActiveEditor={setActiveEditor}
             scrollToBlank={scrollToBlank}
             save={save}

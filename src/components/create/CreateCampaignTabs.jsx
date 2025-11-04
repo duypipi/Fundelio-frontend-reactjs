@@ -14,6 +14,8 @@ import BasicsContent from './basics/BasicsContent';
  * @param {Function} props.onAddBlank - Callback to add new blank
  * @param {Function} props.onTitleChange - Callback for title changes
  * @param {Function} props.onContentChange - Callback for content changes
+ * @param {Function} props.onReorderBlanks - Callback to reorder blanks
+ * @param {Function} props.onDeleteBlank - Callback to delete a blank
  * @param {Function} props.setActiveEditor - Callback to set active editor
  * @param {Function} props.scrollToBlank - Callback to scroll to blank
  * @param {Function} props.save - Callback to save
@@ -29,6 +31,8 @@ export default function CreateCampaignTabs({
   onAddBlank,
   onTitleChange,
   onContentChange,
+  onReorderBlanks,
+  onDeleteBlank,
   setActiveEditor,
   scrollToBlank,
   save,
@@ -59,6 +63,8 @@ export default function CreateCampaignTabs({
                 blanks={blanks}
                 onAddBlank={onAddBlank}
                 onNavigate={scrollToBlank}
+                onReorder={onReorderBlanks}
+                onDelete={onDeleteBlank}
               />
             </aside>
 
@@ -95,8 +101,8 @@ export default function CreateCampaignTabs({
 
         {/* Rewards Tab */}
         {activeTab === 'rewards' && (
-          <RewardCreateTab 
-            setIsEditing={setIsEditing} 
+          <RewardCreateTab
+            setIsEditing={setIsEditing}
             setSaveCallback={setSaveCallback}
             setCancelCallback={setCancelCallback}
           />

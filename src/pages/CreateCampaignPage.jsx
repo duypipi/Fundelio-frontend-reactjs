@@ -24,6 +24,8 @@ export default function CreateCampaignPage() {
     addBlank,
     updateTitle,
     updateContent,
+    reorderBlanks,
+    deleteBlank,
     setActiveEditor,
     scrollToBlank,
     save,
@@ -57,7 +59,7 @@ export default function CreateCampaignPage() {
     const campaignData = {
       // Basics
       basics: basicsData,
-      
+
       // Story
       story: {
         blanks: blanks.map((blank, index) => ({
@@ -68,7 +70,7 @@ export default function CreateCampaignPage() {
           content_html: blank.contentHtml,
         })),
       },
-      
+
       // Rewards
       rewards: rewardsState.rewards,
       addOns: rewardsState.addOns,
@@ -84,18 +86,18 @@ export default function CreateCampaignPage() {
       basics: {
         ...campaignData.basics,
         // Keep only URLs, not base64 data
-        image_url: campaignData.basics.image_url?.startsWith('data:') 
-          ? '[BASE64_IMAGE]' 
+        image_url: campaignData.basics.image_url?.startsWith('data:')
+          ? '[BASE64_IMAGE]'
           : campaignData.basics.image_url,
-        intro_video_url: campaignData.basics.intro_video_url?.startsWith('data:') 
-          ? '[BASE64_VIDEO]' 
+        intro_video_url: campaignData.basics.intro_video_url?.startsWith('data:')
+          ? '[BASE64_VIDEO]'
           : campaignData.basics.intro_video_url,
       }
     };
 
     // Save lighter version to sessionStorage (for refresh support)
     const saved = savePreviewData(previewId, lightCampaignData);
-    
+
     if (!saved) {
       toast.error('Không thể lưu dữ liệu preview. Vui lòng thử lại.');
       return;
@@ -105,7 +107,7 @@ export default function CreateCampaignPage() {
     navigate(`/campaigns/preview/${previewId}`, {
       state: { campaignData, isPreview: true },
     });
-    
+
     toast.success('Đang chuyển đến trang xem trước...');
   };
 
@@ -152,6 +154,8 @@ export default function CreateCampaignPage() {
               onAddBlank={handleAddBlank}
               onTitleChange={updateTitle}
               onContentChange={updateContent}
+              onReorderBlanks={reorderBlanks}
+              onDeleteBlank={deleteBlank}
               setActiveEditor={setActiveEditor}
               scrollToBlank={scrollToBlank}
               save={save}
