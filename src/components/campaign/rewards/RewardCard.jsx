@@ -125,8 +125,8 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
               whileHover={{ x: 4 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
-              <div className="w-8 h-8 rounded-sm gradient-2 flex items-center justify-center">
-                <UsersIcon className="w-4 h-4 text-white" strokeWidth={2} />
+              <div className="w-8 h-8 rounded-sm bg-primary/10 flex items-center justify-center">
+                <UsersIcon className="w-4 h-4 text-primary" strokeWidth={2} />
               </div>
               <span className="font-medium">
                 <strong className="font-bold text-primary">{backers}</strong> người ủng hộ
@@ -138,8 +138,8 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
               whileHover={{ x: 4 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
-              <div className="w-8 h-8 rounded-sm gradient-3 flex items-center justify-center">
-                <MapPinIcon className="w-4 h-4 text-white" strokeWidth={2} />
+              <div className="w-8 h-8 rounded-sm bg-secondary/10 flex items-center justify-center">
+                <MapPinIcon className="w-4 h-4 text-secondary" strokeWidth={2} />
               </div>
               <span className="font-medium">Giao đến: {ships_to}</span>
             </motion.div>
@@ -149,8 +149,8 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
               whileHover={{ x: 4 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
-              <div className="w-8 h-8 rounded-sm gradient-1 flex items-center justify-center">
-                <CalendarIcon className="w-4 h-4 text-white" strokeWidth={2} />
+              <div className="w-8 h-8 rounded-sm bg-accent/10 flex items-center justify-center">
+                <CalendarIcon className="w-4 h-4 text-accent" strokeWidth={2} />
               </div>
               <span className="font-medium">Giao hàng: {eta}</span>
             </motion.div>
@@ -163,7 +163,7 @@ const RewardCard = ({ reward, layoutMode, onPledge }) => {
                 className="w-full font-semibold bg-primary text-white shadow-lg relative overflow-hidden group/btn"
                 onClick={() => onPledge && onPledge(reward)}
               >
-                <span className="relative z-10">{min_pledge_amount} <img src='/packages/coin.svg' alt="Coin" className="inline-block w-5 h-5" /></span>
+                <span className="relative z-10">{min_pledge_amount} VND</span>
                 <motion.div
                   className="absolute inset-0 bg-white/20"
                   initial={{ x: '-100%' }}

@@ -160,8 +160,8 @@ export const ProjectCard = ({
             {/* Total Funding */}
             <div className="flex-1 min-w-0">
               <p className="text-xs text-muted-foreground mb-0.5">Tổng kinh phí</p>
-              <p className="text-xl md:text-xl font-bold text-text-primary dark:text-white truncate">
-                {pledged} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-6 h-6 mb-1" />
+              <p className="text-lg font-bold text-text-primary dark:text-white truncate">
+                {pledged} VND
               </p>
             </div>
 

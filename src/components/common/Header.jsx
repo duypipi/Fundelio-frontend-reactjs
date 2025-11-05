@@ -23,6 +23,7 @@ import {
   Bookmark,
   Star,
   FolderOpen,
+  LayoutDashboard,
 } from 'lucide-react';
 import Button from './Button';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -220,11 +221,9 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                       <a
                         key={index}
                         href={category.href}
-                        className={`flex items-center space-x-3 px-4 py-3 transition-colors ${
-                          currentVariant.dropdownItem
-                        } ${index === 0 ? 'rounded-t-lg' : ''} ${
-                          index === categories.length - 1 ? 'rounded-b-lg' : ''
-                        }`}
+                        className={`flex items-center space-x-3 px-4 py-3 transition-colors ${currentVariant.dropdownItem
+                          } ${index === 0 ? 'rounded-t-lg' : ''} ${index === categories.length - 1 ? 'rounded-b-lg' : ''
+                          }`}
                       >
                         <IconComponent className='w-4 h-4' />
                         <span className='text-sm font-medium'>
@@ -250,11 +249,10 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
-                  isScrolled || variant !== 'transparent'
-                    ? 'bg-white dark:bg-darker border-gray-300 dark:border-gray-600 text-text-primary dark:text-white'
-                    : 'bg-white/20 border-white/30 text-white placeholder-white/70'
-                } focus:outline-none focus:ring-2 focus:ring-primary transition-colors`}
+                className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isScrolled || variant !== 'transparent'
+                  ? 'bg-white dark:bg-darker border-gray-300 dark:border-gray-600 text-text-primary dark:text-white'
+                  : 'bg-white/20 border-white/30 text-white placeholder-white/70'
+                  } focus:outline-none focus:ring-2 focus:ring-primary transition-colors`}
               />
             </div>
 
@@ -356,20 +354,20 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
           {/* Coin Display - Desktop only */}
           <button
             onClick={handleCoinClick}
-            className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg ${
-              user.coins === 0 
-                ? 'hover:bg-red-100 dark:hover:bg-red-900/30' 
-                : 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30'
-            } transition-all duration-200 hover:scale-105 coin-button relative`}
+            className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg ${user.coins === 0
+              ? 'hover:bg-red-100 dark:hover:bg-red-900/30'
+              : 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30'
+              } transition-all duration-200 hover:scale-105 coin-button relative`}
             title={user.coins === 0 ? 'Nạp coin' : 'Số coin hiện có'}
           >
-            <img src="/packages/coin.svg" alt="Coin" className="w-5 h-5" />
-            <span className={`text-md font-bold ${
-              user.coins === 0 
-                ? 'text-red-600 dark:text-red-400' 
-                : 'text-primary dark:text-primary-400'
-            }`}>
-              {formatNumber(user.coins)}
+
+            <span className={`text-md font-bold ${user.coins === 0
+              ? 'text-red-600 dark:text-red-400'
+              : 'text-primary dark:text-primary-400'
+              }`}>
+              {formatNumber(user.coins)} VND
+
+
             </span>
           </button>
 
@@ -454,6 +452,15 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                       Tài khoản
                     </h4>
                     <div className="space-y-1 mb-3">
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <LayoutDashboard className="w-4 h-4" />
+                        <span>Bảng điều khiển</span>
+                      </Link>
+                      <div className="border-t-2 border-border my-3"></div>
                       <a
                         href="#"
                         className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
@@ -461,6 +468,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                         <User className="w-4 h-4" />
                         <span>Hồ sơ</span>
                       </a>
+
                       <a
                         href="#"
                         className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
@@ -553,27 +561,32 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
         <div className='lg:hidden mt-4 py-4 border-t border-white/20 dark:border-gray-700 transition-colors duration-300'>
           <nav className='space-y-2'>
             <Link
+              to="/dashboard"
+              onClick={() => setIsUserMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span>Bảng điều khiển</span>
+            </Link>
+            <div className="border-t-2 border-border my-3"></div>
+            <Link
               to='/home'
-              className={`block px-4 py-2 rounded-lg ${
-                currentVariant.navLink
-              } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${
-                location.pathname === '/home'
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink
+                } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${location.pathname === '/home'
                   ? 'text-primary dark:text-primary-400'
                   : ''
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Trang chủ
             </Link>
             <Link
               to='/campaigns/create'
-              className={`block px-4 py-2 rounded-lg ${
-                currentVariant.navLink
-              } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${
-                location.pathname === '/campaigns/create'
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink
+                } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${location.pathname === '/campaigns/create'
                   ? 'text-primary dark:text-primary-400'
                   : ''
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Tạo chiến dịch

@@ -246,7 +246,7 @@ const RewardForm = forwardRef(({ reward, items, rewards, onSave, onCancel, onCha
         <h3 className="text-lg font-semibold text-foreground mb-4">Giá ủng hộ</h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Giá ($)<span className="text-lg font-bold text-primary">*</span></label>
+            <label className="block text-sm font-medium text-foreground mb-2">Giá (VND)<span className="text-lg font-bold text-primary">*</span></label>
             <Input
               type="number"
               name="price"
@@ -271,7 +271,7 @@ const RewardForm = forwardRef(({ reward, items, rewards, onSave, onCancel, onCha
       </div>
 
       {/* Items Section */}
-      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
+      {!isAddon && (<div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Thành phần</h3>
         <div className="space-y-4">
           <Button type="button" onClick={() => setShowItemSelector(true)} variant="secondary" className="w-full">
@@ -309,7 +309,8 @@ const RewardForm = forwardRef(({ reward, items, rewards, onSave, onCancel, onCha
           <Tip className="mt-2">Ít nhất 1 component. Mỗi component tương ứng 1 món sẽ giao cho backer.</Tip>
         </div>
       </div>
-
+)}
+      
       {/* Delivery Section */}
       <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
         <h3 className="text-lg font-semibold text-foreground mb-4">Thời gian giao dự kiến</h3>
@@ -392,7 +393,7 @@ const RewardForm = forwardRef(({ reward, items, rewards, onSave, onCancel, onCha
                 key={reward.id}
                 checked={formData.offeredWithRewardIds?.includes(reward.id) || false}
                 onChange={() => handleRewardToggle(reward.id)}
-                label={`${reward.title} - CA$${reward.price}`}
+                label={`${reward.title} - ${reward.price} VND`}
               />
             ))}
           </div>
