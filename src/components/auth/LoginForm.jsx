@@ -55,8 +55,9 @@ export const LoginForm = () => {
 
       if (response && response.data) {
         const accessToken = response.data.data.accessToken;
+        const userSecured = response.data.data.userSecured;
         if (accessToken) {
-          login(accessToken);
+          login(accessToken, userSecured);
           navigate('/home');
         }
       }
@@ -106,7 +107,6 @@ export const LoginForm = () => {
         </CardHeader>
         <CardContent className='px-2 md:px-4'>
           <form onSubmit={handleSubmit} className='space-y-5'>
-
             <div className='space-y-4'>
               <motion.div
                 className='space-y-2'

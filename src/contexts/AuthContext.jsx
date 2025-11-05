@@ -23,6 +23,9 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(() => {
     storageService.clearAuth();
+    try {
+      window.localStorage.removeItem('user');
+    } catch (_) {}
     setUser(null);
     setIsLoggedIn(false);
     stopTokenRefreshInterval();
@@ -37,6 +40,9 @@ export function AuthProvider({ children }) {
         const userData = response.data.data;
         setUser(userData);
         storageService.setUser(userData);
+        try {
+          window.localStorage.setItem('user', JSON.stringify(userData));
+        } catch (_) {}
         return userData;
       }
     } catch (error) {
@@ -68,11 +74,18 @@ export function AuthProvider({ children }) {
     initializeAuth();
   }, [fetchUserData]);
 
-  const login = (token) => {
+  const login = (token, userFromLogin) => {
     if (!token) return;
 
     storageService.setAccessToken(token);
     setIsLoggedIn(true);
+    if (userFromLogin) {
+      setUser(userFromLogin);
+      storageService.setUser(userFromLogin);
+      try {
+        window.localStorage.setItem('user', JSON.stringify(userFromLogin));
+      } catch (_) {}
+    }
     fetchUserData();
     startTokenRefreshInterval();
   };
