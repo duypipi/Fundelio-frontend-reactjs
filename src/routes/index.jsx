@@ -10,6 +10,7 @@ import DashboardPage from '@/pages/DashboardPage';
 
 import { AuthPage } from '@/pages/AuthPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
+import { VerifyAccountPage } from '@/pages/VerifyAccountPage';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import UsersPage from '@/pages/admin/UsersPage';
 import RolesPage from '@/pages/admin/RolesPage';
@@ -17,7 +18,6 @@ import PermissionsPage from '@/pages/admin/PermissionsPage';
 import AdminCampaignsPage from '@/pages/admin/AdminCampaignsPage';
 import WalletPage from '@/pages/WalletPage';
 import YourProjectsPage from '@/pages/YourProjectsPage';
-
 
 /**
  * Application routes configuration
@@ -61,15 +61,12 @@ export const router = createBrowserRouter([
   },
   {
     path: '/auth',
-    element: (
-      <AuthLayout>
-        <AuthPage />
-      </AuthLayout>
-    ),
-  },
-  {
-    path: '/reset-password',
-    element: <ResetPasswordPage />,
+    element: <AuthLayout />,
+    children: [
+      { index: true, element: <AuthPage /> },
+      { path: 'reset-password', element: <ResetPasswordPage /> },
+      { path: 'verify-active-account', element: <VerifyAccountPage /> },
+    ],
   },
   {
     path: '/admin',
@@ -83,4 +80,3 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
-

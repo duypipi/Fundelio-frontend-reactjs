@@ -24,6 +24,7 @@
     "@reduxjs/toolkit": "^2.10.1",
     "@tailwindcss/vite": "^4.1.13",
     "animejs": "^4.2.2",
+    "axios": "^1.13.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.6.0",

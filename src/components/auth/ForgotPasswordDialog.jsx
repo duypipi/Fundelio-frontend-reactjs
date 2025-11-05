@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, CheckCircle2 } from 'lucide-react';
+import { authApi } from '@/api/authApi';
 
 export const ForgotPasswordDialog = ({ open, onOpenChange }) => {
   const [email, setEmail] = useState('');
@@ -40,13 +41,24 @@ export const ForgotPasswordDialog = ({ open, onOpenChange }) => {
 
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await authApi.forgotPassword({ email });
+
+      if (response && response.data) {
+        setIsSuccess(true);
+      }
+    } catch (error) {
+      console.error('Forgot password error:', error);
+
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.errors?.[0]?.message ||
+        'Không thể gửi email. Vui lòng thử lại sau.';
+
+      setError(errorMessage);
+    } finally {
       setIsLoading(false);
-      setIsSuccess(true);
-      // TODO: Implement actual forgot password API call
-      console.log('Forgot password email:', email);
-    }, 1500);
+    }
   };
 
   const handleClose = () => {
