@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import Button from './Button';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const Header = ({ variant = 'transparent', isFixed = true }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -37,16 +38,9 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [showCoinModal, setShowCoinModal] = useState(false);
   const { toggleTheme, isDark } = useTheme();
+  const { isLoggedIn, user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Mock user state - Default is logged in
-  const [isLoggedIn] = useState(true);
-  const [user] = useState({
-    name: 'Nguyen Van A',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-    coins: 0, // Set to 0 to test modal, change to any number > 0 for normal display
-  });
 
   // Mock search results
   const [searchResults, setSearchResults] = useState({
@@ -167,7 +161,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
   const currentVariant = headerVariants[variant];
 
   const handleCoinClick = () => {
-    if (user.coins === 0) {
+    if (!user?.coins || user.coins === 0) {
       setShowCoinModal(true);
     }
   };
@@ -178,6 +172,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
   };
 
   const formatNumber = (num) => {
+    if (num === null || num === undefined) return '0';
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
     if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
     return num.toString();
@@ -352,24 +347,26 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
         {/* Right - Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Coin Display - Desktop only */}
-          <button
-            onClick={handleCoinClick}
-            className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg ${user.coins === 0
-              ? 'hover:bg-red-100 dark:hover:bg-red-900/30'
-              : 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30'
-              } transition-all duration-200 hover:scale-105 coin-button relative`}
-            title={user.coins === 0 ? 'Nạp coin' : 'Số coin hiện có'}
-          >
+          {isLoggedIn && user && (
+            <button
+              onClick={handleCoinClick}
+              className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg ${(user.coins === 0 || user.coins === undefined)
+                ? 'hover:bg-red-100 dark:hover:bg-red-900/30'
+                : 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30'
+                } transition-all duration-200 hover:scale-105 coin-button relative`}
+              title={(user.coins === 0 || user.coins === undefined) ? 'Nạp coin' : 'Số coin hiện có'}
+            >
 
-            <span className={`text-md font-bold ${user.coins === 0
-              ? 'text-red-600 dark:text-red-400'
-              : 'text-primary dark:text-primary-400'
-              }`}>
-              {formatNumber(user.coins)} VND
+              <span className={`text-md font-bold ${(user.coins === 0 || user.coins === undefined)
+                ? 'text-red-600 dark:text-red-400'
+                : 'text-primary dark:text-primary-400'
+                }`}>
+                {formatNumber(user.coins)} VND
 
 
-            </span>
-          </button>
+              </span>
+            </button>
+          )}
 
           {/* Coin Modal */}
           {showCoinModal && (
@@ -426,7 +423,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
           </button>
 
           {/* User Menu or Auth Buttons */}
-          {isLoggedIn ? (
+          {isLoggedIn && user ? (
             <div className="relative user-menu-container">
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -437,8 +434,8 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                   <div className="w-full h-full rounded-full bg-white dark:bg-darker-2"></div>
                 </div>
                 <img
-                  src={user.avatar}
-                  alt={user.name}
+                  src={user.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Default'}
+                  alt={user.name || 'User'}
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:shadow-primary-400 hover:shadow-md transition-colors relative z-10"
                 />
               </button>
@@ -513,8 +510,9 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                     <div className="border-t-2 border-border mt-3 pt-3">
                       <button
                         onClick={() => {
-                          // Handle logout
+                          logout();
                           setIsUserMenuOpen(false);
+                          navigate('/auth', { state: { mode: 'login' } });
                         }}
                         className="flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors w-full"
                       >
