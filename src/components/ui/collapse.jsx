@@ -26,4 +26,3 @@ const CollapseContent = React.forwardRef(({ className, ...props }, ref) => (
 CollapseContent.displayName = 'CollapseContent';
 
 export { Collapse, CollapseTrigger, CollapseContent };
-

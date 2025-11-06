@@ -12,7 +12,7 @@ export function DataTableToolbar({ table }) {
           onChange={(event) =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-[150px] lg:w-[250px] bg-white dark:bg-darker-2 border-border text-text-primary dark:text-white transition-colors duration-300"
         />
       </div>
       <div className="flex items-center space-x-2">

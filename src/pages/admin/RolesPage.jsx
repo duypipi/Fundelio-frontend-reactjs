@@ -31,8 +31,10 @@ function RolesContent() {
     <>
       <div className='mb-2 flex items-center justify-between space-y-2 flex-wrap'>
         <div>
-          <h2 className='text-2xl font-bold tracking-tight'>Quản lý vai trò</h2>
-          <p className='text-muted-foreground'>
+          <h2 className='text-2xl font-bold tracking-tight text-text-primary dark:text-white transition-colors duration-300'>
+            Quản lý vai trò
+          </h2>
+          <p className='text-muted-foreground dark:text-text-white transition-colors duration-300'>
             Quản lý và phân quyền cho các vai trò trong hệ thống
           </p>
         </div>

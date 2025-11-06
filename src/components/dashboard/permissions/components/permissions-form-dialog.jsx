@@ -185,12 +185,12 @@ export function PermissionsFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] dark:bg-zinc-800">
+      <DialogContent className="sm:max-w-[425px] bg-white dark:bg-darker-2 border-border transition-colors duration-300">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-text-primary dark:text-white transition-colors duration-300">
             {currentRow ? 'Chỉnh sửa Permission' : 'Thêm Permission'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-muted-foreground dark:text-text-white transition-colors duration-300">
             {currentRow ? 'Cập nhật thông tin permission' : 'Thêm permission mới vào hệ thống'}
           </DialogDescription>
         </DialogHeader>
@@ -202,11 +202,12 @@ export function PermissionsFormDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tên permission</FormLabel>
+                  <FormLabel className="text-text-primary dark:text-white transition-colors duration-300">Tên permission</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Nhập tên permission"
                       {...field}
+                      className="bg-white dark:bg-darker-2 border-border text-text-primary dark:text-white transition-colors duration-300"
                     />
                   </FormControl>
                   <FormMessage />
@@ -219,11 +220,12 @@ export function PermissionsFormDialog({
               name="apiPath"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Đường dẫn API</FormLabel>
+                  <FormLabel className="text-text-primary dark:text-white transition-colors duration-300">Đường dẫn API</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Nhập đường dẫn API"
                       {...field}
+                      className="bg-white dark:bg-darker-2 border-border text-text-primary dark:text-white transition-colors duration-300"
                     />
                   </FormControl>
                   <FormMessage />
@@ -236,10 +238,10 @@ export function PermissionsFormDialog({
               name="httpMethod"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>HTTP Method</FormLabel>
+                  <FormLabel className="text-text-primary dark:text-white transition-colors duration-300">HTTP Method</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white dark:bg-darker-2 border-border text-text-primary dark:text-white transition-colors duration-300">
                         <SelectValue>
                           {field.value
                             ? field.value
@@ -247,9 +249,9 @@ export function PermissionsFormDialog({
                         </SelectValue>
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-darker-2 border-border transition-colors duration-300">
                       {httpMethods.map((method) => (
-                        <SelectItem key={method.value} value={method.value}>
+                        <SelectItem key={method.value} value={method.value} className="text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-darker-2/70 transition-colors duration-300">
                           {method.label}
                         </SelectItem>
                       ))}
@@ -265,22 +267,22 @@ export function PermissionsFormDialog({
               name="module"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Module</FormLabel>
+                  <FormLabel className="text-text-primary dark:text-white transition-colors duration-300">Module</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     value={field.value || 'none'}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white dark:bg-darker-2 border-border text-text-primary dark:text-white transition-colors duration-300">
                         <SelectValue
                           placeholder="Chọn module"
                         />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="none">Không có</SelectItem>
+                    <SelectContent className="bg-white dark:bg-darker-2 border-border transition-colors duration-300">
+                      <SelectItem value="none" className="text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-darker-2/70 transition-colors duration-300">Không có</SelectItem>
                       {availableModules.map((module) => (
-                        <SelectItem key={module} value={module}>
+                        <SelectItem key={module} value={module} className="text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-darker-2/70 transition-colors duration-300">
                           {module}
                         </SelectItem>
                       ))}
@@ -296,6 +298,7 @@ export function PermissionsFormDialog({
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
+                className="hover:bg-gray-100 dark:hover:bg-darker-2 transition-colors duration-300"
               >
                 Hủy
               </Button>

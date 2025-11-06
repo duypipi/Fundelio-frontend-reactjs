@@ -49,7 +49,7 @@ function SortablePermissionItem({ permission, onDelete }) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center justify-between rounded-md border px-4 py-2"
+      className="flex items-center justify-between rounded-md border border-border bg-white dark:bg-darker-2 px-4 py-2 transition-colors duration-300"
     >
       <div className="flex items-center gap-4">
         <button
@@ -57,11 +57,11 @@ function SortablePermissionItem({ permission, onDelete }) {
           {...attributes}
           {...listeners}
         >
-          <GripVertical className="h-4 w-4 text-muted-foreground" />
+          <GripVertical className="h-4 w-4 text-muted-foreground dark:text-text-white transition-colors duration-300" />
         </button>
         <div className="space-y-1">
-          <div className="font-medium">{permission.name}</div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="font-medium text-text-primary dark:text-white transition-colors duration-300">{permission.name}</div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-text-white transition-colors duration-300">
             <Badge variant="secondary">{permission.httpMethod}</Badge>
             <span>{permission.apiPath}</span>
           </div>
@@ -84,14 +84,14 @@ function DroppableArea({ children }) {
     <div
       ref={setNodeRef}
       className={cn(
-        'space-y-2 p-4 rounded-lg border-2 border-dashed transition-colors duration-200',
-        isOver && 'border-primary bg-muted/60 scale-[1.02]',
+        'space-y-2 p-4 rounded-lg border-2 border-dashed border-border bg-white dark:bg-darker-2 transition-colors duration-200',
+        isOver && 'border-primary bg-muted/60 dark:bg-primary/20 scale-[1.02]',
         !children &&
-          'min-h-[100px] flex items-center justify-center text-muted-foreground'
+          'min-h-[100px] flex items-center justify-center text-muted-foreground dark:text-text-white'
       )}
     >
-      <h3 className="text-lg font-medium">Permissions khác</h3>
-      {children || <p>Kéo permission vào đây</p>}
+      <h3 className="text-lg font-medium text-text-primary dark:text-white transition-colors duration-300">Permissions khác</h3>
+      {children || <p className='text-text-primary dark:text-white transition-colors duration-300'>Kéo permission vào đây</p>}
     </div>
   );
 }
@@ -221,7 +221,7 @@ export function PermissionsTable() {
     >
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-medium">Danh sách Module</h2>
+          <h2 className="text-lg font-medium text-text-primary dark:text-white transition-colors duration-300">Danh sách Module</h2>
           <div className="flex gap-2">
             <Button size="sm" onClick={() => setOpenCreatePermission(true)}>
               <Plus className="mr-2 h-3 w-3" />
@@ -336,7 +336,7 @@ export function PermissionsTable() {
           }}
         >
           {activeId ? (
-            <div className="rounded-md border bg-background px-4 py-2 shadow-lg scale-105">
+            <div className="rounded-md border border-border bg-white dark:bg-darker-2 px-4 py-2 shadow-lg scale-105 text-text-primary dark:text-white transition-colors duration-300">
               {permissions.find((p) => p.permissionId === activeId)?.name}
             </div>
           ) : null}

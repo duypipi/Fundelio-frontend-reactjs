@@ -28,10 +28,10 @@ function PermissionsContent() {
     <>
       <div className='mb-2 flex items-center justify-between space-y-2 flex-wrap'>
         <div>
-          <h2 className='text-2xl font-bold tracking-tight'>
+          <h2 className='text-2xl font-bold tracking-tight text-text-primary dark:text-white transition-colors duration-300'>
             Quản lý Permissions
           </h2>
-          <p className='text-muted-foreground'>
+          <p className='text-muted-foreground dark:text-text-white transition-colors duration-300'>
             Quản lý và cấu hình các permissions trong hệ thống
           </p>
         </div>

@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 export function DataTableColumnHeader({ column, title, className }) {
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>;
+    return <div className={cn(className, 'text-text-primary dark:text-white transition-colors duration-300')}>{title}</div>;
   }
 
   return (
@@ -25,7 +25,7 @@ export function DataTableColumnHeader({ column, title, className }) {
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent"
+            className="-ml-3 h-8 data-[state=open]:bg-accent hover:bg-gray-100 dark:hover:bg-darker-2 text-text-primary dark:text-white transition-colors duration-300"
           >
             <span>{title}</span>
             {column.getIsSorted() === 'desc' ? (
@@ -37,18 +37,18 @@ export function DataTableColumnHeader({ column, title, className }) {
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <ArrowUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+        <DropdownMenuContent align="start" className="bg-white dark:bg-darker-2 border-border transition-colors duration-300">
+          <DropdownMenuItem onClick={() => column.toggleSorting(false)} className="text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-darker-2/70 transition-colors duration-300">
+            <ArrowUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70 dark:text-text-white transition-colors duration-300" />
             Sắp xếp tăng dần
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <ArrowDown className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          <DropdownMenuItem onClick={() => column.toggleSorting(true)} className="text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-darker-2/70 transition-colors duration-300">
+            <ArrowDown className="mr-2 h-3.5 w-3.5 text-muted-foreground/70 dark:text-text-white transition-colors duration-300" />
             Sắp xếp giảm dần
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          <DropdownMenuSeparator className="bg-border dark:bg-darker transition-colors duration-300" />
+          <DropdownMenuItem onClick={() => column.toggleVisibility(false)} className="text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-darker-2/70 transition-colors duration-300">
+            <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70 dark:text-text-white transition-colors duration-300" />
             Ẩn cột
           </DropdownMenuItem>
         </DropdownMenuContent>

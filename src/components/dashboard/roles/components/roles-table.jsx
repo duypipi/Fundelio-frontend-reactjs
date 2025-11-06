@@ -67,11 +67,11 @@ export function RolesTable({
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="rounded-md border">
+        <div className="rounded-md border border-border bg-white dark:bg-darker-2 transition-colors duration-300">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="h-24 text-center">
+              <TableRow className='bg-gray-50/50 dark:bg-darker-2/30 transition-colors duration-300'>
+                <TableHead className="h-24 text-center text-text-primary dark:text-white transition-colors duration-300">
                   Đang tải...
                 </TableHead>
               </TableRow>
@@ -85,13 +85,13 @@ export function RolesTable({
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
-      <div className="rounded-md border">
+      <div className="rounded-md border border-border bg-white dark:bg-darker-2 transition-colors duration-300">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className='bg-gray-50/50 dark:bg-darker-2/30 border-b border-border transition-colors duration-300'>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} colSpan={header.colSpan}>
+                  <TableHead key={header.id} colSpan={header.colSpan} className='text-text-primary dark:text-white transition-colors duration-300'>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -109,9 +109,10 @@ export function RolesTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className='hover:bg-gray-50 dark:hover:bg-darker-2/50 transition-colors duration-300'
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className='text-text-primary dark:text-white transition-colors duration-300'>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -124,7 +125,7 @@ export function RolesTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-text-primary dark:text-white transition-colors duration-300"
                 >
                   Không có dữ liệu
                 </TableCell>

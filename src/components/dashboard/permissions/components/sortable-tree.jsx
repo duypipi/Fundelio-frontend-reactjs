@@ -70,11 +70,11 @@ export function SortableTreeItem({
       ref={setRefs}
       style={style}
       className={cn(
-        'flex flex-col rounded-md border transition-colors duration-200',
+        'flex flex-col rounded-md border border-border bg-white dark:bg-darker-2 transition-colors duration-200',
         isDragging && 'opacity-30 scale-95',
-        isModule && 'bg-muted/30',
-        isModule && 'hover:bg-muted/50',
-        isOver && 'ring-2 ring-primary ring-offset-2 bg-muted/60',
+        isModule && 'bg-muted/30 dark:bg-darker-2/70',
+        isModule && 'hover:bg-muted/50 dark:hover:bg-darker-2/90',
+        isOver && 'ring-2 ring-primary ring-offset-2 bg-muted/60 dark:bg-primary/20',
         isModule && isOver && 'scale-[1.02]'
       )}
     >
@@ -86,7 +86,7 @@ export function SortableTreeItem({
               {...attributes}
               {...listeners}
             >
-              <GripVertical className="h-4 w-4 text-muted-foreground" />
+              <GripVertical className="h-4 w-4 text-muted-foreground dark:text-text-white transition-colors duration-300" />
             </button>
           )}
 
@@ -94,7 +94,7 @@ export function SortableTreeItem({
             <button onClick={onCollapse} className="flex items-center">
               <ChevronRight
                 className={cn(
-                  'h-4 w-4 shrink-0 transition-transform duration-200',
+                  'h-4 w-4 shrink-0 transition-transform duration-200 text-text-primary dark:text-white',
                   !collapsed && 'rotate-90'
                 )}
               />
@@ -104,20 +104,20 @@ export function SortableTreeItem({
           <div className="flex items-center gap-2">
             {isModule ? (
               <>
-                <Badge variant="outline" className="font-semibold">
+                <Badge variant="outline" className="font-semibold border-border dark:bg-darker-2 dark:text-white transition-colors duration-300">
                   {permission.name}
                 </Badge>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-muted-foreground dark:text-text-white transition-colors duration-300">
                   ({children?.length || 0})
                 </span>
               </>
             ) : (
               <>
-                <div className="font-medium text-sm">{permission.name}</div>
-                <Badge variant="secondary" className="text-xs">
+                <div className="font-medium text-sm text-text-primary dark:text-white transition-colors duration-300">{permission.name}</div>
+                <Badge variant="secondary" className="text-xs dark:bg-darker-2 dark:text-white transition-colors duration-300">
                   {permission.httpMethod}
                 </Badge>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground dark:text-text-white transition-colors duration-300">
                   {permission.apiPath}
                 </span>
               </>
@@ -129,7 +129,7 @@ export function SortableTreeItem({
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 text-red-600 hover:text-red-700 hover:bg-red-100"
+            className="h-6 w-6 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors duration-300"
             onClick={() => onDelete(permission)}
           >
             <Trash2 className="h-3 w-3" />

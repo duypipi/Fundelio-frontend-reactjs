@@ -48,7 +48,7 @@ export const createColumns = (expandedModules, onDelete) => {
             </div>
           );
         }
-        return <div className="font-medium">{item.name}</div>;
+        return <div className="font-medium text-text-primary dark:text-white transition-colors duration-300">{item.name}</div>;
       },
     },
     {

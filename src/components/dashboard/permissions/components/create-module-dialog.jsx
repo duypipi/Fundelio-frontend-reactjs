@@ -130,10 +130,12 @@ export function CreateModuleDialog({ open, onOpenChange }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-md p-6 dark:bg-zinc-800'>
+      <DialogContent className='max-w-md p-6 bg-white dark:bg-darker-2 border-border transition-colors duration-300'>
         <DialogHeader>
-          <DialogTitle>Thêm Module</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='text-text-primary dark:text-white transition-colors duration-300'>
+            Thêm Module
+          </DialogTitle>
+          <DialogDescription className='text-muted-foreground dark:text-text-white transition-colors duration-300'>
             Tạo module mới và chọn các permissions cho module
           </DialogDescription>
         </DialogHeader>
@@ -145,7 +147,9 @@ export function CreateModuleDialog({ open, onOpenChange }) {
               name='moduleName'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tên Module</FormLabel>
+                  <FormLabel className='text-text-primary dark:text-white transition-colors duration-300'>
+                    Tên Module
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder='Nhập tên module (VD: USERS)'
@@ -153,6 +157,7 @@ export function CreateModuleDialog({ open, onOpenChange }) {
                       onChange={(e) =>
                         field.onChange(e.target.value.toUpperCase())
                       }
+                      className='bg-white dark:bg-darker-2 border-border text-text-primary dark:text-white transition-colors duration-300'
                     />
                   </FormControl>
                   <FormMessage />
@@ -162,29 +167,34 @@ export function CreateModuleDialog({ open, onOpenChange }) {
 
             <div className='space-y-3'>
               <div className='flex items-center justify-between'>
-                <FormLabel>Permissions</FormLabel>
+                <FormLabel className='text-text-primary dark:text-white transition-colors duration-300'>
+                  Permissions
+                </FormLabel>
                 <div className='flex items-center gap-2'>
-                  <Search className='h-4 w-4' />
+                  <Search className='h-4 w-4 text-text-primary dark:text-white transition-colors duration-300' />
                   <Input
                     placeholder='Tìm kiếm...'
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className='h-8 w-48'
+                    className='h-8 w-48 bg-white dark:bg-darker-2 border-border text-text-primary dark:text-white transition-colors duration-300'
                   />
-                  <Badge variant='secondary' className='font-medium'>
+                  <Badge
+                    variant='secondary'
+                    className='font-medium dark:bg-darker-2 dark:text-white transition-colors duration-300'
+                  >
                     {selectedPermissions.length} đã chọn
                   </Badge>
                 </div>
               </div>
 
-              <div className='border rounded-md overflow-hidden'>
+              <div className='border border-border rounded-md overflow-hidden bg-white dark:bg-darker-2 transition-colors duration-300'>
                 <ScrollArea className='h-[300px]'>
                   {filteredPermissions.length === 0 ? (
-                    <div className='flex items-center justify-center h-full p-4 text-center text-muted-foreground'>
+                    <div className='flex items-center justify-center h-full p-4 text-center text-muted-foreground dark:text-text-white transition-colors duration-300'>
                       <p>Không tìm thấy permission nào</p>
                     </div>
                   ) : (
-                    <div className='divide-y'>
+                    <div className='divide-y divide-border dark:divide-darker transition-colors duration-300'>
                       {filteredPermissions.map((permission) => {
                         const isSelected = selectedPermissions.includes(
                           permission.permissionId
@@ -193,8 +203,10 @@ export function CreateModuleDialog({ open, onOpenChange }) {
                         return (
                           <motion.div
                             key={permission.permissionId}
-                            className={`flex items-center justify-between p-3 hover:bg-accent cursor-pointer ${
-                              isSelected ? 'bg-accent/40' : ''
+                            className={`flex items-center justify-between p-3 hover:bg-accent dark:hover:bg-darker-2/70 cursor-pointer transition-colors duration-300 ${
+                              isSelected
+                                ? 'bg-accent/40 dark:bg-primary/20'
+                                : ''
                             }`}
                             onClick={() =>
                               togglePermission(permission.permissionId)
@@ -210,9 +222,9 @@ export function CreateModuleDialog({ open, onOpenChange }) {
                               <div className='flex items-start gap-2'>
                                 <Badge
                                   variant='outline'
-                                  className={`mt-0.5 text-xs whitespace-nowrap ${
+                                  className={`mt-0.5 text-xs whitespace-nowrap border-border dark:bg-darker-2 dark:text-white transition-colors duration-300 ${
                                     isSelected
-                                      ? 'border-primary/50 bg-primary/5 text-primary'
+                                      ? 'border-primary/50 bg-primary/5 dark:bg-primary/20 text-primary dark:text-primary-400'
                                       : ''
                                   }`}
                                 >
@@ -220,13 +232,15 @@ export function CreateModuleDialog({ open, onOpenChange }) {
                                 </Badge>
                                 <div>
                                   <p
-                                    className={`font-medium leading-tight ${
-                                      isSelected ? 'text-primary' : ''
+                                    className={`font-medium leading-tight text-text-primary dark:text-white transition-colors duration-300 ${
+                                      isSelected
+                                        ? 'text-primary dark:text-primary-400'
+                                        : ''
                                     }`}
                                   >
                                     {permission.name}
                                   </p>
-                                  <p className='text-xs text-muted-foreground mt-0.5'>
+                                  <p className='text-xs text-muted-foreground dark:text-text-white mt-0.5 transition-colors duration-300'>
                                     {permission.apiPath}
                                   </p>
                                 </div>
@@ -243,9 +257,9 @@ export function CreateModuleDialog({ open, onOpenChange }) {
                                 }}
                               >
                                 {isSelected ? (
-                                  <CheckCircle2 className='h-5 w-5 text-primary' />
+                                  <CheckCircle2 className='h-5 w-5 text-primary dark:text-primary-400 transition-colors duration-300' />
                                 ) : (
-                                  <Circle className='h-5 w-5 text-muted-foreground/70 hover:text-muted-foreground' />
+                                  <Circle className='h-5 w-5 text-muted-foreground/70 dark:text-text-white hover:text-muted-foreground dark:hover:text-white transition-colors duration-300' />
                                 )}
                               </motion.div>
                             </div>
@@ -263,6 +277,7 @@ export function CreateModuleDialog({ open, onOpenChange }) {
                 type='button'
                 variant='outline'
                 onClick={() => onOpenChange(false)}
+                className='hover:bg-gray-100 dark:hover:bg-darker-2 transition-colors duration-300'
               >
                 Hủy
               </Button>

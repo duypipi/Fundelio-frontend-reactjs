@@ -60,21 +60,25 @@ export function PermissionsDeleteDialog({ open, onOpenChange, type, data }) {
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className='bg-white dark:bg-darker-2 border-border transition-colors duration-300'>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogTitle className='text-text-primary dark:text-white transition-colors duration-300'>
+            Xác nhận xóa
+          </AlertDialogTitle>
+          <AlertDialogDescription className='text-muted-foreground dark:text-text-white transition-colors duration-300'>
             {type === 'module'
               ? `Bạn có chắc chắn muốn xóa module "${data.name}" không?`
               : 'Bạn có chắc chắn muốn xóa permission này không?'}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Hủy</AlertDialogCancel>
+          <AlertDialogCancel className='hover:bg-gray-100 dark:hover:bg-darker-2 transition-colors duration-300'>
+            Hủy
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isDeleting}
-            className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+            className='bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:bg-red-600 dark:hover:bg-red-700 transition-colors duration-300'
           >
             {isDeleting ? 'Đang xóa...' : 'Xóa'}
           </AlertDialogAction>

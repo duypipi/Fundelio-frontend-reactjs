@@ -18,7 +18,7 @@ export function DataTableToolbar({
           onChange={(event) =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-[150px] lg:w-[250px] bg-white dark:bg-darker-2 border-border text-text-primary dark:text-white transition-colors duration-300"
         />
         {table.getColumn('active') && (
           <DataTableFacetedFilter
@@ -34,10 +34,10 @@ export function DataTableToolbar({
           <Button
             variant="ghost"
             onClick={() => table.resetColumnFilters()}
-            className="h-8 px-2 lg:px-3"
+            className="h-8 px-2 lg:px-3 hover:bg-gray-100 dark:hover:bg-darker-2 transition-colors duration-300"
           >
             Đặt lại
-            <Cross2Icon className="ml-2 h-4 w-4" />
+            <Cross2Icon className="ml-2 h-4 w-4 text-text-primary dark:text-white transition-colors duration-300" />
           </Button>
         )}
       </div>
