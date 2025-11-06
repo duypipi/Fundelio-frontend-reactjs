@@ -29,9 +29,8 @@ import {
 } from '@/components/ui/collapse';
 import { useRoles } from '../context/roles-context';
 import { toast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { IconChevronRight } from '@tabler/icons-react';
 import { usePermissions } from '@/components/dashboard/permissions/context/permissions-context';
 import { permissionsApi } from '@/api-client';
 import { rolesApi } from '@/api-client';
@@ -432,7 +431,7 @@ export function RolesFormDialog({ open, onOpenChange, currentRow }) {
                                   <div className="w-full rounded-t-lg border bg-white dark:text-slate-100 dark:bg-zinc-800 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors px-4 py-3">
                                     <div className="flex items-center justify-between w-full">
                                       <CollapseTrigger className="flex items-center gap-3">
-                                        <IconChevronRight
+                                        <ChevronRight
                                           className={cn(
                                             'h-4 w-4 shrink-0 transition-transform duration-200 text-slate-900 dark:text-slate-300',
                                             openModules[module] && 'rotate-90'

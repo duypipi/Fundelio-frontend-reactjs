@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconAlertTriangle } from '@tabler/icons-react';
+import { AlertTriangle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
@@ -60,7 +60,7 @@ export function RolesDeleteDialog({ open, onOpenChange }) {
         </Label>
 
         <Alert variant="destructive">
-          <IconAlertTriangle className="h-4 w-4" />
+          <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Cảnh báo</AlertTitle>
           <AlertDescription>Hành động này sẽ xóa vĩnh viễn vai trò và không thể hoàn tác.</AlertDescription>
         </Alert>

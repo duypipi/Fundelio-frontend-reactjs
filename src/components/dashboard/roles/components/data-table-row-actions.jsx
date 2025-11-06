@@ -1,5 +1,5 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -34,7 +34,7 @@ export function DataTableRowActions({
             setOpen('edit');
           }}
         >
-          <IconEdit className="mr-2 h-4 w-4" />
+          <Pencil className="mr-2 h-4 w-4" />
           Chỉnh sửa
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -45,7 +45,7 @@ export function DataTableRowActions({
           }}
           className="text-red-600"
         >
-          <IconTrash className="mr-2 h-4 w-4" />
+          <Trash2 className="mr-2 h-4 w-4" />
           Xóa
         </DropdownMenuItem>
       </DropdownMenuContent>

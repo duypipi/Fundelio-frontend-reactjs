@@ -1,62 +1,15 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import useDialogState from '@/hooks/use-dialog-state';
-import { Role } from '../data/schema';
 import { createContext, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { rolesApi } from '@/api-client';
 
-type RolesDialogType = 'add' | 'edit' | 'delete';
-type SetOpenType = (type: RolesDialogType | null) => void;
+const RolesContext = createContext(undefined);
 
-interface RolesContextType {
-  roles: Role[];
-  isLoading: boolean;
-  error: string | null;
-  refetch: () => void;
-  meta: {
-    totalPages: number;
-    currentPage: number;
-    totalElements: number;
-  };
-  fetchRoles: (page?: number) => Promise<void>;
-  createRole: (data: {
-    name: string;
-    description: string;
-    active: boolean;
-    permissionIds: string[];
-  }) => Promise<void>;
-  updateRole: (
-    roleId: string,
-    data: {
-      name?: string;
-      description?: string;
-      active?: boolean;
-      permissionIds?: string[];
-    }
-  ) => Promise<void>;
-  deleteRole: (roleId: string) => Promise<void>;
-  updateRolePermissions: (
-    roleId: string,
-    permissions: string[]
-  ) => Promise<void>;
-  open: RolesDialogType | null;
-  setOpen: SetOpenType;
-  currentRow: Role | null;
-  setCurrentRow: (role: Role | null) => void;
-  handleCloseDialog: () => void;
-}
-
-const RolesContext = createContext<RolesContextType | undefined>(undefined);
-
-interface Props {
-  children: React.ReactNode;
-}
-
-export default function RolesProvider({ children }: Props) {
-  const [open, setOpenState] = useState<RolesDialogType | null>(null);
-  const setOpen: SetOpenType = useCallback(
+export default function RolesProvider({ children }) {
+  const [open, setOpenState] = useState(null);
+  const setOpen = useCallback(
     (type) => {
       console.log('RolesContext - Dialog state changed:', {
         from: open,
@@ -66,10 +19,10 @@ export default function RolesProvider({ children }: Props) {
     },
     [open]
   );
-  const [currentRow, setCurrentRow] = useState<Role | null>(null);
-  const [roles, setRoles] = useState<Role[]>([]);
+  const [currentRow, setCurrentRow] = useState(null);
+  const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [meta, setMeta] = useState({
     totalPages: 1,
     currentPage: 1,
@@ -77,7 +30,7 @@ export default function RolesProvider({ children }: Props) {
   });
 
   // Fetch roles
-  const fetchRoles = useCallback(async (page: number = 1) => {
+  const fetchRoles = useCallback(async (page = 1) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -111,12 +64,7 @@ export default function RolesProvider({ children }: Props) {
 
   // Create role
   const createRole = useCallback(
-    async (data: {
-      name: string;
-      description: string;
-      active: boolean;
-      permissionIds: string[];
-    }) => {
+    async (data) => {
       try {
         setIsLoading(true);
         const response = await rolesApi.createRole({
@@ -146,15 +94,7 @@ export default function RolesProvider({ children }: Props) {
 
   // Update role
   const updateRole = useCallback(
-    async (
-      roleId: string,
-      data: {
-        name?: string;
-        description?: string;
-        active?: boolean;
-        permissionIds?: string[];
-      }
-    ) => {
+    async (roleId, data) => {
       try {
         setIsLoading(true);
         const response = await rolesApi.updateRole(roleId, data);
@@ -184,7 +124,7 @@ export default function RolesProvider({ children }: Props) {
 
   // Delete role
   const deleteRole = useCallback(
-    async (roleId: string) => {
+    async (roleId) => {
       try {
         setIsLoading(true);
         const response = await rolesApi.deleteRole(roleId);
@@ -210,7 +150,7 @@ export default function RolesProvider({ children }: Props) {
 
   // Update role permissions
   const updateRolePermissions = useCallback(
-    async (roleId: string, permissions: string[]) => {
+    async (roleId, permissions) => {
       try {
         setIsLoading(true);
         const response = await rolesApi.updateRolePermissions(
@@ -275,3 +215,4 @@ export function useRoles() {
   }
   return context;
 }
+
