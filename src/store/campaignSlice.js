@@ -14,7 +14,7 @@ const initialState = {
     description: 'Papercuts is a rowdy card game about books and writing brought to you by Electric Literature.',
     goalAmount: 10000,
     category: 'games',
-    // image_url: 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=1024&h=576&fit=crop', // Not in API yet
+    // imageUrl: 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=1024&h=576&fit=crop', // Not in API yet
     introVideoUrl: null,
     startTime: getDateString(0), // Today
     endTime: getDateString(60), // 60 days from now

@@ -43,7 +43,7 @@ export default function CreateCampaignPage() {
 
   const handlePreview = () => {
     // Validate basics data
-    if (!basicsData || !basicsData.title || !basicsData.desc) {
+    if (!basicsData || !basicsData.title || !basicsData.description) {
       toast.error('Vui lòng điền đầy đủ thông tin cơ bản (Tiêu đề và Mô tả)');
       setActiveTab('basic');
       return;
