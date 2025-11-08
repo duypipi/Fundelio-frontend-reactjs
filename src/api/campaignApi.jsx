@@ -21,6 +21,35 @@ export const campaignApi = {
         });
     },
 
+    updateCampaign(campaignId, campaignData) {
+        console.log('Updating campaign:', campaignId, 'with data:', campaignData);
+        return httpService.patch(`/campaigns/${campaignId}`, campaignData, {
+            requireToken: true,
+        });
+    },
+
+    // Campaign Sections (Story)
+    createCampaignSection(campaignId, sectionData) {
+        console.log('Creating campaign section for:', campaignId, 'with data:', sectionData);
+        return httpService.post(`/campaigns/${campaignId}/sections`, sectionData, {
+            requireToken: true,
+        });
+    },
+
+    updateCampaignSection(campaignId, sectionId, sectionData) {
+        console.log('Updating section:', sectionId, 'for campaign:', campaignId, 'with data:', sectionData);
+        return httpService.patch(`/campaigns/${campaignId}/sections/${sectionId}`, sectionData, {
+            requireToken: true,
+        });
+    },
+
+    deleteCampaignSection(campaignId, sectionId) {
+        console.log('Deleting section:', sectionId, 'from campaign:', campaignId);
+        return httpService.delete(`/campaigns/${campaignId}/sections/${sectionId}`, {
+            requireToken: true,
+        });
+    },
+
     getUserCampaigns(userId, params = {}) {
         const { page = 1, size = 10, sort = 'createdAt,desc' } = params;
         return httpService.get('/campaigns', {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Eye,
   Sun,
@@ -10,7 +10,8 @@ import {
   Plus,
   FolderOpen,
   Wallet,
-  LayoutDashboard
+  LayoutDashboard,
+  ArrowLeft
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import Button from './Button';
@@ -21,13 +22,18 @@ import Button from './Button';
  * @param {string} props.activeTab - Current active tab ('basic' | 'story' | 'rewards')
  * @param {Function} props.onTabChange - Callback when tab changes
  * @param {Function} props.onPreview - Callback when preview button clicked
+ * @param {boolean} props.isEditMode - Whether in edit mode
+ * @param {string} props.campaignId - Campaign ID if editing
  */
 export const CreateCampaignHeader = ({
   activeTab = 'basic',
   onTabChange,
-  onPreview
+  onPreview,
+  isEditMode = false,
+  campaignId,
 }) => {
   const { toggleTheme, isDark } = useTheme();
+  const navigate = useNavigate();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   // Mock user state
@@ -54,15 +60,35 @@ export const CreateCampaignHeader = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const handleBackToOverview = () => {
+    if (isEditMode && campaignId) {
+      navigate(`/campaigns/${campaignId}/dashboard`);
+    }
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-darker-2 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 h-20`}>
       {/* Desktop - Single Row */}
       <div className="hidden md:block h-full">
         <div className="mx-auto max-w-container px-4 sm:px-6 h-full flex items-center justify-between gap-4">
-          {/* Left - Logo */}
-          <Link to="/home" className="flex-shrink-0">
-            <img src="/logo.png" alt="Fundelio" className="w-16 h-16" />
-          </Link>
+          {/* Left - Logo + Back Button (if edit mode) */}
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <Link to="/home" className="flex-shrink-0">
+              <img src="/logo.png" alt="Fundelio" className="w-16 h-16" />
+            </Link>
+
+            {isEditMode && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleBackToOverview}
+                className="flex items-center gap-2 text-muted-foreground hover:text-primary"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Tổng quan</span>
+              </Button>
+            )}
+          </div>
 
           {/* Center - Tabs */}
           <nav className="flex items-center gap-8 absolute left-1/2 -translate-x-1/2">

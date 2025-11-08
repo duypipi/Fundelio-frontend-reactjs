@@ -35,6 +35,8 @@ export default function CreateCampaignTabs({
   save,
   activeTab: externalActiveTab,
   onTabChange,
+  campaignId,
+  isEditMode,
 }) {
   // Use external activeTab if provided, otherwise use internal state
   const [internalActiveTab, setInternalActiveTab] = useState('story');
@@ -46,7 +48,9 @@ export default function CreateCampaignTabs({
       {/* Tab Content - No tab navigation here, it's in the header now */}
       <div>
         {/* Basic Tab */}
-        {activeTab === 'basic' && <BasicsContent />}
+        {activeTab === 'basic' && (
+          <BasicsContent campaignId={campaignId} isEditMode={isEditMode} />
+        )}
 
         {/* Story Tab */}
         {activeTab === 'story' && (

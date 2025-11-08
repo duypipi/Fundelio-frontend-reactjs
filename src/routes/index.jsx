@@ -20,6 +20,7 @@ import WalletPage from '@/pages/WalletPage';
 import YourProjectsPage from '@/pages/YourProjectsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ForbiddenPage from '@/pages/ForbiddenPage';
+import CampaignOverviewPage from '@/components/campaign/dashboard/CampaignOverviewPage';
 
 /**
  * Application routes configuration
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
         children: [
           { path: 'detail', element: <CampaignDetailPage /> },
           { path: 'preview/:previewId', element: <CampaignDetailPage /> },
+          { path: ':campaignId/dashboard', element: <CampaignOverviewPage /> },
         ],
       },
 
@@ -63,6 +65,10 @@ export const router = createBrowserRouter([
   },
   {
     path: '/campaigns/create',
+    element: <CreateCampaignPage />,
+  },
+  {
+    path: '/campaigns/:campaignId/edit',
     element: <CreateCampaignPage />,
   },
   {

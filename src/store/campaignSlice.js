@@ -135,9 +135,9 @@ const campaignSlice = createSlice({
 
     // ============ STORY ACTIONS ============
     initializeStory: (state, action) => {
-      const { id, blank } = action.payload;
-      state.story.blanksById[id] = blank;
-      state.story.order = [id];
+      const { blanksById, order } = action.payload;
+      state.story.blanksById = blanksById || {};
+      state.story.order = order || [];
     },
     addBlank: (state, action) => {
       const { id, blank } = action.payload;

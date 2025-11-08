@@ -25,7 +25,7 @@ const CATEGORIES = [
   { value: 'other', label: 'Khác' },
 ];
 
-export default function BasicsContent() {
+export default function BasicsContent({ campaignId, isEditMode = false }) {
   const dispatch = useDispatch();
   const basicsData = useSelector((state) => state.campaign.basics);
 
@@ -54,6 +54,7 @@ export default function BasicsContent() {
   // Sync with Redux when basicsData changes
   useEffect(() => {
     setFormData(basicsData);
+    console.log('BasicsContent - Synced from Redux:', basicsData);
   }, [basicsData]);
 
   const handleChange = (e) => {
@@ -98,7 +99,7 @@ export default function BasicsContent() {
       toast.error('Vui lòng chọn thời gian chiến dịch');
       return;
     }
-    if (!formData.acceptedTerms) {
+    if (!formData.acceptedTerms && !isEditMode) {
       toast.error('Vui lòng chấp nhận điều khoản dịch vụ');
       return;
     }
@@ -128,22 +129,30 @@ export default function BasicsContent() {
       // Remove undefined fields
       Object.keys(payload).forEach(key => payload[key] === undefined && delete payload[key]);
 
-      toast.loading('Đang tạo chiến dịch...', { id: 'create-campaign' });
+      const toastId = isEditMode ? 'update-campaign' : 'create-campaign';
+      const loadingMsg = isEditMode ? 'Đang cập nhật chiến dịch...' : 'Đang tạo chiến dịch...';
+      const successMsg = isEditMode ? 'Cập nhật chiến dịch thành công!' : 'Tạo chiến dịch thành công!';
 
-      // Call API to create campaign
-      const response = await campaignApi.createCampaign(payload);
+      toast.loading(loadingMsg, { id: toastId });
+
+      // Call API to create or update campaign
+      const response = isEditMode && campaignId
+        ? await campaignApi.updateCampaign(campaignId, payload)
+        : await campaignApi.createCampaign(payload);
 
       if (response?.data?.data) {
         // Save to Redux
         dispatch(setBasics(formData));
-        toast.success('Tạo chiến dịch thành công!', { id: 'create-campaign' });
-        console.log('Campaign created:', response.data.data);
+        toast.success(successMsg, { id: toastId });
+        console.log('Campaign saved:', response.data.data);
       } else {
-        toast.error('Không nhận được phản hồi từ server', { id: 'create-campaign' });
+        toast.error('Không nhận được phản hồi từ server', { id: toastId });
       }
     } catch (error) {
-      console.error('Create campaign error:', error);
+      console.error('Save campaign error:', error);
       console.error('Response data:', error.response?.data);
+
+      const toastId = isEditMode ? 'update-campaign' : 'create-campaign';
 
       // Handle field-specific errors
       if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
@@ -160,13 +169,13 @@ export default function BasicsContent() {
 
         // Show first error message in toast
         const firstError = errors[0];
-        toast.error(firstError?.message || 'Lỗi khi tạo chiến dịch', { id: 'create-campaign' });
+        toast.error(firstError?.message || 'Lỗi khi lưu chiến dịch', { id: toastId });
       } else {
         // Fallback for non-field errors
         toast.error(
           error.response?.data?.message ||
-          'Lỗi khi tạo chiến dịch',
-          { id: 'create-campaign' }
+          'Lỗi khi lưu chiến dịch',
+          { id: toastId }
         );
       }
     }
@@ -357,8 +366,8 @@ export default function BasicsContent() {
             value={formData.category}
             onChange={handleChange}
             className={`w-full px-4 py-2 border rounded-sm bg-background text-text-primary dark:text-white focus:ring-2 focus:border-transparent transition-all ${fieldErrors.category
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-border focus:ring-primary'
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-border focus:ring-primary'
               }`}
           >
             <option value="">Chọn danh mục</option>
@@ -710,7 +719,7 @@ export default function BasicsContent() {
           onClick={handleSave}
           className="px-8"
         >
-          Tạo chiến dịch
+          {isEditMode ? 'Lưu thay đổi' : 'Tạo chiến dịch'}
         </Button>
       </div>
     </div>

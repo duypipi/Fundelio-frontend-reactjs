@@ -311,13 +311,13 @@ const Hero = () => {
       </div>
 
       {/* Slide Indicators - Thumbnail Images - Enhanced design */}
-      <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2 px-2 sm:px-4 sm:gap-2.5 md:gap-3 lg:gap-4 max-w-full overflow-x-auto scrollbar-hide">
+      <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2 px-2 sm:px-4 sm:gap-2.5 md:gap-3 lg:gap-4 py-4  max-w-full overflow-x-auto scrollbar-hide">
         {mockCampaigns.map((campaign, index) => (
           <button
             key={index}
             onClick={() => handleSlideChange(index)}
             className={`group relative overflow-hidden rounded-sm transition-all duration-300 border-2 flex-shrink-0 ${index === currentSlide
-                ? "border-cyan-400 shadow-lg shadow-cyan-400/50 scale-110 sm:scale-115"
+                ? "border-primary shadow-lg shadow-primary/50 scale-103 sm:scale-105"
                 : "border-white/20 opacity-60 hover:opacity-100 hover:scale-105 hover:border-white/40"
               }`}
             aria-label={`Go to slide ${index + 1}: ${campaign.title}`}

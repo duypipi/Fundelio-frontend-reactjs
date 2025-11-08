@@ -165,7 +165,7 @@ export const ProjectCard = ({
             <div className="flex-1 min-w-0">
               <p className="text-xs text-muted-foreground mb-0.5">Tổng kinh phí</p>
               <p className="text-lg font-bold text-text-primary dark:text-white truncate">
-                {typeof pledged === 'string' ? pledged : formatCurrency(pledged)} VND
+                {typeof pledged === 'string' ? pledged : pledged} VND
               </p>
             </div>
 

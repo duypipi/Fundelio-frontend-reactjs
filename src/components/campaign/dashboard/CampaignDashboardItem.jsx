@@ -60,7 +60,7 @@ export default function CampaignDashboardItem({ campaign }) {
     const navigate = useNavigate();
 
     const handleEdit = () => {
-        navigate(`/campaigns/${campaign.campaignId}/edit`);
+        navigate(`/campaigns/${campaign.campaignId}/dashboard`);
     };
 
     // Get owner name
