@@ -33,6 +33,7 @@ export default function CreateCampaignTabs({
   setActiveEditor,
   scrollToBlank,
   save,
+  saveStatus,
   activeTab: externalActiveTab,
   onTabChange,
   campaignId,
@@ -69,7 +70,11 @@ export default function CreateCampaignTabs({
             {/* Main Content */}
             <main className="w-full min-w-0">
               {/* Toolbar */}
-              <StoryToolbar activeEditorRef={activeEditorRef} onSave={save} />
+              <StoryToolbar
+                activeEditorRef={activeEditorRef}
+                onSave={save}
+                saveStatus={saveStatus}
+              />
 
               {/* Blanks */}
               <div className="mt-6">

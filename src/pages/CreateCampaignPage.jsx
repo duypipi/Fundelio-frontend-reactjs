@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
@@ -8,8 +8,9 @@ import CreateCampaignTabs from '@/components/campaign/create/CreateCampaignTabs'
 import CreateCampaignHeader from '@/components/common/CreateCampaignHeader';
 import Footer from '@/components/common/Footer';
 import { generatePreviewId, savePreviewData } from '@/utils/previewStorage';
-import { setBasics, initializeStory, resetCampaign } from '@/store/campaignSlice';
+import { setBasics, initializeStory, resetCampaign, addBlank as addBlankAction } from '@/store/campaignSlice';
 import { campaignApi } from '@/api/campaignApi';
+import { campaignSectionApi } from '@/api/campaignSectionApi';
 
 export default function CreateCampaignPage() {
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ export default function CreateCampaignPage() {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [loading, setLoading] = useState(false);
   const [campaign, setCampaign] = useState(null);
+  const [saveStatus, setSaveStatus] = useState('idle'); // 'idle' | 'saving' | 'saved'
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const saveTimeoutRef = useRef(null);
+  const lastFocusedBlankRef = useRef(null);
 
   const isEditMode = Boolean(campaignId);
 
@@ -115,10 +120,127 @@ export default function CreateCampaignPage() {
     loadCampaignData();
   }, [campaignId, dispatch]);
 
-  const handleAddBlank = () => {
-    const newId = addBlank();
-    // Wait for DOM update then scroll
-    setTimeout(() => scrollToBlank(newId), 100);
+  // Auto-save logic with debounce
+  const autoSave = useCallback(async (blankId) => {
+    if (!isEditMode || !campaignId) return;
+
+    try {
+      const blank = blanks.find(b => b.id === blankId);
+      if (!blank) return;
+
+      const sectionData = {
+        tabTitle: blank.titleText || 'Untitled',
+        formatTitle: blank.titleHtml || blank.titleText || '<p>Untitled</p>',
+        itemData: blank.contentHtml || '',
+      };
+
+      // blankId is the campaign section ID
+      await campaignSectionApi.updateSectionToCampaign(campaignId, blankId, sectionData);
+
+      setSaveStatus('idle'); // Back to idle (CloudCheck icon only)
+      setHasUnsavedChanges(false);
+    } catch (error) {
+      console.error('Auto-save error:', error);
+      setSaveStatus('idle');
+      toast.error('Lỗi khi tự động lưu');
+    }
+  }, [isEditMode, campaignId, blanks]);
+
+  // Track changes and trigger auto-save on blur with debounce
+  useEffect(() => {
+    if (!hasUnsavedChanges || !lastFocusedBlankRef.current) return;
+
+    // Clear existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Set new timeout for auto-save after 2 seconds of inactivity
+    saveTimeoutRef.current = setTimeout(() => {
+      autoSave(lastFocusedBlankRef.current);
+    }, 2000);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [hasUnsavedChanges, autoSave]);
+
+  // Update handlers to track changes
+  const handleTitleChange = (id, html, text) => {
+    updateTitle(id, html, text);
+    setHasUnsavedChanges(true);
+    lastFocusedBlankRef.current = id;
+    setSaveStatus('saving'); // Show "Đang lưu..." immediately when typing
+  };
+
+  const handleContentChange = (id, html) => {
+    updateContent(id, html);
+    setHasUnsavedChanges(true);
+    lastFocusedBlankRef.current = id;
+    setSaveStatus('saving'); // Show "Đang lưu..." immediately when typing
+  };
+
+  const handleAddBlank = async () => {
+    // If in edit mode, create section via API first to get real ID
+    if (isEditMode && campaignId) {
+      try {
+        const blankIndex = blanks.length;
+        const sectionData = {
+          tabTitle: 'Untitled',
+          formatTitle: 'Untitled',
+          itemData: '',
+        };
+
+        const response = await campaignSectionApi.addSectionToCampaign(campaignId, sectionData);
+        console.log('Section created:', response);
+
+        // Get the real section ID from API response
+        const realSectionId = response?.data?.data?.campaignSectionId;
+
+        if (realSectionId) {
+          // Add blank to Redux with the real section ID from backend
+          const newBlank = {
+            id: realSectionId,
+            titleHtml: 'Untitled',
+            titleText: 'Untitled',
+            contentHtml: '',
+          };
+          dispatch(addBlankAction({ id: realSectionId, blank: newBlank }));
+
+          // Wait for DOM update then scroll
+          setTimeout(() => scrollToBlank(realSectionId), 100);
+          toast.success('Đã thêm section mới');
+        }
+      } catch (error) {
+        console.error('Error creating section:', error);
+        toast.error('Không thể tạo section mới');
+      }
+    } else {
+      // In create mode, just add to Redux with local ID
+      const newId = addBlank();
+      setTimeout(() => scrollToBlank(newId), 100);
+    }
+  };
+
+  const handleReorderBlanks = async (newOrder) => {
+    reorderBlanks(newOrder); // Update Redux first
+
+    // If in edit mode, also update order via API
+    if (isEditMode && campaignId) {
+      try {
+        const reorderData = {
+          orderIndex: newOrder
+        };
+
+        await campaignSectionApi.reorderSections(campaignId, reorderData);
+        console.log('Sections reordered successfully');
+      } catch (error) {
+        console.error('Error reordering sections:', error);
+        toast.error('Không thể sắp xếp lại sections');
+      }
+    }
   };
 
   const handleTabChange = (tabId) => {
@@ -264,13 +386,14 @@ export default function CreateCampaignPage() {
               blanks={blanks}
               activeEditorRef={activeEditorRef}
               onAddBlank={handleAddBlank}
-              onTitleChange={updateTitle}
-              onContentChange={updateContent}
-              onReorderBlanks={reorderBlanks}
+              onTitleChange={handleTitleChange}
+              onContentChange={handleContentChange}
+              onReorderBlanks={handleReorderBlanks}
               onDeleteBlank={deleteBlank}
               setActiveEditor={setActiveEditor}
               scrollToBlank={scrollToBlank}
               save={handleSaveStory}
+              saveStatus={saveStatus}
               campaignId={campaignId}
               isEditMode={isEditMode}
             />

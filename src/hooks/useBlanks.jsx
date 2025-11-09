@@ -92,7 +92,7 @@ function useBlanks() {
   };
 
   const save = () => {
-    toast.success('Story đã được lưu tự động vào Redux store!');
+   console.log('Story đã được lưu tự động vào Redux store!');
   };
 
   // Derive blanks array from order and blanksById for rendering

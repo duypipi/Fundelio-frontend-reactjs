@@ -1,5 +1,7 @@
 import { useRef, useEffect, memo } from 'react';
+import toast from 'react-hot-toast';
 import { buildVideoEmbed } from '../../../../utils/embed';
+import { storageApi } from '@/api/storageApi';
 
 /**
  * BlankSection component - A single editable section with title and content
@@ -40,20 +42,57 @@ function BlankSection({ blank, onTitleChange, onContentChange, onFocus }) {
     }
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     if (!e.dataTransfer.files.length) return;
 
     const file = e.dataTransfer.files[0];
     if (!file.type.startsWith('image/')) return;
 
-    const url = URL.createObjectURL(file);
-    const img = document.createElement('img');
-    img.src = url;
-    img.className = 'max-w-full h-auto block mx-auto my-4 rounded-xl';
+    // Create loading overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-10 rounded-xl';
+    overlay.innerHTML = `
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <span class="text-white text-sm font-medium">Đang tải ảnh lên...</span>
+      </div>
+    `;
 
-    placeBlock(editorRef.current, img);
-    handleContentInput();
+    // Add overlay to editor's parent (the section)
+    const section = editorRef.current?.closest('section');
+    if (section) {
+      section.style.position = 'relative';
+      section.appendChild(overlay);
+    }
+
+    try {
+      // Upload to server
+      const response = await storageApi.uploadSingleFile(file, 'campaigns/story-images');
+
+      if (response?.data?.data?.fileUrl) {
+        const imageUrl = response.data.data.fileUrl;
+
+        // Create and insert actual image
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.className = 'max-w-full h-auto block mx-auto my-4 rounded-xl';
+        img.alt = file.name;
+
+        placeBlock(editorRef.current, img);
+        handleContentInput();
+      } else {
+        toast.error('Không lấy được URL ảnh sau khi tải lên');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error(error.response?.data?.errors?.[0]?.message || 'Lỗi tải ảnh lên');
+    } finally {
+      // Remove overlay
+      if (overlay && overlay.parentNode) {
+        overlay.remove();
+      }
+    }
   };
 
   const handlePaste = (e) => {

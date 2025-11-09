@@ -62,4 +62,10 @@ export const campaignApi = {
             },
         });
     },
+
+    getAllCategories() {
+        return httpService.get('/campaigns/categories', {
+            requireToken: false,
+        });
+    }
 }

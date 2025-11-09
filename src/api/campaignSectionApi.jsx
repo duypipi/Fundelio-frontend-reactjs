@@ -1,36 +1,29 @@
 import { httpService } from './http';
 
-export const campaignApi = {
-    getAllCampaigns(params) {
-        return httpService.get('/campaigns', {
-            requireToken: true,
-            params,
-        });
-    },
+export const campaignSectionApi = {
 
-    getCampaignById(campaignId) {
-        return httpService.get(`/campaigns/${campaignId}`, {
+    getCampaignSections(campaignId) {
+        return httpService.get(`/campaigns/${campaignId}/sections`, {
             requireToken: true,
         });
     },
 
-    createCampaign(campaignData) {
-        console.log('Creating campaign with data:', campaignData);
-        return httpService.post('/campaigns', campaignData, {
+    addSectionToCampaign(campaignId, campaignSectionData) {
+        console.log('Creating campaign section with data:', campaignSectionData);
+        return httpService.post(`/campaigns/${campaignId}/sections`, campaignSectionData, {
             requireToken: true,
         });
     },
 
-    getUserCampaigns(userId, params = {}) {
-        const { page = 1, size = 10, sort = 'createdAt,desc' } = params;
-        return httpService.get('/campaigns', {
+    updateSectionToCampaign(campaignId, sectionId, campaignSectionData) {
+        return httpService.patch(`/campaigns/${campaignId}/sections/${sectionId}`, campaignSectionData, {
             requireToken: true,
-            params: {
-                filter: `owner.userId:'${userId}'`,
-                page,
-                size,
-                sort,
-            },
         });
     },
+
+    reorderSections(campaignId, reorderData) {
+        return httpService.put(`/campaigns/${campaignId}/sections/reorder`, reorderData, {
+            requireToken: true,
+        });
+    }
 }

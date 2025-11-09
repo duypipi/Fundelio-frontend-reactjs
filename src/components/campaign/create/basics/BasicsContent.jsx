@@ -10,20 +10,20 @@ import { setBasics } from '@/store/campaignSlice';
 import { storageApi } from '@/api/storageApi';
 import { campaignApi } from '@/api/campaignApi';
 
-// API Categories: art, design, fashion, film, food, games, music, photography, publishing, technology, other
-const CATEGORIES = [
-  { value: 'art', label: 'Nghệ thuật' },
-  { value: 'design', label: 'Thiết kế' },
-  { value: 'fashion', label: 'Thời trang' },
-  { value: 'film', label: 'Phim & Video' },
-  { value: 'food', label: 'Thực phẩm & Thủ công' },
-  { value: 'games', label: 'Trò chơi' },
-  { value: 'music', label: 'Nhạc' },
-  { value: 'photography', label: 'Nhiếp ảnh' },
-  { value: 'publishing', label: 'Xuất bản' },
-  { value: 'technology', label: 'Công nghệ' },
-  { value: 'other', label: 'Khác' },
-];
+// Category label mapping for Vietnamese
+const CATEGORY_LABELS = {
+  ART: 'Nghệ thuật',
+  DESIGN: 'Thiết kế',
+  FASHION: 'Thời trang',
+  FILM: 'Phim & Video',
+  FOOD: 'Thực phẩm & Thủ công',
+  GAMES: 'Trò chơi',
+  MUSIC: 'Nhạc',
+  PHOTOGRAPHY: 'Nhiếp ảnh',
+  PUBLISHING: 'Xuất bản',
+  TECHNOLOGY: 'Công nghệ',
+  OTHER: 'Khác',
+};
 
 export default function BasicsContent({ campaignId, isEditMode = false }) {
   const dispatch = useDispatch();
@@ -34,8 +34,30 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({}); // Store field-specific errors
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
+
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoadingCategories(true);
+        const response = await campaignApi.getAllCategories();
+        if (response.data.success && response.data) {
+          setCategories(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        toast.error('Không thể tải danh sách danh mục');
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   // Initialize with default dates if empty
   useEffect(() => {
@@ -115,12 +137,12 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
       const startTimeISO = new Date(formData.startTime).toISOString();
       const endTimeISO = new Date(formData.endTime).toISOString();
 
-      // Prepare payload for API (excluding acceptedTerms and imageUrl for now)
       const payload = {
         title: formData.title,
         description: formData.description || undefined,
         goalAmount: Number(formData.goalAmount),
-        category: formData.category,
+        category: formData.category.toLowerCase(), 
+        introImageUrl: formData.introImageUrl || undefined,
         introVideoUrl: formData.introVideoUrl || undefined,
         startTime: startTimeISO,
         endTime: endTimeISO,
@@ -199,9 +221,9 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
 
       if (response?.data?.data?.fileUrl) {
         const imageUrl = response.data.data.fileUrl;
-        // setFormData(prev => ({ ...prev, imageUrl: imageUrl })); // Commented: API doesn't have imageUrl field yet
+        setFormData(prev => ({ ...prev, introImageUrl: imageUrl }));
         console.log('Image uploaded successfully:', imageUrl);
-        toast.success('Tải ảnh lên thành công! (Chưa lưu vào campaign)', { id: 'upload-image' });
+        toast.success('Tải ảnh lên thành công!', { id: 'upload-image' });
       } else {
         toast.error('Không lấy được URL ảnh sau khi tải lên', { id: 'upload-image' });
       }
@@ -249,6 +271,8 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
       if (videoInputRef.current) videoInputRef.current.value = '';
     }
   };
+
+  console.log('Category:', categories);
 
   return (
     <div className="space-y-8">
@@ -323,6 +347,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
                 name="goalAmount"
                 value={formData.goalAmount || ''}
                 onChange={handleChange}
+                onWheel={(e) => e.target.blur()}
                 placeholder="10000"
                 min="1"
                 className={fieldErrors.goalAmount ? 'border-red-500 focus:ring-red-500' : ''}
@@ -365,15 +390,16 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
             name="category"
             value={formData.category}
             onChange={handleChange}
+            disabled={loadingCategories}
             className={`w-full px-4 py-2 border rounded-sm bg-background text-text-primary dark:text-white focus:ring-2 focus:border-transparent transition-all ${fieldErrors.category
               ? 'border-red-500 focus:ring-red-500'
               : 'border-border focus:ring-primary'
               }`}
           >
-            <option value="">Chọn danh mục</option>
-            {CATEGORIES.map((cat) => (
-              <option key={cat.value} value={cat.value}>
-                {cat.label}
+            <option value="">{loadingCategories ? 'Đang tải...' : 'Chọn danh mục'}</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {CATEGORY_LABELS[cat] || cat}
               </option>
             ))}
           </select>
@@ -406,11 +432,10 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
         </div>
 
         <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
-          <h3 className="text-md font-semibold text-text-primary dark:text-white mb-4">Hình ảnh {/* <span className="text-primary">*</span> */}</h3>
+          <h3 className="text-md font-semibold text-text-primary dark:text-white mb-4">Hình ảnh <span className="text-primary">*</span></h3>
 
           {/* Upload Area - Only show when no image */}
-          {/* {!formData.imageUrl && ( */}
-          {true && (
+          {!formData.introImageUrl && (
             <div className="flex flex-col items-center">
               <div className="w-full max-w-2xl">
                 <div className="border-2 border-dashed border-border rounded-sm p-8 bg-muted/30 hover:bg-muted/50 transition-colors">
@@ -430,10 +455,6 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
                     <p className="text-xs text-muted-foreground">
                       Thông số kỹ thuật hình ảnh: JPG, PNG, GIF hoặc WEBP, tỷ lệ 16:9, tối thiểu 1024 × 576 pixel, tối đa 50 MB
                     </p>
-
-                    <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                      Lưu ý: Chức năng upload ảnh đang tạm thời bị vô hiệu hóa vì API chưa hỗ trợ
-                    </p>
                   </div>
                 </div>
 
@@ -449,12 +470,12 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
           )}
 
           {/* Image Preview - Only show when image exists */}
-          {/* {formData.imageUrl && (
+          {formData.introImageUrl && (
             <div className="flex flex-col items-center">
               <div className="w-full max-w-2xl">
                 <div className="relative aspect-video rounded-sm overflow-hidden bg-muted border border-border">
                   <img
-                    src={formData.imageUrl}
+                    src={formData.introImageUrl}
                     alt="Preview"
                     className="w-full h-full object-cover"
                   />
@@ -469,7 +490,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, imageUrl: null }))}
+                    onClick={() => setFormData(prev => ({ ...prev, introImageUrl: null }))}
                     className="px-4 py-2 border border-destructive text-destructive rounded-sm hover:bg-destructive/10 transition-colors text-sm font-medium"
                   >
                     Xóa ảnh
@@ -484,7 +505,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
                 className="hidden"
               />
             </div>
-          )} */}
+          )}
 
           <div className="p-3 border-l-4 border-primary bg-primary/10 mt-4">
             <p className="text-xs text-muted-foreground">

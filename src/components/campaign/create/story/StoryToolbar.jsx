@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
-import { Heading2, Image, Video, Save } from 'lucide-react';
+import { Heading2, Image, Video, RefreshCcw, CloudCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { buildVideoEmbed } from '../../../../utils/embed';
+import { storageApi } from '../../../../api/storageApi';
 import VideoModal from './VideoModal';
 import ColorPicker from './ColorPicker';
 
@@ -10,8 +11,9 @@ import ColorPicker from './ColorPicker';
  * @param {Object} props
  * @param {Object} props.activeEditorRef - Reference to currently active editor
  * @param {Function} props.onSave - Callback when save button is clicked
+ * @param {'idle' | 'saving' | 'saved'} props.saveStatus - Current save status
  */
-export default function StoryToolbar({ activeEditorRef, onSave }) {
+export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'idle' }) {
   const imgPickerRef = useRef(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
@@ -60,17 +62,61 @@ export default function StoryToolbar({ activeEditorRef, onSave }) {
     imgPickerRef.current?.click();
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     if (!activeEditorRef.current) return;
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Vui lòng chọn file ảnh hợp lệ');
+      return;
+    }
 
-    const url = URL.createObjectURL(file);
-    const img = document.createElement('img');
-    img.src = url;
-    img.className = 'max-w-full h-auto block mx-auto my-4 rounded-xl';
-    placeBlock(activeEditorRef.current, img);
+    // Create loading overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-10 rounded-xl';
+    overlay.innerHTML = `
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <span class="text-white text-sm font-medium">Đang tải ảnh lên...</span>
+      </div>
+    `;
+
+    // Add overlay to editor's parent (the section)
+    const section = activeEditorRef.current?.closest('section');
+    if (section) {
+      section.style.position = 'relative';
+      section.appendChild(overlay);
+    }
+
+    try {
+      // Upload to server
+      const response = await storageApi.uploadSingleFile(file, 'campaigns/story-images');
+
+      if (response?.data?.data?.fileUrl) {
+        const imageUrl = response.data.data.fileUrl;
+
+        // Create and insert actual image
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.className = 'max-w-full h-auto block mx-auto my-4 rounded-xl';
+        img.alt = file.name;
+
+        placeBlock(activeEditorRef.current, img);
+      } else {
+        toast.error('Không lấy được URL ảnh sau khi tải lên', { id: 'upload-story-image' });
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error(
+        error.response?.data?.errors?.[0]?.message || 'Lỗi tải ảnh lên',
+        { id: 'upload-story-image' }
+      );
+    } finally {
+      // Remove overlay
+      if (overlay && overlay.parentNode) {
+        overlay.remove();
+      }
+    }
 
     // Reset input
     e.target.value = '';
@@ -104,7 +150,7 @@ export default function StoryToolbar({ activeEditorRef, onSave }) {
 
   return (
     <>
-      <div className="sticky top-20 z-10 flex gap-2 flex-wrap bg-white dark:bg-darker-2 inset-shadow-2xs shadow-md rounded-sm p-2 mb-4">
+      <div className="sticky top-20 z-10 flex gap-2 flex-wrap bg-white dark:bg-darker-2 inset-shadow-2xs shadow-md rounded-sm py-3 px-6 mb-4">
         {/* Text Formatting */}
         <button
           onClick={handleBold}
@@ -169,14 +215,28 @@ export default function StoryToolbar({ activeEditorRef, onSave }) {
         {/* Color Picker */}
         <ColorPicker onColorSelect={handleColorChange} />
 
-        {/* Save Button */}
+        {/* Save Status */}
         <button
           onClick={onSave}
-          className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-sm text-sm font-medium hover:bg-primary/90 transition-colors ml-auto"
-          title="Save (Ctrl+S)"
+          disabled={saveStatus === 'saving'}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-sm text-sm font-medium transition-colors ml-auto ${saveStatus === 'saving'
+            ? 'bg-muted text-muted-foreground cursor-not-allowed'
+            : 'bg-white dark:bg-darker border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+            }`}
+          title={
+            saveStatus === 'saving'
+              ? 'Đang lưu...'
+              : 'Đã lưu tự động'
+          }
         >
-          <Save className="w-4 h-4" />
-          <span>Lưu</span>
+          {saveStatus === 'saving' ? (
+            <>
+              <RefreshCcw className="w-4 h-4 animate-spin" />
+              <span>Đang lưu...</span>
+            </>
+          ) : (
+            <CloudCheck className="w-4 h-4" />
+          )}
         </button>
 
         <input

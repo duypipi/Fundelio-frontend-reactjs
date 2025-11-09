@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import Button from './Button';
-
+import { useAuth } from '../../contexts/AuthContext';
 /**
  * CreateCampaignHeader - Header for create campaign pages
  * @param {Object} props
@@ -35,12 +35,9 @@ export const CreateCampaignHeader = ({
   const { toggleTheme, isDark } = useTheme();
   const navigate = useNavigate();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
-  // Mock user state
-  const user = {
-    name: 'Nguyen Van A',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-  };
+  const { isLoggedIn, user, logout } = useAuth();
+  const avatarSrc = user?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Fundelio';
+  const displayName = user?.name || 'Người dùng';
 
   const tabs = [
     { id: 'basic', label: 'Cơ bản' },
@@ -131,106 +128,128 @@ export const CreateCampaignHeader = ({
               <span>Xem trước</span>
             </Button>
 
-            {/* User Avatar with Dropdown */}
-            <div className="relative user-menu-container">
-              <button
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex-shrink-0"
-              >
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-200 dark:border-gray-700 hover:ring-2 hover:ring-primary transition-all cursor-pointer"
-                />
-              </button>
+            {/* User Menu or Auth Buttons */}
+            {isLoggedIn && user ? (
+              <div className="relative user-menu-container">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-2 p-1 rounded-full transition-all group relative"
+                >
+                  {/* Gradient border effect */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-[2px]">
+                    <div className="w-full h-full rounded-full bg-white dark:bg-darker-2"></div>
+                  </div>
+                  <img
+                    src={avatarSrc}
+                    alt={displayName}
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:shadow-primary-400 hover:shadow-md transition-colors relative z-10"
+                  />
+                </button>
 
-              {/* User Dropdown Menu */}
-              {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-[280px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker rounded-lg shadow-xl border border-border overflow-hidden z-50">
-                  <div className="p-4">
-                    {/* Your Account Section */}
-                    <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
-                      Tài khoản
-                    </h4>
-                    <div className="space-y-1 mb-3">
-                      <Link
-                        to="/dashboard"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                      >
-                        <LayoutDashboard className="w-4 h-4" />
-                        <span>Bảng điều khiển</span>
-                      </Link>
-                      <div className="border-t-2 border-border my-3"></div>
-                      <a
-                        href="#"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                      >
-                        <User className="w-4 h-4" />
-                        <span>Hồ sơ</span>
-                      </a>
-                      <a
-                        href="#"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                      >
-                        <Settings className="w-4 h-4" />
-                        <span>Cài đặt</span>
-                      </a>
-                      <Link
-                        to="/your-projects"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                      >
-                        <FolderOpen className="w-4 h-4" />
-                        <span>Dự án của bạn</span>
-                      </Link>
-                      <Link
-                        to="/wallet"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                      >
-                        <Wallet className="w-4 h-4" />
-                        <span>Ví</span>
-                      </Link>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="border-t-2 border-border my-3"></div>
-
-                    {/* Create New Campaign Button */}
-                    <Link
-                      to="/campaigns/create"
-                      onClick={() => setIsUserMenuOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                    >
-                      <div className="w-10 h-10 flex-shrink-0 bg-primary/10 rounded flex items-center justify-center border-2 border-dashed border-primary">
-                        <Plus className="w-5 h-5" />
+                {/* User Dropdown Menu */}
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-[280px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker rounded-lg shadow-xl border border-border overflow-hidden z-50">
+                    <div className="p-4">
+                      {/* Your Account Section */}
+                      <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
+                        Tài khoản
+                      </h4>
+                      <div className="space-y-1 mb-3">
+                        <Link
+                          to="/dashboard"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                        >
+                          <LayoutDashboard className="w-4 h-4" />
+                          <span>Bảng điều khiển</span>
+                        </Link>
+                        <div className="border-t-2 border-border my-3"></div>
+                        <a
+                          href="#"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                        >
+                          <User className="w-4 h-4" />
+                          <span>Hồ sơ</span>
+                        </a>
+                        <a
+                          href="#"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                        >
+                          <Settings className="w-4 h-4" />
+                          <span>Cài đặt</span>
+                        </a>
+                        <Link
+                          to="/your-projects"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                        >
+                          <FolderOpen className="w-4 h-4" />
+                          <span>Dự án của bạn</span>
+                        </Link>
+                        <Link
+                          to="/wallet"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                        >
+                          <Wallet className="w-4 h-4" />
+                          <span>Ví</span>
+                        </Link>
                       </div>
-                      <span className="text-sm font-medium">Tạo chiến dịch mới</span>
-                    </Link>
 
-                    {/* Logout */}
-                    <div className="border-t-2 border-border mt-3 pt-3">
-                      <button
-                        onClick={() => {
-                          // Handle logout
-                          setIsUserMenuOpen(false);
-                        }}
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors w-full"
+                      {/* Divider */}
+                      <div className="border-t-2 border-border my-3"></div>
+
+                      {/* Create New Campaign Button */}
+                      <Link
+                        to="/campaigns/create"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
                       >
-                        <LogOut className="w-4 h-4" />
-                        <span>Đăng xuất</span>
-                      </button>
+                        <div className="w-10 h-10 flex-shrink-0 bg-primary/10 rounded flex items-center justify-center border-2 border-dashed border-primary">
+                          <Plus className="w-5 h-5" />
+                        </div>
+                        <span className="text-sm font-medium">Tạo chiến dịch mới</span>
+                      </Link>
+
+                      {/* Logout */}
+                      <div className="border-t-2 border-border mt-3 pt-3">
+                        <button
+                          onClick={() => {
+                            logout();
+                            setIsUserMenuOpen(false);
+                            navigate('/auth', { state: { mode: 'login' } });
+                          }}
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors w-full"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Đăng xuất</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Button
+                  size="sm"
+                  onClick={() => navigate('/auth', { state: { mode: 'register' } })}
+                >
+                  Đăng ký
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-current"
+                  onClick={() => navigate('/auth', { state: { mode: 'login' } })}
+                >
+                  Đăng nhập
+                </Button>
+              </>
+            )}
           </div>
         </div>
-      </div>
-
-      {/* Mobile - Two Rows */}
+      </div>      {/* Mobile - Two Rows */}
       <div className="md:hidden h-full flex flex-col">
         {/* Row 1 - Logo and Actions */}
         <div className="flex items-center justify-between px-4 h-1/2 border-b border-gray-200 dark:border-gray-700">
@@ -251,16 +270,25 @@ export const CreateCampaignHeader = ({
             </button>
 
             {/* User Avatar */}
-            <button
-              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="flex-shrink-0"
-            >
-              <img
-                src={user.avatar}
-                alt={user.name}
-                className="w-8 h-8 rounded-full border-2 border-gray-200 dark:border-gray-700 hover:ring-2 hover:ring-primary transition-all cursor-pointer"
-              />
-            </button>
+            {isLoggedIn && user ? (
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex-shrink-0"
+              >
+                <img
+                  src={avatarSrc}
+                  alt={displayName}
+                  className="w-8 h-8 rounded-full border-2 border-gray-200 dark:border-gray-700 hover:ring-2 hover:ring-primary transition-all cursor-pointer"
+                />
+              </button>
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => navigate('/auth', { state: { mode: 'login' } })}
+              >
+                Đăng nhập
+              </Button>
+            )}
           </div>
         </div>
 

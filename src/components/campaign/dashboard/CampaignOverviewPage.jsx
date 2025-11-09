@@ -91,7 +91,7 @@ const calculateRewardsProgress = (campaign) => {
 /**
  * Circular Progress Component
  */
-const CircularProgress = ({ percentage, size = 60, strokeWidth = 6 }) => {
+const CircularProgress = ({ percentage, size = 50, strokeWidth = 3 }) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
     const offset = circumference - (percentage / 100) * circumference;
@@ -100,7 +100,7 @@ const CircularProgress = ({ percentage, size = 60, strokeWidth = 6 }) => {
     return (
         <div className="relative inline-flex items-center justify-center">
             <svg width={size} height={size} className="transform -rotate-90">
-                {/* Background circle */}
+                {/* Background circle (track) */}
                 <circle
                     cx={size / 2}
                     cy={size / 2}
@@ -122,22 +122,25 @@ const CircularProgress = ({ percentage, size = 60, strokeWidth = 6 }) => {
                     strokeDashoffset={offset}
                     strokeLinecap="round"
                     className={`transition-all duration-300 ${isComplete
-                            ? 'text-green-500'
-                            : percentage >= 50
-                                ? 'text-primary'
-                                : 'text-yellow-500'
+                        ? 'text-primary'
+                        : percentage >= 50
+                            ? 'text-primary'
+                            : 'text-yellow-500'
                         }`}
                 />
             </svg>
-            {/* Check Icon */}
+            {/* Center circle with shadow and check icon */}
             <div className="absolute inset-0 flex items-center justify-center">
-                <Check
-                    className={`w-6 h-6 transition-colors duration-300 ${isComplete
-                            ? 'text-white'
-                            : 'text-gray-400 dark:text-gray-500'
-                        }`}
-                    strokeWidth={3}
-                />
+                <div className={`rounded-full flex items-center justify-center transition-all duration-300 ${isComplete ? 'w-12 h-12 bg-primary' : 'w-12 h-12 bg-white dark:bg-darker shadow-lg'
+                    }`}>
+                    <Check
+                        className={`transition-colors duration-300 ${isComplete
+                            ? 'w-5 h-5 text-white'
+                            : 'w-5 h-5 text-gray-400 dark:text-gray-500'
+                            }`}
+                        strokeWidth={2}
+                    />
+                </div>
             </div>
         </div>
     );
@@ -154,7 +157,7 @@ const SectionItem = ({ title, description, completed, onClick, progress = 0 }) =
         >
             {/* Icon with Progress */}
             <div className="flex-shrink-0">
-                <CircularProgress percentage={progress} size={56} strokeWidth={5} />
+                <CircularProgress percentage={progress} size={50} strokeWidth={2} />
             </div>
 
             {/* Content */}

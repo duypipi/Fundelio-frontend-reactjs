@@ -178,7 +178,7 @@ export const ProjectCard = ({
                   cy="28"
                   r="24"
                   stroke="currentColor"
-                  strokeWidth="4"
+                  strokeWidth="2"
                   fill="none"
                   className="text-gray-200 dark:text-gray-700"
                 />
@@ -188,7 +188,7 @@ export const ProjectCard = ({
                   cy="28"
                   r="24"
                   stroke="url(#circularGradient)"
-                  strokeWidth="4"
+                  strokeWidth="2"
                   fill="none"
                   strokeLinecap="round"
                   strokeDasharray={`${2 * Math.PI * 24}`}
