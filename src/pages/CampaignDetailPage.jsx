@@ -239,7 +239,8 @@ export default function CampaignDetailPage() {
   // Check if we're in preview mode based on route path
   const isPreview = location.pathname.includes('/preview/');
 
-  useEffect(() => {
+  // Check if opened from admin (to hide edit button)
+  const fromAdmin = location.state?.fromAdmin || false; useEffect(() => {
     const loadCampaignData = async () => {
       setLoading(true);
 
@@ -338,30 +339,32 @@ export default function CampaignDetailPage() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
                 <span className="font-semibold text-sm sm:text-base">Chế độ xem trước</span>
                 <span className="text-xs sm:text-sm opacity-90">
-                  Chỉ bạn mới thấy trang này
+                  {fromAdmin ? 'Xem trước chiến dịch từ Admin' : 'Chỉ bạn mới thấy trang này'}
                 </span>
               </div>
             </div>
             <div className="flex gap-2 w-full sm:w-auto">
-              <button
-                onClick={() => {
-                  // Get the real campaign ID from previewId or campaignData
-                  const realCampaignId = previewId && !isPreviewId(previewId)
-                    ? previewId
-                    : campaignData?.campaign?.campaign_id;
+              {!fromAdmin && (
+                <button
+                  onClick={() => {
+                    // Get the real campaign ID from previewId or campaignData
+                    const realCampaignId = previewId && !isPreviewId(previewId)
+                      ? previewId
+                      : campaignData?.campaign?.campaign_id;
 
-                  if (realCampaignId && realCampaignId !== 'preview') {
-                    navigate(`/campaigns/${realCampaignId}/edit?tab=basic`);
-                  } else {
-                    navigate('/campaigns/create');
-                  }
-                }}
-                className="flex items-center gap-1.5 bg-white text-blue-600 dark:text-blue-700 px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-100 transition-colors whitespace-nowrap flex-1 sm:flex-none justify-center"
-              >
-                <Edit className="w-4 h-4" />
-                <span className="hidden sm:inline">Thoát xem trước</span>
-                <span className="sm:hidden">Chỉnh sửa</span>
-              </button>
+                    if (realCampaignId && realCampaignId !== 'preview') {
+                      navigate(`/campaigns/${realCampaignId}/edit?tab=basic`);
+                    } else {
+                      navigate('/campaigns/create');
+                    }
+                  }}
+                  className="flex items-center gap-1.5 bg-white text-blue-600 dark:text-blue-700 px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-100 transition-colors whitespace-nowrap flex-1 sm:flex-none justify-center"
+                >
+                  <Edit className="w-4 h-4" />
+                  <span className="hidden sm:inline">Thoát xem trước</span>
+                  <span className="sm:hidden">Chỉnh sửa</span>
+                </button>
+              )}
               <button
                 onClick={() => navigate(-1)}
                 className="flex items-center gap-1.5 bg-blue-700 dark:bg-blue-800 text-white px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium hover:bg-blue-800 dark:hover:bg-blue-900 transition-colors border border-blue-500 dark:border-blue-600 whitespace-nowrap"

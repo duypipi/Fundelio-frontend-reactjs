@@ -27,6 +27,12 @@ export const campaignApi = {
         });
     },
 
+    updateCampaignStatus(campaignId, statusData) {
+        return httpService.put(`/campaigns/${campaignId}/status`, statusData, {
+            requireToken: true,
+        });
+    },
+
     // Campaign Sections (Story)
     createCampaignSection(campaignId, sectionData) {
         console.log('Creating campaign section for:', campaignId, 'with data:', sectionData);
