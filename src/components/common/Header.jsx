@@ -362,7 +362,7 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             >
 
               <span className={`text-md font-bold ${(user.coins === 0 || user.coins === undefined)
-                ? 'text-red-600 dark:text-red-400'
+                ? 'text-red-400 dark:text-red-400'
                 : 'text-primary dark:text-primary-400'
                 }`}>
                 {formatNumber(user.coins)} VND

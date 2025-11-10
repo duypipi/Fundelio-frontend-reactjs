@@ -21,6 +21,7 @@ import YourProjectsPage from '@/pages/YourProjectsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ForbiddenPage from '@/pages/ForbiddenPage';
 import CampaignOverviewPage from '@/components/campaign/dashboard/CampaignOverviewPage';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 /**
  * Application routes configuration
@@ -50,18 +51,6 @@ export const router = createBrowserRouter([
       { path: 'wallet', element: <WalletPage /> },
 
       { path: 'your-projects', element: <YourProjectsPage /> },
-
-      // Error pages
-      { path: '403', element: <ForbiddenPage /> },
-      { path: '404', element: <NotFoundPage /> },
-
-      // {
-      //   path: 'auth',
-      //   children: [
-      //     { path: 'login', element: <LoginPage /> },
-      //     { path: 'register', element: <RegisterPage /> },
-      //   ],
-      // }
     ],
   },
   {
@@ -83,7 +72,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/admin',
-    element: <AdminLayout />,
+    element: (
+      <ProtectedRoute requiredRole="ADMIN">
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <AdminDashboard /> },
       { path: 'users', element: <UsersPage /> },
@@ -97,4 +90,5 @@ export const router = createBrowserRouter([
     path: '*',
     element: <NotFoundPage />,
   },
+   { path: '/403', element: <ForbiddenPage /> },
 ]);
