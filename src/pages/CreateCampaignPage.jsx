@@ -344,7 +344,17 @@ export default function CreateCampaignPage() {
       },
     };
 
-    // Generate unique preview ID
+    // Check if we have a real campaignId (from create/edit)
+    if (campaignId) {
+      // Navigate to preview route with campaignId
+      navigate(`/campaigns/preview/${campaignId}`, {
+        state: { campaignData, isPreview: true },
+      });
+      toast.success('Đang chuyển đến trang xem trước...');
+      return;
+    }
+
+    // Fallback: Generate unique preview ID for unsaved campaigns
     const previewId = generatePreviewId();
 
     // Save to sessionStorage (will automatically handle large images)

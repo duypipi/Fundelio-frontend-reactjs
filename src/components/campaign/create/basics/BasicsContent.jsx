@@ -31,6 +31,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
 
   // Initialize with empty state to avoid loading sample data
   const [formData, setFormData] = useState({
+    campaignId: campaignId || '', // Include campaignId
     title: '',
     description: '',
     goalAmount: '',
@@ -44,7 +45,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState({}); 
+  const [fieldErrors, setFieldErrors] = useState({});
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false); // Track if data has been loaded from Redux
@@ -185,6 +186,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
         const responseData = response.data.data;
         const updatedFormData = {
           ...formData,
+          campaignId: responseData.campaignId, // Lưu campaignId
           title: responseData.title || formData.title,
           description: responseData.description || formData.description,
           goalAmount: responseData.goalAmount || formData.goalAmount,

@@ -1,15 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { Eye, Edit, X } from 'lucide-react';
 import CampaignHeader from '@/components/campaign/CampaignHeader';
 import CampaignTabs from '@/components/campaign/CampaignTabs';
 import RelatedCampaigns from '@/components/campaign/RelatedCampaigns';
 import { mockProjects } from '@/data/mockProjects';
 import { mockCampaignStory, getBlanksFromSections } from '@/data/mockCampaignStory';
 import { getPreviewData, isPreviewId } from '@/utils/previewStorage';
+import { campaignApi } from '@/api/campaignApi';
 
-/**
- * Transform preview data from create page to campaign detail format
- */
+function transformApiData(apiData) {
+  console.log('Transforming API data:', apiData);
+
+  // Calculate days left
+  const endDate = apiData.endTime ? new Date(apiData.endTime) : new Date();
+  const today = new Date();
+  const daysLeft = Math.max(0, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
+
+  return {
+    campaign: {
+      campaign_id: apiData.campaignId,
+      title: apiData.title || 'Untitled Campaign',
+      description: apiData.description || '',
+      highlights: apiData.description || '',
+      goal_amount: apiData.goalAmount || 0,
+      pledged_amount: apiData.currentAmount || 0,
+      backers_count: apiData.totalBackers || 0,
+      category: apiData.campaignCategory || 'Uncategorized',
+      introImageUrl: apiData.introImageUrl || 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1200&auto=format&fit=crop',
+      introVideoUrl: apiData.introVideoUrl || null,
+      start_date: apiData.startTime ? apiData.startTime.split('T')[0] : new Date().toISOString().split('T')[0],
+      end_date: apiData.endTime ? apiData.endTime.split('T')[0] : new Date().toISOString().split('T')[0],
+      status: apiData.status || 'active',
+      currency: 'VND',
+      daysLeft,
+      pledged: apiData.currentAmount || 0,
+      goal: apiData.goalAmount || 0,
+      backers: apiData.totalBackers || 0,
+      creator: {
+        name: apiData.owner?.fullName || 'Creator',
+        location: 'Vietnam',
+        link: '#creator-profile',
+      },
+    },
+    rewards: [],
+    items: [],
+    addOns: [],
+    blanks: apiData.campaignSections ? getBlanksFromSections(apiData.campaignSections) : [],
+    creator: {
+      name: apiData.owner?.fullName || 'Creator',
+      username: apiData.owner?.username || 'creator',
+      avatar: apiData.owner?.profileImage || 'https://i.pravatar.cc/150?img=12',
+      bio: apiData.owner?.bio || 'Campaign creator',
+      badges: [],
+      stats: {
+        createdProjects: 0,
+        backedProjects: 0,
+        lastLogin: new Date().toLocaleDateString(),
+        accountCreated: new Date().toLocaleDateString()
+      },
+      socials: {},
+      isVerified: false,
+      moreHref: '#creator-profile',
+    },
+    otherProjects: [],
+  };
+}
+
+
 function transformPreviewData(previewData) {
   const { basics, story, rewards } = previewData;
   console.log('Transforming preview data:', previewData);
@@ -21,19 +79,20 @@ function transformPreviewData(previewData) {
 
   return {
     campaign: {
-      campaign_id: 'preview',
+      campaign_id: basics?.campaignId || 'preview', // Lấy campaignId nếu có
       title: basics?.title || 'Untitled Campaign',
       description: basics?.description || '',
+      highlights: basics?.description || '',
       goal_amount: basics?.goalAmount || 50000.00,
       pledged_amount: 0,
       backers_count: 0,
-      category: basics?.category || 'Uncategorized',
-      intro_video_url: basics?.introVideoUrl || null,
+      category: basics?.campaignCategory || 'Uncategorized',
+      introImageUrl: basics?.introImageUrl || 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1200&auto=format&fit=crop',
+      introVideoUrl: basics?.introVideoUrl || null,
       start_date: basics?.startTime || new Date().toISOString().split('T')[0],
       end_date: basics?.endTime || new Date().toISOString().split('T')[0],
       status: 'preview',
-      imageUrl: basics?.imageUrl || 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1200&auto=format&fit=crop',
-      currency: 'USD',
+      currency: 'VND',
       daysLeft,
       pledged: 0,
       goal: basics?.goalAmount || 50000.00,
@@ -171,37 +230,68 @@ function getMockCampaignData() {
 }
 
 export default function CampaignDetailPage() {
-  const { previewId } = useParams();
+  const { previewId, campaignId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [campaignData, setCampaignData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isPreview, setIsPreview] = useState(false);
+
+  // Check if we're in preview mode based on route path
+  const isPreview = location.pathname.includes('/preview/');
 
   useEffect(() => {
     const loadCampaignData = async () => {
       setLoading(true);
 
-      if (previewId && isPreviewId(previewId)) {
-        setIsPreview(true);
+      try {
+        // Preview mode - check previewId
+        if (isPreview && previewId) {
+          // First try to load real campaign if previewId is actually a campaignId (UUID)
+          if (!isPreviewId(previewId)) {
+            const response = await campaignApi.getCampaignById(previewId);
 
-        const stateData = location.state?.campaignData;
-
-        if (stateData) {
-          setCampaignData(transformPreviewData(stateData));
-        } else {
-          const storedData = getPreviewData(previewId);
-
-          if (storedData) {
-            setCampaignData(transformPreviewData(storedData));
+            if (response?.data?.data) {
+              setCampaignData(transformApiData(response.data.data));
+            } else {
+              console.error('Campaign not found');
+              setCampaignData(getMockCampaignData());
+            }
           } else {
-            console.error('Preview data not found');
-            navigate('/campaigns/create');
-            return;
+            // It's a real preview ID
+            const stateData = location.state?.campaignData;
+
+            if (stateData) {
+              setCampaignData(transformPreviewData(stateData));
+            } else {
+              const storedData = getPreviewData(previewId);
+
+              if (storedData) {
+                setCampaignData(transformPreviewData(storedData));
+              } else {
+                console.error('Preview data not found');
+                navigate('/campaigns/create');
+                return;
+              }
+            }
           }
         }
-      } else {
-        setIsPreview(false);
+        // Normal mode - load campaign by ID
+        else if (campaignId) {
+          const response = await campaignApi.getCampaignById(campaignId);
+
+          if (response?.data?.data) {
+            setCampaignData(transformApiData(response.data.data));
+          } else {
+            console.error('Campaign not found');
+            setCampaignData(getMockCampaignData());
+          }
+        }
+        // Default mock data
+        else {
+          setCampaignData(getMockCampaignData());
+        }
+      } catch (error) {
+        console.error('Error loading campaign:', error);
         setCampaignData(getMockCampaignData());
       }
 
@@ -209,7 +299,7 @@ export default function CampaignDetailPage() {
     };
 
     loadCampaignData();
-  }, [previewId, location.state, navigate]);
+  }, [previewId, campaignId, isPreview, location.state, navigate]);
 
   const handlePickPerk = () => console.log('Pick Your Perk clicked');
   const handleSave = () => console.log('Save For Later clicked');
@@ -241,50 +331,78 @@ export default function CampaignDetailPage() {
   return (
     <div className="min-h-screen bg-background-light-2 dark:bg-darker">
       {isPreview && (
-        <div className="bg-amber-500 text-white pb-3 pt-20 px-4 text-center">
-          <div className="container mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">🔍 Chế độ xem trước</span>
-              <span className="text-sm opacity-90">
-                Đây là bản xem trước chiến dịch của bạn. Người khác sẽ không thấy trang này.
-              </span>
+        <div className="bg-blue-600 dark:bg-blue-700 text-white py-2.5 sm:py-3 px-3 sm:px-4 fixed top-16 sm:top-20 left-0 right-0 z-40 shadow-lg">
+          <div className="container mx-auto flex sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+                <span className="font-semibold text-sm sm:text-base">Chế độ xem trước</span>
+                <span className="text-xs sm:text-sm opacity-90">
+                  Chỉ bạn mới thấy trang này
+                </span>
+              </div>
             </div>
-            <button
-              onClick={() => navigate('/campaigns/create')}
-              className="bg-white text-amber-600 px-4 py-1.5 rounded-md font-medium hover:bg-amber-50 transition-colors"
-            >
-              ← Quay lại chỉnh sửa
-            </button>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <button
+                onClick={() => {
+                  // Get the real campaign ID from previewId or campaignData
+                  const realCampaignId = previewId && !isPreviewId(previewId)
+                    ? previewId
+                    : campaignData?.campaign?.campaign_id;
+
+                  if (realCampaignId && realCampaignId !== 'preview') {
+                    navigate(`/campaigns/${realCampaignId}/edit?tab=basic`);
+                  } else {
+                    navigate('/campaigns/create');
+                  }
+                }}
+                className="flex items-center gap-1.5 bg-white text-blue-600 dark:text-blue-700 px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-100 transition-colors whitespace-nowrap flex-1 sm:flex-none justify-center"
+              >
+                <Edit className="w-4 h-4" />
+                <span className="hidden sm:inline">Thoát xem trước</span>
+                <span className="sm:hidden">Chỉnh sửa</span>
+              </button>
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center gap-1.5 bg-blue-700 dark:bg-blue-800 text-white px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium hover:bg-blue-800 dark:hover:bg-blue-900 transition-colors border border-blue-500 dark:border-blue-600 whitespace-nowrap"
+                aria-label="Đóng preview"
+              >
+                <X className="w-4 h-4" />
+                <span className="hidden sm:inline">Đóng</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      <CampaignHeader
-        campaign={campaignData.campaign}
-        onPickPerk={handlePickPerk}
-        onSave={handleSave}
-        onShare={handleShare}
-      />
+      <div className={isPreview ? 'pt-[104px] sm:pt-[128px]' : 'pt-16'}>
+        <CampaignHeader
+          campaign={campaignData.campaign}
+          onPickPerk={handlePickPerk}
+          onSave={handleSave}
+          onShare={handleShare}
+        />
 
-      <CampaignTabs
-        initialTab="campaign"
-        campaignProps={{
-          rewards: campaignData.rewards,
-          items: campaignData.items,
-          addOns: campaignData.addOns,
-          creator: campaignData.creator,
-          otherProjects: campaignData.otherProjects,
-          blanks: campaignData.blanks,
-          currency: campaignData.campaign.currency,
-          onPledge: handlePledge,
-        }}
-      />
+        <CampaignTabs
+          initialTab="campaign"
+          campaignProps={{
+            rewards: campaignData.rewards,
+            items: campaignData.items,
+            addOns: campaignData.addOns,
+            creator: campaignData.creator,
+            otherProjects: campaignData.otherProjects,
+            blanks: campaignData.blanks,
+            currency: campaignData.campaign.currency,
+            onPledge: handlePledge,
+          }}
+        />
 
-      {/* Related Campaigns Section */}
-      <RelatedCampaigns
-        category={campaignData.campaign.category}
-        currentCampaignId={campaignData.campaign.campaign_id}
-      />
+        {/* Related Campaigns Section */}
+        <RelatedCampaigns
+          category={campaignData.campaign.category}
+          currentCampaignId={campaignData.campaign.campaign_id}
+        />
+      </div>
     </div>
   );
 }

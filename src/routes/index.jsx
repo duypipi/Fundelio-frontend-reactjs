@@ -41,7 +41,8 @@ export const router = createBrowserRouter([
         path: 'campaigns',
         children: [
           { path: 'detail', element: <CampaignDetailPage /> },
-          { path: 'preview/:previewId', element: <CampaignDetailPage /> },
+          { path: 'preview/:campaignId', element: <CampaignDetailPage isPreviewMode={true} /> },
+          { path: ':campaignId', element: <CampaignDetailPage /> },
           { path: ':campaignId/dashboard', element: <CampaignOverviewPage /> },
         ],
       },
