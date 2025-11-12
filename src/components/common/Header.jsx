@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
@@ -62,6 +62,35 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+    // Tạo avatar URL từ tên nếu không có avatar
+    const avatarUrl = useMemo(() => {
+      if (user?.avatar) {
+        return user.avatar;
+      }
+  
+      // Lấy tên từ user để tạo avatar
+      const firstName = user?.firstName || user?.first_name || '';
+      const lastName = user?.lastName || user?.last_name || '';
+      const fullName =
+        `${firstName} ${lastName}`.trim() || user?.email || user?.name || 'User';
+  
+      // Encode tên để dùng trong URL
+      const encodedName = encodeURIComponent(fullName);
+      return `https://ui-avatars.com/api/?name=${encodedName}&size=150&background=random`;
+    }, [user]);
+  
+    // Lấy tên hiển thị
+    const displayName = useMemo(() => {
+      if (user?.firstName || user?.first_name) {
+        const firstName = user?.firstName || user?.first_name || '';
+        const lastName = user?.lastName || user?.last_name || '';
+        return (
+          `${firstName} ${lastName}`.trim() || user?.email || user?.name || 'User'
+        );
+      }
+      return user?.email || user?.name || 'User';
+    }, [user]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -171,6 +200,8 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
     if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
     return num.toString();
   };
+
+  console.log('user coins:', user);
 
   return (
     <header
@@ -431,17 +462,26 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             <div className="relative user-menu-container">
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-2 p-1 rounded-full transition-all group relative"
+                className="flex items-center gap-2 p-1 rounded-full transition-all group hover:cursor-pointer relative"
               >
-                {/* Gradient border effect */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-[2px]">
-                  <div className="w-full h-full rounded-full bg-white dark:bg-darker-2"></div>
-                </div>
                 <img
-                  src={user.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Default'}
-                  alt={user.name || 'User'}
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:shadow-primary-400 hover:shadow-md transition-colors relative z-10"
-                />
+                src={avatarUrl}
+                alt={displayName}
+                className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700'
+                onError={(e) => {
+                  // Fallback nếu avatar lỗi
+                  const firstName = user?.firstName || user?.first_name || '';
+                  const lastName = user?.lastName || user?.last_name || '';
+                  const fullName =
+                    `${firstName} ${lastName}`.trim() ||
+                    user?.email ||
+                    user?.name ||
+                    'User';
+                  const encodedName = encodeURIComponent(fullName);
+                  console.log('Fallback avatar for:', encodedName);
+                  e.target.src = `https://ui-avatars.com/api/?name=${encodedName}&size=150&background=random`;
+                }}
+              />
               </button>
 
               {/* User Dropdown Menu */}

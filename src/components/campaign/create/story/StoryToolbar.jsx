@@ -154,7 +154,7 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
         {/* Text Formatting */}
         <button
           onClick={handleBold}
-          className="px-2.5 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-darker rounded-sm text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
+          className="px-2.5 py-2 border border-border bg-white dark:bg-darker rounded-sm text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
           title="Bold (Ctrl+B)"
         >
           B
@@ -162,7 +162,7 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
 
         <button
           onClick={handleItalic}
-          className="px-2.5 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-darker rounded-sm text-sm italic hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
+          className="px-2.5 py-2 border border-border bg-white dark:bg-darker rounded-sm text-sm italic hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
           title="Italic (Ctrl+I)"
         >
           I
@@ -170,7 +170,7 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
 
         <button
           onClick={handleUnderline}
-          className="px-2.5 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-darker rounded-sm text-sm underline hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
+          className="px-2.5 py-2 border border-border bg-white dark:bg-darker rounded-sm text-sm underline hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
           title="Underline (Ctrl+U)"
         >
           U
@@ -182,7 +182,7 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
         {/* Heading */}
         <button
           onClick={handleH2}
-          className="flex items-center gap-1.5 px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-darker rounded-sm text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
+          className="flex items-center gap-1.5 px-3 py-2 border border-border bg-white dark:bg-darker rounded-sm text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
           title="Heading 2"
         >
           <Heading2 className="w-4 h-4" />
@@ -192,7 +192,7 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
         {/* Video */}
         <button
           onClick={() => setIsVideoModalOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-darker rounded-sm text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
+          className="flex items-center gap-1.5 px-3 py-2 border border-border bg-white dark:bg-darker rounded-sm text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
           title="Add Video"
         >
           <Video className="w-4 h-4" />
@@ -202,7 +202,7 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
         {/* Image */}
         <button
           onClick={handleImagePicker}
-          className="flex items-center gap-1.5 px-3 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-darker rounded-sm text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
+          className="flex items-center gap-1.5 px-3 py-2 border border-border bg-white dark:bg-darker rounded-sm text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors dark:text-white"
           title="Upload Image/GIF"
         >
           <Image className="w-4 h-4" />
@@ -221,7 +221,7 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
           disabled={saveStatus === 'saving'}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-sm text-sm font-medium transition-colors ml-auto ${saveStatus === 'saving'
             ? 'bg-muted text-muted-foreground cursor-not-allowed'
-            : 'bg-white dark:bg-darker border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+            : 'bg-white dark:bg-darker border border-border text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
           title={
             saveStatus === 'saving'

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Eye,
@@ -36,8 +36,33 @@ export const CreateCampaignHeader = ({
   const navigate = useNavigate();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { isLoggedIn, user, logout } = useAuth();
-  const avatarSrc = user?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Fundelio';
-  const displayName = user?.name || 'Người dùng';
+
+  const avatarUrl = useMemo(() => {
+    if (user?.avatar) {
+      return user.avatar;
+    }
+
+    // Lấy tên từ user để tạo avatar
+    const firstName = user?.firstName || user?.first_name || '';
+    const lastName = user?.lastName || user?.last_name || '';
+    const fullName =
+      `${firstName} ${lastName}`.trim() || user?.email || user?.name || 'User';
+
+    // Encode tên để dùng trong URL
+    const encodedName = encodeURIComponent(fullName);
+    return `https://ui-avatars.com/api/?name=${encodedName}&size=150&background=random`;
+  }, [user]);
+
+  const displayName = useMemo(() => {
+    if (user?.firstName || user?.first_name) {
+      const firstName = user?.firstName || user?.first_name || '';
+      const lastName = user?.lastName || user?.last_name || '';
+      return (
+        `${firstName} ${lastName}`.trim() || user?.email || user?.name || 'User'
+      );
+    }
+    return user?.email || user?.name || 'User';
+  }, [user]);
 
   const tabs = [
     { id: 'basic', label: 'Cơ bản' },
@@ -64,7 +89,7 @@ export const CreateCampaignHeader = ({
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-darker-2 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 h-20`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-background-header-dark border-b border-border dark:border-border transition-all duration-300 h-20`}>
       {/* Desktop - Single Row */}
       <div className="hidden md:block h-full">
         <div className="mx-auto max-w-container px-4 sm:px-6 h-full flex items-center justify-between gap-4">
@@ -140,10 +165,14 @@ export const CreateCampaignHeader = ({
                     <div className="w-full h-full rounded-full bg-white dark:bg-darker-2"></div>
                   </div>
                   <img
-                    src={avatarSrc}
+                    src={avatarUrl}
                     alt={displayName}
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:shadow-primary-400 hover:shadow-md transition-colors relative z-10"
+                    className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700 relative z-10'
                   />
+                  {/* <ChevronDown
+                    className={`w-4 h-4 text-text-primary dark:text-white transition-transform ${isUserMenuOpen ? 'rotate-180' : ''
+                      }`}
+                  /> */}
                 </button>
 
                 {/* User Dropdown Menu */}
@@ -275,11 +304,23 @@ export const CreateCampaignHeader = ({
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex-shrink-0"
               >
-                <img
-                  src={avatarSrc}
-                  alt={displayName}
-                  className="w-8 h-8 rounded-full border-2 border-gray-200 dark:border-gray-700 hover:ring-2 hover:ring-primary transition-all cursor-pointer"
-                />
+               <img
+                src={avatarUrl}
+                alt={displayName}
+                className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700'
+                onError={(e) => {
+                  // Fallback nếu avatar lỗi
+                  const firstName = user?.firstName || user?.first_name || '';
+                  const lastName = user?.lastName || user?.last_name || '';
+                  const fullName =
+                    `${firstName} ${lastName}`.trim() ||
+                    user?.email ||
+                    user?.name ||
+                    'User';
+                  const encodedName = encodeURIComponent(fullName);
+                  e.target.src = `https://ui-avatars.com/api/?name=${encodedName}&size=150&background=random`;
+                }}
+              />
               </button>
             ) : (
               <Button

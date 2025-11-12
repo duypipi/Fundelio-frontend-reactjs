@@ -219,7 +219,7 @@ function getMockCampaignData() {
         id: 'item-003',
         title: 'Protective Case',
         description: 'Shockproof protective carrying case with soft interior',
-        image: 'https://images.unsplash.com/photo-1585838587832-f6aeccb23d63?q=80&w=300&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1759673824881-0ddb7f27d970?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1674',
       },
       {
         id: 'item-004',
@@ -415,7 +415,7 @@ export default function CampaignDetailPage() {
   return (
     <div className="min-h-screen bg-background-light-2 dark:bg-darker">
       {isPreview && (
-        <div className="bg-blue-600 dark:bg-blue-700 text-white py-2.5 sm:py-3 px-3 sm:px-4 fixed top-16 sm:top-20 left-0 right-0 z-40 shadow-lg">
+        <div className="bg-blue-600 dark:bg-blue-700 text-white py-2.5 sm:py-3 px-3 sm:px-4 fixed top-0 left-0 right-0 z-40 shadow-lg">
           <div className="container mx-auto flex sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <Eye className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
@@ -461,7 +461,7 @@ export default function CampaignDetailPage() {
         </div>
       )}
 
-      <div className={isPreview ? 'pt-[104px] sm:pt-[128px]' : 'pt-16'}>
+      <div className={isPreview ? 'pt-[52px] sm:pt-[60px]' : ''}>
         <CampaignHeader
           campaign={campaignData.campaign}
           onPickPerk={handlePickPerk}

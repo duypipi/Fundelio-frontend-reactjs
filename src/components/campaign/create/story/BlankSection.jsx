@@ -142,7 +142,7 @@ function BlankSection({ blank, onTitleChange, onContentChange, onFocus }) {
         ref={titleRef}
         contentEditable
         suppressContentEditableWarning
-        className="w-full px-4 py-3 text-xl font-semibold border border-gray-300 dark:border-gray-700 rounded-sm mb-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-darker dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600"
+        className="w-full px-4 py-3 text-xl font-semibold border border-border rounded-sm mb-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-darker dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600"
         placeholder="Tiêu đề blank..."
         spellCheck={false}
         onInput={handleTitleInput}
@@ -155,7 +155,7 @@ function BlankSection({ blank, onTitleChange, onContentChange, onFocus }) {
         contentEditable
         suppressContentEditableWarning
         spellCheck={false}
-        className="min-h-[40vh] p-4 border border-gray-300 dark:border-gray-700 rounded-sm 
+        className="min-h-[40vh] p-4 border border-border rounded-sm 
         focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent 
         dark:bg-darker dark:text-white prose prose-sm dark:prose-invert max-w-none
         [&_i]:italic [&_em]:italic"
