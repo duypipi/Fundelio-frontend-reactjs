@@ -1,60 +1,57 @@
 "use client";
+
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { userApi } from "@/api/userApi";
+import { userApi } from "@/api/userApi";  
 
-export default function VerifyChangeEmailPage() {
-  const router = useRouter();
-  const { token } = router.query;
+export default function VerifyChangeEmail() {
+  const navigate = useNavigate(); 
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
 
-  const [status, setStatus] = useState("idle");
+  const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (!token) return;
-    (async () => {
+    if (!token) {
+      setMessage("Token không hợp lệ!");
+      setStatus("error");
+      return;
+    }
+
+    const verifyEmail = async () => {
       try {
         setStatus("loading");
-        const res = await userApi.verifyChangeEmail(token); // truyền string
-        const ok = res?.data?.success ?? true;
-        setMessage(res?.data?.message || "Xác thực thành công.");
-        if (ok) {
-          setStatus("success");
-          setTimeout(() => router.replace("/login"), 1000);
-        } else {
-          setStatus("error");
-        }
-      } catch (err) {
-        const msg =
-          err?.response?.data?.message || err?.message || "Xác thực thất bại.";
-        setMessage(msg);
+        console.log(" Verifying token:", token);
+
+
+        const response = await userApi.verifyChangeEmail(token);
+
+        console.log("Success:", response?.data);
+        setMessage(
+          response?.data?.message || "Email đã được xác thực thành công!"
+        );
+        setStatus("success");
+
+        setTimeout(() => {
+          navigate("/auth/login");
+        }, 2000);
+      } catch (error) {
+        console.error("Error:", error);
+        const errorMsg =
+          error?.response?.data?.message ||
+          error?.message ||
+          "Xác thực thất bại!";
+        setMessage(errorMsg);
         setStatus("error");
       }
-    })();
-  }, [token, router]);
+    };
+
+    verifyEmail();
+  }, [token, navigate]);
 
   return (
-    <main className="min-h-[60vh] flex items-center justify-center p-6">
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-neutral-900 p-6 text-center">
-        <h1 className="text-xl font-semibold mb-2">Verify Email Change</h1>
-
-        {status === "loading" ? (
-          <p className="text-sm text-muted-foreground">Đang xác thực… Vui lòng chờ.</p>
-        ) : (
-          <p className={status === "success" ? "text-emerald-600" : "text-red-500"}>
-            {message}
-          </p>
-        )}
-
-        <div className="mt-6">
-          <button
-            onClick={() => router.replace("/login")}
-            className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-semibold text-white dark:bg-neutral-800"
-          >
-            Về trang đăng nhập
-          </button>
-        </div>
-      </div>
-    </main>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-darker">
+    </div>
   );
 }

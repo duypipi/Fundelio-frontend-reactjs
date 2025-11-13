@@ -22,6 +22,8 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import ForbiddenPage from '@/pages/ForbiddenPage';
 import UserProfilePage from "@/pages/UserProfilePage";
 
+import VerifyChangeEmail from '@/components/auth/VerifyChangeEmail';
+
 /**
  * Application routes configuration
  */
@@ -65,15 +67,7 @@ export const router = createBrowserRouter([
     path: '/campaigns/create',
     element: <CreateCampaignPage />,
   },
-  {
-    path: '/auth',
-    element: <AuthLayout />,
-    children: [
-      { index: true, element: <AuthPage /> },
-      { path: 'reset-password', element: <ResetPasswordPage /> },
-      { path: 'verify-active-account', element: <VerifyAccountPage /> },
-    ],
-  },
+
   {
     path: '/admin',
     element: <AdminLayout />,
@@ -83,6 +77,16 @@ export const router = createBrowserRouter([
       { path: 'roles', element: <RolesPage /> },
       { path: 'permissions', element: <PermissionsPage /> },
       { path: 'campaigns', element: <AdminCampaignsPage /> },
+    ],
+  },
+  {
+    path: '/auth',
+    element: <AuthLayout />,
+    children: [
+      { index: true, element: <AuthPage /> },
+      { path: 'reset-password', element: <ResetPasswordPage /> },
+      { path: 'verify-active-account', element: <VerifyAccountPage /> },
+      { path: 'verify-change-email', element: <VerifyChangeEmail /> },
     ],
   },
   // Catch all 404 - must be last
