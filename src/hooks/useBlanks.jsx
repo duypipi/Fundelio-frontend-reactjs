@@ -68,7 +68,6 @@ function useBlanks() {
     }
 
     dispatch(deleteBlankAction(id));
-    toast.success('Đã xóa blank thành công!');
   }, [dispatch, order.length]);
 
   const setActiveEditor = (_id, editor) => {

@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
  * TocMenu — NestJS-like timeline with dots + vertical line
  */
 const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
+  
   useEffect(() => {
     console.log('📋 TocMenu received:', {
       blanksCount: blanks.length,
@@ -20,6 +21,9 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  console.log('Rendering TocMenu with blanks:', blanks);
+  console.log('Active ID:', activeId);
+
   return (
     <nav
       className="sticky top-[88px] max-h-[calc(100vh-88px)] overflow-auto pr-2 scrollbar-primary"
@@ -35,8 +39,14 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
       >
         <ul className="space-y-1">
           {blanks.map((b, idx) => {
-            const isActive = activeId === b.id;
+            // Convert both to string for comparison
+            const isActive = String(activeId) === String(b.id);
+            console.log('TocMenu Item:', {
+              id: b.id,
+              isActive,
+            });
 
+            console.log('Rendering TocMenu Item:', b.id, 'activeId:', activeId);
             return (
               <li key={b.id}>
                 <button

@@ -49,6 +49,11 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
     const iframe = buildVideoEmbed(url);
     if (iframe) {
       placeBlock(activeEditorRef.current, iframe);
+
+      // Trigger input event to save content
+      const inputEvent = new Event('input', { bubbles: true });
+      activeEditorRef.current.dispatchEvent(inputEvent);
+
       toast.success('Đã thêm video thành công!');
     } else if (/^https?:\/\//i.test(url)) {
       execCommand('createLink', url);
@@ -102,6 +107,12 @@ export default function StoryToolbar({ activeEditorRef, onSave, saveStatus = 'id
         img.alt = file.name;
 
         placeBlock(activeEditorRef.current, img);
+
+        // Trigger input event to save content
+        const inputEvent = new Event('input', { bubbles: true });
+        activeEditorRef.current.dispatchEvent(inputEvent);
+
+        toast.success('Đã tải ảnh lên thành công!');
       } else {
         toast.error('Không lấy được URL ảnh sau khi tải lên', { id: 'upload-story-image' });
       }

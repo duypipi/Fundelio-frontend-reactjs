@@ -16,15 +16,22 @@ function BlankSection({ blank, onTitleChange, onContentChange, onFocus }) {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    // Set initial content only once when component mounts
-    if (titleRef.current && !titleRef.current.innerHTML) {
-      titleRef.current.innerHTML = blank.titleHtml || 'Untitled';
+    // Update content when blank data changes from Redux
+    if (titleRef.current && blank.titleHtml !== undefined) {
+      const currentTitle = titleRef.current.innerHTML;
+      if (currentTitle !== blank.titleHtml) {
+        titleRef.current.innerHTML = blank.titleHtml || 'Untitled';
+      }
     }
-    if (editorRef.current && !editorRef.current.innerHTML) {
-      editorRef.current.innerHTML = blank.contentHtml || '';
+
+    if (editorRef.current && blank.contentHtml !== undefined) {
+      const currentContent = editorRef.current.innerHTML;
+      // Only update if content is actually different to avoid cursor issues
+      if (currentContent !== blank.contentHtml) {
+        editorRef.current.innerHTML = blank.contentHtml || '';
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [blank.titleHtml, blank.contentHtml]);
 
   const handleTitleInput = () => {
     if (titleRef.current) {
@@ -104,10 +111,8 @@ function BlankSection({ blank, onTitleChange, onContentChange, onFocus }) {
       if (iframe) {
         e.preventDefault();
         placeBlock(editorRef.current, iframe);
-        // Trigger content change callback to update state and save
-        setTimeout(() => {
-          handleContentInput();
-        }, 100);
+        // Trigger content change callback immediately
+        handleContentInput();
       }
     }
   };
@@ -175,9 +180,23 @@ function BlankSection({ blank, onTitleChange, onContentChange, onFocus }) {
   );
 }
 
-// ✨ Custom comparison function - chỉ re-render khi blank.id thay đổi
+// ✨ Custom comparison function - re-render when content changes
 export default memo(BlankSection, (prevProps, nextProps) => {
   // Return true nếu props GIỐNG NHAU (không cần re-render)
   // Return false nếu props KHÁC NHAU (cần re-render)
-  return prevProps.blank.id === nextProps.blank.id;
+
+  // Re-render if blank ID changes or content changes
+  if (prevProps.blank.id !== nextProps.blank.id) {
+    return false; // Different blank, need re-render
+  }
+
+  if (prevProps.blank.contentHtml !== nextProps.blank.contentHtml) {
+    return false; // Content changed, need re-render
+  }
+
+  if (prevProps.blank.titleHtml !== nextProps.blank.titleHtml) {
+    return false; // Title changed, need re-render
+  }
+
+  return true; // Props are the same, skip re-render
 });

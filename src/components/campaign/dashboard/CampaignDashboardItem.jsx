@@ -182,7 +182,7 @@ export default function CampaignDashboardItem({ campaign }) {
                         )}
 
                         {/* Delete Button - Only show when status is DRAFT */}
-                        {campaign.campaignStatus === 'DRAFT' || campaign.campaignStatus === 'CANCELLED' && (
+                        {(campaign.campaignStatus === 'DRAFT' || campaign.campaignStatus === 'CANCELLED') && (
                             <button
                                 onClick={() => setShowDeleteModal(true)}
                                 disabled={isProcessing}

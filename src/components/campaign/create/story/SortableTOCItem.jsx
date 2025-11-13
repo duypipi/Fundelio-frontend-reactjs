@@ -71,7 +71,7 @@ export default function SortableTOCItem({ blank, index, onNavigate, onDelete, ca
                     aria-label="Delete blank"
                     title="Xóa blank"
                 >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-3.5 h-3.5 text-muted-foreground hover:text-red-500 dark:hover:text-red-400" />
                 </button>
             )}
         </div>

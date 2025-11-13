@@ -64,9 +64,9 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
     };
 
     const calculateTotal = () => {
-        const rewardTotal = reward.min_pledge_amount * quantity;
+        const rewardTotal = (reward.minPledgeAmount || reward.min_pledge_amount || 0) * quantity;
         const addOnsTotal = selectedAddOns.reduce(
-            (sum, addon) => sum + addon.price * addon.quantity,
+            (sum, addon) => sum + (addon.price || addon.minPledgeAmount || addon.min_pledge_amount || 0) * addon.quantity,
             0
         );
         return rewardTotal + addOnsTotal;

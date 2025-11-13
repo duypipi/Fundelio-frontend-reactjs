@@ -10,102 +10,134 @@ const useScrollSpy = (sectionIds) => {
   const [activeId, setActiveId] = useState('');
 
   useEffect(() => {
-    if (!sectionIds || sectionIds.length === 0) return;
+    if (!sectionIds || sectionIds.length === 0) {
+      return;
+    }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Find the first intersecting entry
-        const intersecting = entries.find((entry) => entry.isIntersecting);
+    let observer = null;
+    let updateTimeout = null;
 
-        if (intersecting) {
-          setActiveId(intersecting.target.id);
+    const timeoutId = setTimeout(() => {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (updateTimeout) {
+            clearTimeout(updateTimeout);
+          }
+
+          updateTimeout = setTimeout(() => {
+            const intersectingElements = [];
+
+            sectionIds.forEach((id) => {
+              const element = document.getElementById(id);
+              if (element) {
+                const rect = element.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+
+                if (rect.top < viewportHeight * 0.5 && rect.bottom > viewportHeight * 0.2) {
+                  intersectingElements.push({
+                    id,
+                    top: rect.top,
+                    bottom: rect.bottom,
+                    priority: Math.abs(rect.top - viewportHeight * 0.3)
+                  });
+                }
+              }
+            });
+
+            intersectingElements.sort((a, b) => a.priority - b.priority);
+
+            if (intersectingElements.length > 0) {
+              const newActiveId = intersectingElements[0].id;
+              setActiveId(prev => prev !== newActiveId ? newActiveId : prev);
+            }
+          }, 50);
+        },
+        {
+          rootMargin: '-20% 0px -30% 0px',
+          threshold: [0, 0.25, 0.5, 0.75, 1.0],
         }
-      },
-      {
-        rootMargin: '0px 0px -60% 0px',
-        threshold: 0.2,
-      }
-    );
+      );
 
-    // Observe all sections
-    sectionIds.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) {
-        observer.observe(element);
-      }
-    });
+      sectionIds.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          observer.observe(element);
+        }
+      });
+    }, 100);
 
     return () => {
-      observer.disconnect();
+      clearTimeout(timeoutId);
+      if (updateTimeout) {
+        clearTimeout(updateTimeout);
+      }
+      if (observer) {
+        observer.disconnect();
+      }
     };
   }, [sectionIds]);
 
   return activeId;
 };
 
-/**
- * RewardsPage Component
- * Displays reward cards with TOC navigation and pledge summary
- */
 const RewardsPage = ({ rewards = [], items = [], addOns = [], onPledge }) => {
-  const [selectedReward, setSelectedReward] = useState(null);
+  const [selectedRewards, setSelectedRewards] = useState([]);
+  const [selectedAddOns, setSelectedAddOns] = useState([]);
 
-  // Transform rewards to TOC menu items format
   const rewardMenuItems = rewards.map((reward) => ({
-    id: reward.reward_id || reward.id,
-    title_text: reward.title,
+    id: reward.rewardId,
+    titleText: reward.title,
     order: rewards.indexOf(reward),
   }));
 
-  // Use scroll spy to track active reward
-  const activeId = useScrollSpy(rewards.map((r) => r.reward_id || r.id));
-
-  // Find reward with most backers for default display
-  const mostPopularReward = rewards.length > 0
-    ? rewards.reduce((max, reward) =>
-      (reward.backers || 0) > (max.backers || 0) ? reward : max,
-      rewards[0]
-    )
-    : null;
-
-  // Set default selected reward if none selected
-  useEffect(() => {
-    if (!selectedReward && mostPopularReward) {
-      setSelectedReward({
-        reward: mostPopularReward,
-        quantity: 1,
-        addOns: [],
-        total: mostPopularReward.min_pledge_amount,
-      });
-    }
-  }, [mostPopularReward, selectedReward]);
+  const rewardIds = rewards.map((r) => String(r.rewardId || r.reward_id || r.id));
+  const activeId = useScrollSpy(rewardIds);
 
   const handleSelectReward = (rewardData) => {
-    setSelectedReward(rewardData);
+    // Always add as a new item instead of updating existing one
+    // This allows users to add the same reward multiple times with different configurations
+    setSelectedRewards([...selectedRewards, rewardData]);
+
     if (onPledge) {
       onPledge(rewardData);
     }
   };
 
-  const handleRemoveItem = (type, itemId) => {
+  const handleSelectAddOn = (addon, isSelected) => {
+    if (isSelected) {
+      setSelectedAddOns([...selectedAddOns, { ...addon, quantity: 1 }]);
+    } else {
+      setSelectedAddOns(selectedAddOns.filter(a => a.id !== addon.id));
+    }
+  };
+
+  const handleRemoveItem = (type, rewardIndex, addonIndex) => {
     if (type === 'reward') {
-      setSelectedReward(null);
-    } else if (type === 'addon' && selectedReward) {
-      setSelectedReward({
-        ...selectedReward,
-        addOns: selectedReward.addOns.filter((addon) => addon.id !== itemId),
-      });
+      setSelectedRewards(selectedRewards.filter((_, index) => index !== rewardIndex));
+    } else if (type === 'addon') {
+      if (rewardIndex !== undefined) {
+        const updated = [...selectedRewards];
+        updated[rewardIndex] = {
+          ...updated[rewardIndex],
+          addOns: updated[rewardIndex].addOns.filter((_, index) => index !== addonIndex),
+        };
+        setSelectedRewards(updated);
+      } else {
+        setSelectedAddOns(selectedAddOns.filter((_, index) => index !== addonIndex));
+      }
     }
   };
 
   const handlePickAddOns = () => {
-    // This would open an add-ons picker modal or expand add-ons section
     console.log('Pick add-ons clicked');
   };
 
   const handleSubmit = () => {
-    if (selectedReward && onPledge) {
-      onPledge(selectedReward);
+    if (selectedRewards.length > 0 && onPledge) {
+      onPledge({
+        rewards: selectedRewards,
+        addOns: selectedAddOns,
+      });
     }
   };
 
@@ -123,13 +155,15 @@ const RewardsPage = ({ rewards = [], items = [], addOns = [], onPledge }) => {
           items={items}
           addOns={addOns}
           onSelectReward={handleSelectReward}
+          onSelectAddOn={handleSelectAddOn}
         />
       </div>
 
       {/* Right Column - Pledge Summary */}
       <div className="order-3 hidden lg:block">
         <PledgeSummaryCard
-          selectedReward={selectedReward}
+          selectedRewards={selectedRewards}
+          selectedAddOns={selectedAddOns}
           onRemoveItem={handleRemoveItem}
           onPickAddOns={handlePickAddOns}
           onSubmit={handleSubmit}

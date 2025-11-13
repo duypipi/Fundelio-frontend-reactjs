@@ -23,8 +23,8 @@ export default function RootLayout() {
 
   return (
     <div className={`flex flex-col min-h-screen ${!isCampaignDetail ? 'overflow-x-hidden' : ''}`}>
-      {location.pathname !== '/' && !isPreviewMode && <Header variant={headerVariant} isFixed={isHeaderFixed} />}
-
+      {location.pathname !== '/' && !isPreviewMode && <Header variant={headerVariant} isFixed={isHeaderFixed} />} 
+      {/*  */}
       <main className={`flex-1 ${!isCampaignDetail ? 'overflow-x-hidden' : ''}`}>
         <Outlet />
       </main>

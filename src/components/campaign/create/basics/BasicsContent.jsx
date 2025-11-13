@@ -8,6 +8,7 @@ import TermsCreator from './TermsCreator';
 import toast from 'react-hot-toast';
 import { setBasics } from '@/store/campaignSlice';
 import { storageApi } from '@/api/storageApi';
+import { campaignApi } from '@/api/campaignApi';
 import { useCategories } from '@/hooks/useCategories';
 
 // Category label mapping for Vietnamese
@@ -49,7 +50,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
-  const [isInitialized, setIsInitialized] = useState(false); // Track if data has been loaded from Redux
+  const [isInitialized, setIsInitialized] = useState(false);
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
@@ -76,12 +77,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
 
   // Initialize formData from Redux when basicsData is loaded (edit mode)
   useEffect(() => {
-    console.log('BasicsContent useEffect - isEditMode:', isEditMode, 'basicsData.title:', basicsData.title, 'isInitialized:', isInitialized);
-    console.log('BasicsContent useEffect - Full basicsData:', basicsData);
-
-    // Only sync once when in edit mode and basicsData has been loaded from API
     if (isEditMode && basicsData.title && !isInitialized) {
-      console.log('BasicsContent - Loading from Redux (edit mode):', basicsData);
       setFormData(basicsData);
       setIsInitialized(true);
     }
@@ -103,42 +99,6 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
   const handleSave = async () => {
     // Clear previous errors
     setFieldErrors({});
-
-    // Validate required fields
-    if (!formData.title.trim()) {
-      toast.error('Vui lòng nhập tiêu đề dự án');
-      return;
-    }
-    if (!formData.description?.trim()) {
-      toast.error('Vui lòng nhập mô tả ngắn');
-      return;
-    }
-    if (!formData.campaignCategory) {
-      toast.error('Vui lòng chọn danh mục');
-      return;
-    }
-    if (!formData.goalAmount || formData.goalAmount < 1) {
-      toast.error('Vui lòng nhập mục tiêu gây quỹ (tối thiểu 1)');
-      return;
-    }
-    // if (!formData.imageUrl) {
-    //   toast.error('Vui lòng tải lên ảnh dự án');
-    //   return;
-    // }
-    if (!formData.startTime || !formData.endTime) {
-      toast.error('Vui lòng chọn thời gian chiến dịch');
-      return;
-    }
-    if (!formData.acceptedTerms && !isEditMode) {
-      toast.error('Vui lòng chấp nhận điều khoản dịch vụ');
-      return;
-    }
-
-    // Validate end date is after start date
-    if (new Date(formData.endTime) <= new Date(formData.startTime)) {
-      toast.error('Ngày kết thúc phải sau ngày bắt đầu');
-      return;
-    }
 
     try {
       const startTimeISO = new Date(formData.startTime).toISOString();
@@ -170,11 +130,10 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
         : await campaignApi.createCampaign(payload);
 
       if (response?.data?.data) {
-        // Update formData with response data to ensure we have latest values
         const responseData = response.data.data;
         const updatedFormData = {
           ...formData,
-          campaignId: responseData.campaignId, // Lưu campaignId
+          campaignId: responseData.campaignId,
           title: responseData.title || formData.title,
           description: responseData.description || formData.description,
           goalAmount: responseData.goalAmount || formData.goalAmount,
@@ -191,21 +150,18 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
         // Save merged data to Redux
         dispatch(setBasics(updatedFormData));
         toast.success(successMsg, { id: toastId });
-        console.log('Campaign saved:', response.data.data);
       } else {
         toast.error('Không nhận được phản hồi từ server', { id: toastId });
       }
     } catch (error) {
-      console.error('Save campaign error:', error);
-      console.error('Response data:', error.response?.data);
-
       const toastId = isEditMode ? 'update-campaign' : 'create-campaign';
 
-      // Handle field-specific errors
-      if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
-        const errors = error.response.data.errors;
+      // Handle backend validation errors
+      if (error.errors && Array.isArray(error.errors)) {
+        const errors = error.errors;
         const newFieldErrors = {};
 
+        // Map backend errors to field errors
         errors.forEach(err => {
           if (err.field) {
             newFieldErrors[err.field] = err.message;
@@ -214,16 +170,25 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
 
         setFieldErrors(newFieldErrors);
 
-        // Show first error message in toast
-        const firstError = errors[0];
-        toast.error(firstError?.message || 'Lỗi khi lưu chiến dịch', { id: toastId });
-      } else {
-        // Fallback for non-field errors
+        const errorCount = errors.length;
         toast.error(
-          error.response?.data?.message ||
-          'Lỗi khi lưu chiến dịch',
+          errorCount === 1
+            ? errors[0].message
+            : `Vui lòng kiểm tra lại thông tin`,
           { id: toastId }
         );
+      } else if (error.response?.data?.message) {
+        // Handle single message error from backend
+        console.log('Backend message error:', error.response.data.message);
+        toast.error(error.response.data.message, { id: toastId });
+      } else if (error.message) {
+        // Handle network or other errors
+        console.log('Network/Other error:', error.message);
+        toast.error(error.message, { id: toastId });
+      } else {
+        // Final fallback
+        console.log('Unknown error format');
+        toast.error('Đã xảy ra lỗi không xác định', { id: toastId });
       }
     }
   };

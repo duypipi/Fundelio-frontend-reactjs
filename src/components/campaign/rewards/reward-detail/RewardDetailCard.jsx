@@ -79,9 +79,9 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
               )}
 
               {/* More info link */}
-              <a href="#" className="text-primary text-base font-semibold hover:underline mb-6 inline-flex items-center gap-1">
+              <div onClick={() => setIsModalOpen(true)} className="text-primary text-base font-semibold hover:underline mb-6 inline-flex items-center gap-1">
                 Xem thêm <ChevronRight className="w-4 h-4" />
-              </a>
+              </div>
 
               {/* Stats */}
               <div className="flex items-center gap-6 mb-6 text-sm text-muted-foreground">

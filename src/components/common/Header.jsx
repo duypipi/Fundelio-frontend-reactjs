@@ -30,7 +30,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCategories } from '../../hooks/useCategories';
 
-export const Header = ({ variant = 'transparent', isFixed = true }) => {
+export const Header = ({ variant = 'transparent', isFixed = true, landing = false }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -63,34 +63,34 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-    // Tạo avatar URL từ tên nếu không có avatar
-    const avatarUrl = useMemo(() => {
-      if (user?.avatar) {
-        return user.avatar;
-      }
-  
-      // Lấy tên từ user để tạo avatar
+  // Tạo avatar URL từ tên nếu không có avatar
+  const avatarUrl = useMemo(() => {
+    if (user?.avatar) {
+      return user.avatar;
+    }
+
+    // Lấy tên từ user để tạo avatar
+    const firstName = user?.firstName || user?.first_name || '';
+    const lastName = user?.lastName || user?.last_name || '';
+    const fullName =
+      `${firstName} ${lastName}`.trim() || user?.email || user?.name || 'User';
+
+    // Encode tên để dùng trong URL
+    const encodedName = encodeURIComponent(fullName);
+    return `https://ui-avatars.com/api/?name=${encodedName}&size=150&background=random`;
+  }, [user]);
+
+  // Lấy tên hiển thị
+  const displayName = useMemo(() => {
+    if (user?.firstName || user?.first_name) {
       const firstName = user?.firstName || user?.first_name || '';
       const lastName = user?.lastName || user?.last_name || '';
-      const fullName =
-        `${firstName} ${lastName}`.trim() || user?.email || user?.name || 'User';
-  
-      // Encode tên để dùng trong URL
-      const encodedName = encodeURIComponent(fullName);
-      return `https://ui-avatars.com/api/?name=${encodedName}&size=150&background=random`;
-    }, [user]);
-  
-    // Lấy tên hiển thị
-    const displayName = useMemo(() => {
-      if (user?.firstName || user?.first_name) {
-        const firstName = user?.firstName || user?.first_name || '';
-        const lastName = user?.lastName || user?.last_name || '';
-        return (
-          `${firstName} ${lastName}`.trim() || user?.email || user?.name || 'User'
-        );
-      }
-      return user?.email || user?.name || 'User';
-    }, [user]);
+      return (
+        `${firstName} ${lastName}`.trim() || user?.email || user?.name || 'User'
+      );
+    }
+    return user?.email || user?.name || 'User';
+  }, [user]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -267,115 +267,116 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
         </div>
 
         {/* Center - Search Bar (Desktop) */}
-        <div className="hidden md:block flex-1 max-w-xl search-container">
-          <div className="relative">
+        {!landing && (
+          <div className="hidden md:block flex-1 max-w-xl search-container">
             <div className="relative">
-              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${currentVariant.navLink}`} />
-              <input
-                type="text"
-                placeholder="Tìm kiếm danh mục, nhà sáng tạo, chiến dịch..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setIsSearchFocused(true)}
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isScrolled || variant !== 'transparent'
-                  ? 'bg-white dark:bg-darker border-gray-300 dark:border-gray-600 text-text-primary dark:text-white'
-                  : 'bg-white/20 border-white/30 text-white placeholder-white/70'
-                  } focus:outline-none focus:ring-2 focus:ring-primary transition-colors`}
-              />
-            </div>
+              <div className="relative">
+                <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${currentVariant.navLink}`} />
+                <input
+                  type="text"
+                  placeholder="Tìm kiếm danh mục, nhà sáng tạo, chiến dịch..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchFocused(true)}
+                  className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isScrolled || variant !== 'transparent'
+                    ? 'bg-white dark:bg-darker border-gray-300 dark:border-gray-600 text-text-primary dark:text-white'
+                    : 'bg-white/20 border-white/30 text-white placeholder-white/70'
+                    } focus:outline-none focus:ring-2 focus:ring-primary transition-colors`}
+                />
+              </div>
 
-            {/* Search Results Dropdown */}
-            {isSearchFocused && searchQuery.length >= 3 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto z-50">
-                {/* Categories */}
-                {searchResults.categories.length > 0 && (
-                  <div className="p-2">
-                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
-                      Danh mục
-                    </p>
-                    {searchResults.categories.map((category) => {
-                      const IconComponent = category.icon;
-                      return (
+              {/* Search Results Dropdown */}
+              {isSearchFocused && searchQuery.length >= 3 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto z-50">
+                  {/* Categories */}
+                  {searchResults.categories.length > 0 && (
+                    <div className="p-2">
+                      <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
+                        Danh mục
+                      </p>
+                      {searchResults.categories.map((category) => {
+                        const IconComponent = category.icon;
+                        return (
+                          <a
+                            key={category.id}
+                            href="#"
+                            className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                          >
+                            <IconComponent className="w-5 h-5 text-primary" />
+                            <span className="text-sm text-text-primary dark:text-white">{category.name}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Creators */}
+                  {searchResults.creators.length > 0 && (
+                    <div className="p-2 border-t border-gray-200 dark:border-gray-700">
+                      <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
+                        Nhà sáng tạo
+                      </p>
+                      {searchResults.creators.map((creator) => (
                         <a
-                          key={category.id}
+                          key={creator.id}
                           href="#"
                           className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
                         >
-                          <IconComponent className="w-5 h-5 text-primary" />
-                          <span className="text-sm text-text-primary dark:text-white">{category.name}</span>
+                          <img
+                            src={creator.avatar}
+                            alt={creator.name}
+                            className="w-8 h-8 rounded-full"
+                          />
+                          <span className="text-sm text-text-primary dark:text-white">{creator.name}</span>
                         </a>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {/* Creators */}
-                {searchResults.creators.length > 0 && (
-                  <div className="p-2 border-t border-gray-200 dark:border-gray-700">
-                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
-                      Nhà sáng tạo
-                    </p>
-                    {searchResults.creators.map((creator) => (
-                      <a
-                        key={creator.id}
-                        href="#"
-                        className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
-                      >
-                        <img
-                          src={creator.avatar}
-                          alt={creator.name}
-                          className="w-8 h-8 rounded-full"
-                        />
-                        <span className="text-sm text-text-primary dark:text-white">{creator.name}</span>
-                      </a>
-                    ))}
-                  </div>
-                )}
-
-                {/* Campaigns */}
-                {searchResults.campaigns.length > 0 && (
-                  <div className="p-2 border-t border-gray-200 dark:border-gray-700">
-                    <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
-                      Chiến dịch
-                    </p>
-                    {searchResults.campaigns.map((campaign) => (
-                      <a
-                        key={campaign.id}
-                        href="#"
-                        className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
-                      >
-                        <div>
-                          <p className="text-sm font-medium text-text-primary dark:text-white">{campaign.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-text-white">{campaign.category}</p>
-                        </div>
-                        <span className="text-xs font-semibold text-primary">
-                          {campaign.raised.toLocaleString()} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-4 h-4 mb-0.5" />
-                        </span>
-                      </a>
-                    ))}
-                  </div>
-                )}
-
-                {/* No results */}
-                {searchResults.categories.length === 0 &&
-                  searchResults.creators.length === 0 &&
-                  searchResults.campaigns.length === 0 && (
-                    <div className="p-8 text-center text-gray-500 dark:text-text-white">
-                      <p>Không tìm thấy kết quả</p>
+                      ))}
                     </div>
                   )}
-              </div>
-            )}
 
-            {searchQuery.length > 0 && searchQuery.length < 3 && isSearchFocused && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
-                <p className="text-sm text-gray-500 dark:text-text-white text-center">
-                  Nhập ít nhất 3 ký tự để tìm kiếm
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
+                  {/* Campaigns */}
+                  {searchResults.campaigns.length > 0 && (
+                    <div className="p-2 border-t border-gray-200 dark:border-gray-700">
+                      <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-text-white uppercase">
+                        Chiến dịch
+                      </p>
+                      {searchResults.campaigns.map((campaign) => (
+                        <a
+                          key={campaign.id}
+                          href="#"
+                          className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                        >
+                          <div>
+                            <p className="text-sm font-medium text-text-primary dark:text-white">{campaign.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-text-white">{campaign.category}</p>
+                          </div>
+                          <span className="text-xs font-semibold text-primary">
+                            {campaign.raised.toLocaleString()} <img src="/packages/coin.svg" alt="Coin" className="inline-block w-4 h-4 mb-0.5" />
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* No results */}
+                  {searchResults.categories.length === 0 &&
+                    searchResults.creators.length === 0 &&
+                    searchResults.campaigns.length === 0 && (
+                      <div className="p-8 text-center text-gray-500 dark:text-text-white">
+                        <p>Không tìm thấy kết quả</p>
+                      </div>
+                    )}
+                </div>
+              )}
+
+              {searchQuery.length > 0 && searchQuery.length < 3 && isSearchFocused && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-darker rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
+                  <p className="text-sm text-gray-500 dark:text-text-white text-center">
+                    Nhập ít nhất 3 ký tự để tìm kiếm
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>)}
 
         {/* Right - Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
@@ -406,12 +407,12 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] coin-modal">
               <div className="bg-white dark:bg-darker rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
                 <div className="text-center mb-6">
-                  <img src="/packages/coin.svg" alt="Coin" className="w-16 h-16 mx-auto mb-4" />
+                  {/* <img src="/packages/coin.svg" alt="Coin" className="w-16 h-16 mx-auto mb-4" /> */}
                   <h3 className="text-xl font-bold text-text-primary dark:text-white mb-2">
-                    Bạn chưa có coin
+                    Bạn chưa có số dư trong ví
                   </h3>
                   <p className="text-muted-foreground dark:text-text-white">
-                    Bạn có muốn nạp coin để tham gia các chiến dịch không?
+                    Bạn có muốn nạp vào ví để tham gia các chiến dịch không?
                   </p>
                 </div>
                 <div className="flex gap-3">
@@ -463,23 +464,23 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
                 className="flex items-center gap-2 p-1 rounded-full transition-all group hover:cursor-pointer relative"
               >
                 <img
-                src={avatarUrl}
-                alt={displayName}
-                className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700'
-                onError={(e) => {
-                  // Fallback nếu avatar lỗi
-                  const firstName = user?.firstName || user?.first_name || '';
-                  const lastName = user?.lastName || user?.last_name || '';
-                  const fullName =
-                    `${firstName} ${lastName}`.trim() ||
-                    user?.email ||
-                    user?.name ||
-                    'User';
-                  const encodedName = encodeURIComponent(fullName);
-                  console.log('Fallback avatar for:', encodedName);
-                  e.target.src = `https://ui-avatars.com/api/?name=${encodedName}&size=150&background=random`;
-                }}
-              />
+                  src={avatarUrl}
+                  alt={displayName}
+                  className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700'
+                  onError={(e) => {
+                    // Fallback nếu avatar lỗi
+                    const firstName = user?.firstName || user?.first_name || '';
+                    const lastName = user?.lastName || user?.last_name || '';
+                    const fullName =
+                      `${firstName} ${lastName}`.trim() ||
+                      user?.email ||
+                      user?.name ||
+                      'User';
+                    const encodedName = encodeURIComponent(fullName);
+                    console.log('Fallback avatar for:', encodedName);
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodedName}&size=150&background=random`;
+                  }}
+                />
               </button>
 
               {/* User Dropdown Menu */}

@@ -2,55 +2,115 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { X, Plus, Info } from 'lucide-react';
 
-export function PledgeSummaryCard({ selectedReward, onRemoveItem, onPickAddOns, onSubmit }) {
+export function PledgeSummaryCard({ selectedRewards = [], selectedAddOns = [], onRemoveItem, onPickAddOns, onSubmit }) {
     const formatPrice = (price) => {
         return new Intl.NumberFormat('vi-VN').format(price);
     };
 
     const calculateTotal = () => {
-        if (!selectedReward) return 0;
+        let total = 0;
 
-        const rewardTotal = selectedReward.reward.min_pledge_amount * (selectedReward.quantity || 1);
-        const addOnsTotal = (selectedReward.addOns || []).reduce(
-            (sum, addon) => sum + addon.price * addon.quantity,
-            0
-        );
-        return rewardTotal + addOnsTotal;
+        // Calculate rewards total
+        if (selectedRewards && selectedRewards.length > 0) {
+            total += selectedRewards.reduce((sum, selectedReward) => {
+                const rewardTotal = (selectedReward.reward.minPledgeAmount || selectedReward.reward.min_pledge_amount || 0) * (selectedReward.quantity || 1);
+                const addOnsTotal = (selectedReward.addOns || []).reduce(
+                    (addonSum, addon) => addonSum + (addon.price || addon.minPledgeAmount || addon.min_pledge_amount || 0) * addon.quantity,
+                    0
+                );
+                return sum + rewardTotal + addOnsTotal;
+            }, 0);
+        }
+
+        // Calculate standalone add-ons total
+        if (selectedAddOns && selectedAddOns.length > 0) {
+            total += selectedAddOns.reduce(
+                (sum, addon) => sum + (addon.price || addon.minPledgeAmount || addon.min_pledge_amount || 0) * addon.quantity,
+                0
+            );
+        }
+
+        return total;
     };
 
-    if (!selectedReward) {
-        return null;
-    }
+    const hasItems = (selectedRewards && selectedRewards.length > 0) || (selectedAddOns && selectedAddOns.length > 0);
 
-    const hasAddOns = selectedReward.addOns && selectedReward.addOns.length > 0;
+    if (!hasItems) {
+        return (
+            <Card className="sticky top-8 p-4 bg-white dark:bg-darker-2 border border-border/50">
+                <h3 className="text-xs font-semibold text-muted-foreground mb-3">SẢN PHẨM CỦA BẠN</h3>
+                <p className="text-sm text-muted-foreground text-center py-8">
+                    Chưa có sản phẩm nào được chọn
+                </p>
+            </Card>
+        );
+    }
 
     return (
         <Card className="sticky top-8 p-4 bg-white dark:bg-darker-2 border border-border/50">
             <h3 className="text-xs font-semibold text-muted-foreground mb-3">SẢN PHẨM CỦA BẠN</h3>
 
-            {/* Selected Reward */}
-            <div className="mb-3 p-3 border border-border rounded-sm bg-background dark:bg-darker relative">
-                <button
-                    onClick={() => onRemoveItem('reward')}
-                    className="absolute top-2 right-2 text-destructive hover:text-destructive/80"
-                >
-                    <X className="w-4 h-4" />
-                </button>
-                <p className="font-bold text-foreground pr-6 text-sm">
-                    {selectedReward.quantity}x {selectedReward.reward.title}
-                </p>
-            </div>
-
-            {/* Add-ons */}
-            {hasAddOns ? (
+            {/* Selected Rewards */}
+            {selectedRewards && selectedRewards.length > 0 && (
                 <div className="space-y-2 mb-3">
-                    {selectedReward.addOns.map((addon) => (
+                    {selectedRewards.map((selectedReward, index) => (
+                        <div key={index}>
+                            {/* Reward Item */}
+                            <div className="p-3 border border-border rounded-sm bg-background dark:bg-darker relative">
+                                <button
+                                    onClick={() => onRemoveItem('reward', index)}
+                                    className="absolute top-2 right-2 text-destructive hover:text-destructive/80"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+                                <p className="font-bold text-foreground pr-6 text-sm">
+                                    {selectedReward.quantity}x {selectedReward.reward.title}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    {formatPrice((selectedReward.reward.minPledgeAmount || selectedReward.reward.min_pledge_amount || 0) * selectedReward.quantity)} VND
+                                </p>
+                            </div>
+
+                            {/* Add-ons for this reward */}
+                            {selectedReward.addOns && selectedReward.addOns.length > 0 && (
+                                <div className="ml-4 mt-2 space-y-2">
+                                    {selectedReward.addOns.map((addon, addonIndex) => (
+                                        <div
+                                            key={addonIndex}
+                                            className="p-2 border border-border/50 rounded-sm bg-background/50 dark:bg-darker/50 relative"
+                                        >
+                                            <button
+                                                onClick={() => onRemoveItem('addon', index, addonIndex)}
+                                                className="absolute top-1 right-1 text-destructive hover:text-destructive/80"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                            <p className="font-semibold text-foreground pr-5 text-xs">
+                                                {addon.quantity}x {addon.title}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {formatPrice((addon.price || addon.minPledgeAmount || addon.min_pledge_amount || 0) * addon.quantity)} VND
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Standalone Add-ons */}
+            {selectedAddOns && selectedAddOns.length > 0 && (
+                <div className="space-y-2 mb-3">
+                    <h4 className="text-xs font-semibold text-muted-foreground mb-2">TIỆN ÍCH BỔ SUNG</h4>
+                    {selectedAddOns.map((addon, index) => (
                         <div
-                            key={addon.id}
-                            className="p-3 border border-border rounded-sm bg-background dark:bg-darker relative"
+                            key={index}
+                            className="p-3 border border-primary/30 rounded-sm bg-primary/5 dark:bg-primary/10 relative"
                         >
                             <button
-                                onClick={() => onRemoveItem('addon', addon.id)}
+                                onClick={() => onRemoveItem('addon', undefined, index)}
                                 className="absolute top-2 right-2 text-destructive hover:text-destructive/80"
                             >
                                 <X className="w-4 h-4" />
@@ -58,14 +118,11 @@ export function PledgeSummaryCard({ selectedReward, onRemoveItem, onPickAddOns, 
                             <p className="font-bold text-foreground pr-6 text-sm">
                                 {addon.quantity}x {addon.title}
                             </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                {formatPrice((addon.price || addon.minPledgeAmount || addon.min_pledge_amount || 0) * addon.quantity)} VND
+                            </p>
                         </div>
                     ))}
-                </div>
-            ) : (
-                <div className="mb-3">
-                    <p className="text-xs text-muted-foreground mb-2 text-center py-3">
-                        Chưa chọn tiện ích bổ sung
-                    </p>
                 </div>
             )}
 
