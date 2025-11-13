@@ -20,8 +20,13 @@ import WalletPage from '@/pages/WalletPage';
 import YourProjectsPage from '@/pages/YourProjectsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ForbiddenPage from '@/pages/ForbiddenPage';
+import UserProfilePage from "@/pages/UserProfilePage";
+
+import VerifyChangeEmail from '@/components/auth/VerifyChangeEmail';
+
 import CampaignOverviewPage from '@/components/campaign/dashboard/CampaignOverviewPage';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+
 
 /**
  * Application routes configuration
@@ -37,7 +42,7 @@ export const router = createBrowserRouter([
       { path: 'home', element: <HomePage /> },
 
       { path: 'dashboard', element: <DashboardPage /> },
-
+      { path: 'profile', element: <UserProfilePage /> },
       {
         path: 'campaigns',
         children: [
@@ -51,7 +56,6 @@ export const router = createBrowserRouter([
       { path: 'wallet', element: <WalletPage /> },
 
       { path: 'your-projects', element: <YourProjectsPage /> },
-    ],
   },
   {
     path: '/campaigns/create',
@@ -83,6 +87,16 @@ export const router = createBrowserRouter([
       { path: 'roles', element: <RolesPage /> },
       { path: 'permissions', element: <PermissionsPage /> },
       { path: 'campaigns', element: <AdminCampaignsPage /> },
+    ],
+  },
+  {
+    path: '/auth',
+    element: <AuthLayout />,
+    children: [
+      { index: true, element: <AuthPage /> },
+      { path: 'reset-password', element: <ResetPasswordPage /> },
+      { path: 'verify-active-account', element: <VerifyAccountPage /> },
+      { path: 'verify-change-email', element: <VerifyChangeEmail /> },
     ],
   },
   // Catch all 404 - must be last
