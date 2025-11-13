@@ -8,7 +8,7 @@ import TermsCreator from './TermsCreator';
 import toast from 'react-hot-toast';
 import { setBasics } from '@/store/campaignSlice';
 import { storageApi } from '@/api/storageApi';
-import { campaignApi } from '@/api/campaignApi';
+import { useCategories } from '@/hooks/useCategories';
 
 // Category label mapping for Vietnamese
 const CATEGORY_LABELS = {
@@ -29,6 +29,9 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
   const dispatch = useDispatch();
   const basicsData = useSelector((state) => state.campaign.basics);
 
+  // Use custom hook for categories with error handling
+  const { categories: categoriesData, loading: loadingCategories, error: categoriesError, refetch: refetchCategories } = useCategories();
+
   // Initialize with empty state to avoid loading sample data
   const [formData, setFormData] = useState({
     campaignId: campaignId || '', // Include campaignId
@@ -46,31 +49,16 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
-  const [categories, setCategories] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false); // Track if data has been loaded from Redux
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
-  // Fetch categories from API
+  // Show error toast if categories fail to load
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setLoadingCategories(true);
-        const response = await campaignApi.getAllCategories();
-        if (response.data.success && response.data) {
-          setCategories(response.data.data);
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        toast.error('Không thể tải danh sách danh mục');
-      } finally {
-        setLoadingCategories(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+    if (categoriesError) {
+      toast.error('Không thể tải danh sách danh mục. Vui lòng thử lại.');
+    }
+  }, [categoriesError]);
 
   // Initialize with default dates if empty
   useEffect(() => {
@@ -431,13 +419,23 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
               : 'border-border focus:ring-primary'
               }`}
           >
-            <option value="">{loadingCategories ? 'Đang tải...' : 'Chọn danh mục'}</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {CATEGORY_LABELS[cat] || cat}
+            <option value="">
+              {loadingCategories ? 'Đang tải...' : categoriesError ? 'Lỗi khi tải danh mục' : 'Chọn danh mục'}
+            </option>
+            {categoriesData.map((cat) => (
+              <option key={cat.key} value={cat.key}>
+                {cat.name}
               </option>
             ))}
           </select>
+          {categoriesError && (
+            <button
+              onClick={refetchCategories}
+              className="text-xs text-primary hover:underline mt-1"
+            >
+              Thử lại
+            </button>
+          )}
           {fieldErrors.campaignCategory && (
             <p className="text-xs text-red-500 mt-1">{fieldErrors.campaignCategory}</p>
           )}

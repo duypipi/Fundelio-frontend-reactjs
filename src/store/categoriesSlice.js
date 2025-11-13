@@ -21,11 +21,19 @@ const categoriesSlice = createSlice({
     loading: false,
     error: null,
     lastFetched: null, // Timestamp để track lần fetch cuối
+    lastError: null, // Timestamp của lần lỗi cuối
+    retryCount: 0, // Số lần retry
   },
   reducers: {
     clearCategories: (state) => {
       state.items = [];
       state.error = null;
+      state.lastError = null;
+      state.retryCount = 0;
+    },
+    resetRetry: (state) => {
+      state.retryCount = 0;
+      state.lastError = null;
     },
   },
   extraReducers: (builder) => {
@@ -38,13 +46,18 @@ const categoriesSlice = createSlice({
         state.loading = false;
         state.items = action.payload;
         state.lastFetched = Date.now();
+        state.error = null;
+        state.lastError = null;
+        state.retryCount = 0; // Reset retry count on success
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.lastError = Date.now();
+        state.retryCount += 1;
       });
   },
 });
 
-export const { clearCategories } = categoriesSlice.actions;
+export const { clearCategories, resetRetry } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

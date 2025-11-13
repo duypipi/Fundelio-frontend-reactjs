@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Check, AlertCircle, ChevronRight } from 'lucide-react';
+import { Check, AlertCircle, ChevronRight, Trash2 } from 'lucide-react';
 import Header from '@/components/common/Header';
 import Button from '@/components/common/Button';
+import ConfirmModal from '@/components/common/ConfirmModal';
 import { campaignApi } from '@/api/campaignApi';
 import toast from 'react-hot-toast';
 
@@ -227,6 +228,7 @@ export default function CampaignOverviewPage() {
 
     const [campaign, setCampaign] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [completionStatus, setCompletionStatus] = useState({
         basics: false,
         rewards: false,
@@ -310,6 +312,25 @@ export default function CampaignOverviewPage() {
 
         // TODO: Implement launch campaign API
         toast.success('Dự án đã được kích hoạt!');
+    };
+
+    const handleDeleteCampaign = async () => {
+        try {
+            const response = await campaignApi.deleteCampaign(campaignId);
+
+            if (response?.data?.success) {
+                toast.success('Xóa dự án thành công!');
+                // Navigate to dashboard after successful deletion
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 1000);
+            } else {
+                toast.error('Không thể xóa dự án');
+            }
+        } catch (error) {
+            console.error('Error deleting campaign:', error);
+            toast.error(error.response?.data?.message || 'Lỗi khi xóa dự án');
+        }
     };
 
     const allSectionsComplete = completionStatus.basics && completionStatus.rewards && completionStatus.story;
@@ -431,8 +452,42 @@ export default function CampaignOverviewPage() {
                             </p>
                         </div>
                     )}
+
+                    {/* Delete Campaign Button */}
+                    <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                        <button
+                            onClick={() => setShowDeleteModal(true)}
+                            disabled={campaign.campaignStatus !== 'DRAFT'}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${campaign.campaignStatus === 'DRAFT'
+                                ? 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-200 dark:border-red-800'
+                                : 'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50 border border-gray-200 dark:border-gray-700'
+                                }`}
+                            title={
+                                campaign.campaignStatus !== 'DRAFT'
+                                    ? 'Chỉ có thể xóa dự án ở trạng thái Bản nháp'
+                                    : 'Xóa dự án'
+                            }
+                        >
+                            <Trash2 className="w-4 h-4" />
+                            <span>Xóa dự án</span>
+                        </button>
+                    </div>
                 </div>
             </main>
+
+            {/* Delete Campaign Modal */}
+            <ConfirmModal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={handleDeleteCampaign}
+                title="Xóa dự án"
+                titleKeyword={campaign?.title}
+                description={`Bạn có chắc chắn muốn xóa dự án "${campaign?.title}"? Hành động này không thể hoàn tác và toàn bộ dữ liệu sẽ bị xóa vĩnh viễn.`}
+                confirmKeyword="delete"
+                confirmButtonText="Xóa"
+                cancelButtonText="Hủy"
+                type="danger"
+            />
         </div>
     );
 }

@@ -97,7 +97,7 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                     <div className="relative md:w-2/5 flex-shrink-0">
                         <div className="relative aspect-[4/3] md:aspect-auto md:h-full min-h-[300px] overflow-hidden bg-gray-100 dark:bg-darker">
                             <img
-                                src={reward.image_url || reward.image}
+                                src={reward.imageUrl || reward.image}
                                 alt={reward.title}
                                 className="w-full h-full object-cover"
                             />
@@ -121,22 +121,22 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-2 mb-2">
                                 <span className="text-3xl font-bold text-primary">
-                                    {formatPrice(reward.min_pledge_amount)} <span className="text-base">VND</span>
+                                    {formatPrice(reward.minPledgeAmount)} <span className="text-base">VND</span>
                                 </span>
-                                {reward.original_price && reward.original_price > reward.min_pledge_amount && (
+                                {reward.originalPrice && reward.originalPrice > reward.minPledgeAmount && (
                                     <span className="text-lg text-muted-foreground line-through">
-                                        {formatPrice(reward.original_price)} VND
+                                        {formatPrice(reward.originalPrice)} VND
                                     </span>
                                 )}
                             </div>
                             <p className="text-sm text-muted-foreground mb-4">
-                                Giá thấp nhất trong 30 ngày qua: {formatPrice(reward.min_pledge_amount)} VND
+                                Giá thấp nhất trong 30 ngày qua: {formatPrice(reward.minPledgeAmount)} VND
                             </p>
 
                             {/* Perk name */}
-                            {reward.perk_name && (
+                            {reward.perkName && (
                                 <p className="text-base font-semibold text-foreground mb-4">
-                                    {reward.perk_name}
+                                    {reward.perkName}
                                 </p>
                             )}
 

@@ -30,7 +30,7 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
           <div className="md:w-1/2 lg:w-1/2 flex-shrink-0">
             <div className=" aspect-[4/3] h-full overflow-hidden bg-gray-100 dark:bg-darker">
               <img
-                src={reward.image_url || reward.image}
+                src={reward.imageUrl || reward.image}
                 alt={reward.imageAlt || reward.title}
                 className="w-full h-full object-cover"
               />
@@ -58,11 +58,11 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
               <div className="mb-4">
                 <div className="flex items-baseline gap-2 mb-1">
                   <span className="text-[22px] font-bold text-primary">
-                    {formatPrice(reward.min_pledge_amount)} <span className="text-base">VND</span>
+                    {formatPrice(reward.minPledgeAmount)} <span className="text-base">VND</span>
                   </span>
                   {hasDiscount && (
                     <span className="text-lg text-muted-foreground line-through">
-                      {formatPrice(reward.original_price)} VND
+                      {formatPrice(reward.originalPrice)} VND
                     </span>
                   )}
                 </div>
@@ -74,7 +74,7 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
               {/* Perks info if available */}
               {reward.perk_name && (
                 <p className="text-base text-foreground font-semibold mb-4">
-                  {reward.perk_name}
+                  {reward.perkName}
                 </p>
               )}
 
@@ -91,7 +91,7 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span>{eta}</span>
+                  <span>{reward.shipsTo}</span>
                 </div>
               </div>
             </div>

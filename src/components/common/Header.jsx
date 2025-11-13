@@ -201,8 +201,6 @@ export const Header = ({ variant = 'transparent', isFixed = true }) => {
     return num.toString();
   };
 
-  console.log('user coins:', user);
-
   return (
     <header
       className={`${isFixed ? 'fixed' : 'relative'} top-0 left-0 right-0 z-50 py-3 px-4 sm:py-4 sm:px-6 transition-all duration-300 ${currentVariant.container}`}

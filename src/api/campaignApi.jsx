@@ -33,6 +33,12 @@ export const campaignApi = {
         });
     },
 
+    deleteCampaign(campaignId) {
+        return httpService.delete(`/campaigns/${campaignId}`, {
+            requireToken: true,
+        });
+    },
+
     // Campaign Sections (Story)
     createCampaignSection(campaignId, sectionData) {
         console.log('Creating campaign section for:', campaignId, 'with data:', sectionData);

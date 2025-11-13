@@ -481,7 +481,7 @@ export default function CampaignDetailPage() {
         </div>
       )}
 
-      <div className={isPreview ? 'pt-[52px] sm:pt-[60px]' : ''}>
+      <div className={isPreview ? 'pt-[52px] sm:pt-[58px]' : ''}>
         <CampaignHeader
           campaign={campaignData.campaign}
           onPickPerk={handlePickPerk}
