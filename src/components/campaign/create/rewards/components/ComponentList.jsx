@@ -3,11 +3,13 @@ import Button from "@/components/common/Button"
 import Input from "@/components/common/Input"
 import RewardCard from "./RewardCard"
 
-export default function ItemList({ items, onEdit, onDelete, onCreate }) {
+export default function ItemList({ items, onEdit, onDelete, onCreate, isLoading, itemRewards = {} }) {
   const [searchTerm, setSearchTerm] = useState("")
 
   const filteredItems = useMemo(() => {
-    return items.filter((item) => item.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    return items.filter((item) =>
+      item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   }, [items, searchTerm])
 
   if (items.length === 0) {
@@ -52,11 +54,12 @@ export default function ItemList({ items, onEdit, onDelete, onCreate }) {
       <div className="space-y-4">
         {filteredItems.map((item) => (
           <RewardCard
-            key={item.id}
+            key={item.catalogItemId}
             data={item}
             type="item"
             onEdit={onEdit}
             onDelete={onDelete}
+            linkedRewards={itemRewards[item.catalogItemId] || []}
           />
         ))}
       </div>

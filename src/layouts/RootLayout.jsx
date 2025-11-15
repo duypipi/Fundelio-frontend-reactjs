@@ -2,10 +2,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 
-/**
- * Root layout component that wraps all pages
- * Includes header, main content area, and footer
- */
 export default function RootLayout() {
   const location = useLocation();
   const headerVariant = location.pathname === '/home' ? 'transparent' : 'light';

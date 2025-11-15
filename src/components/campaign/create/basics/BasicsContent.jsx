@@ -42,8 +42,8 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
     campaignCategory: '',
     introImageUrl: '',
     introVideoUrl: '',
-    startTime: '',
-    endTime: '',
+    startDate: '',
+    endDate: '',
     acceptedTerms: false,
   });
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
@@ -63,14 +63,14 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
 
   // Initialize with default dates if empty
   useEffect(() => {
-    if (!formData.startTime || !formData.endTime) {
+    if (!formData.startDate || !formData.endDate) {
       const today = new Date();
-      const endTime = new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000); // 60 days from now
+      const endDate = new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000); // 60 days from now
 
       setFormData(prev => ({
         ...prev,
-        startTime: today.toISOString().split('T')[0],
-        endTime: endTime.toISOString().split('T')[0],
+        startDate: today.toISOString().split('T')[0],
+        endDate: endDate.toISOString().split('T')[0],
       }));
     }
   }, []);
@@ -101,8 +101,9 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
     setFieldErrors({});
 
     try {
-      const startTimeISO = new Date(formData.startTime).toISOString();
-      const endTimeISO = new Date(formData.endTime).toISOString();
+      // Only use date (YYYY-MM-DD), no time
+      // const startDateOnly = formData.startDate; // Already in YYYY-MM-DD format from date input
+      // const endDateOnly = formData.endDate; // Already in YYYY-MM-DD format from date input
 
       const payload = {
         title: formData.title,
@@ -111,8 +112,8 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
         campaignCategory: formData.campaignCategory,
         introImageUrl: formData.introImageUrl || undefined,
         introVideoUrl: formData.introVideoUrl || undefined,
-        startTime: startTimeISO,
-        endTime: endTimeISO,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
       };
 
       // Remove undefined fields
@@ -140,8 +141,8 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
           campaignCategory: responseData.campaignCategory || formData.campaignCategory,
           introImageUrl: responseData.introImageUrl || formData.introImageUrl,
           introVideoUrl: responseData.introVideoUrl || formData.introVideoUrl,
-          startTime: responseData.startTime ? new Date(responseData.startTime).toISOString().split('T')[0] : formData.startTime,
-          endTime: responseData.endTime ? new Date(responseData.endTime).toISOString().split('T')[0] : formData.endTime,
+          startDate: responseData.startDate ? new Date(responseData.startDate).toISOString().split('T')[0] : formData.startDate,
+          endDate: responseData.endDate ? new Date(responseData.endDate).toISOString().split('T')[0] : formData.endDate,
         };
 
         // Update local state
@@ -638,13 +639,13 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
               </label>
               <Input
                 type="date"
-                name="startTime"
-                value={formData.startTime}
+                name="startDate"
+                value={formData.startDate}
                 onChange={handleChange}
-                className={fieldErrors.startTime ? 'border-red-500 focus:ring-red-500' : ''}
+                className={fieldErrors.startDate ? 'border-red-500 focus:ring-red-500' : ''}
               />
-              {fieldErrors.startTime && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.startTime}</p>
+              {fieldErrors.startDate && (
+                <p className="text-xs text-red-500 mt-1">{fieldErrors.startDate}</p>
               )}
             </div>
 
@@ -654,23 +655,23 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
               </label>
               <Input
                 type="date"
-                name="endTime"
-                value={formData.endTime}
+                name="endDate"
+                value={formData.endDate}
                 onChange={handleChange}
-                min={formData.startTime}
-                className={fieldErrors.endTime ? 'border-red-500 focus:ring-red-500' : ''}
+                min={formData.startDate}
+                className={fieldErrors.endDate ? 'border-red-500 focus:ring-red-500' : ''}
               />
-              {fieldErrors.endTime && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.endTime}</p>
+              {fieldErrors.endDate && (
+                <p className="text-xs text-red-500 mt-1">{fieldErrors.endDate}</p>
               )}
             </div>
           </div>
 
-          {formData.startTime && formData.endTime && (
+          {formData.startDate && formData.endDate && (
             <div className="mt-4 p-3 bg-primary/10 border-l-4 border-primary">
               <p className="text-sm text-text-primary dark:text-white">
                 <span className="font-medium"><strong>Thời gian chiến dịch</strong>:</span>{' '}
-                {Math.ceil((new Date(formData.endTime) - new Date(formData.startTime)) / (1000 * 60 * 60 * 24))} ngày
+                {Math.ceil((new Date(formData.endDate) - new Date(formData.startDate)) / (1000 * 60 * 60 * 24))} ngày
               </p>
             </div>
           )}
