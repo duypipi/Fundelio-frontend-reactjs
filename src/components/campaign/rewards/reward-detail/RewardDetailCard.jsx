@@ -5,7 +5,7 @@ import { Button } from '../ui/Button';
 import { useState } from 'react';
 import { RewardDetailModal } from './RewardDetailModal';
 
-export function RewardDetailCard({ reward, items = [], addOns = [], onSelectReward, showChooseButton = false }) {
+export function RewardDetailCard({ reward, items = [], addOns = [], onSelectReward, showChooseButton = false, campaignId }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Format delivery date
@@ -136,6 +136,7 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
         items={items}
         addOns={addOns}
         onSelectReward={onSelectReward}
+        campaignId={campaignId}
       />
     </>
   );

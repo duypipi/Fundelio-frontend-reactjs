@@ -8,8 +8,6 @@ import React from 'react';
 const BlankSection = React.memo(({ blank }) => {
   const { id, order, titleHtml, contentHtml } = blank;
 
-  console.log('Loading BlankSection:', id, order, titleHtml);
-
   return (
     <section
       id={id}

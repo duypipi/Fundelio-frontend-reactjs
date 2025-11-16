@@ -5,14 +5,6 @@ import React, { useEffect } from 'react';
  */
 const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
   
-  useEffect(() => {
-    console.log('📋 TocMenu received:', {
-      blanksCount: blanks.length,
-      activeId,
-      blankIds: blanks.map((b) => b.id),
-    });
-  }, [activeId, blanks]);
-
   if (!blanks?.length) return null;
 
   const handleClick = (id) => {
@@ -20,9 +12,6 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
-
-  console.log('Rendering TocMenu with blanks:', blanks);
-  console.log('Active ID:', activeId);
 
   return (
     <nav
@@ -39,14 +28,8 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
       >
         <ul className="space-y-1">
           {blanks.map((b, idx) => {
-            // Convert both to string for comparison
             const isActive = String(activeId) === String(b.id);
-            console.log('TocMenu Item:', {
-              id: b.id,
-              isActive,
-            });
 
-            console.log('Rendering TocMenu Item:', b.id, 'activeId:', activeId);
             return (
               <li key={b.id}>
                 <button

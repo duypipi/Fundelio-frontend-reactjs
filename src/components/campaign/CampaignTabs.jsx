@@ -8,8 +8,15 @@ import Leaderboard from './leaderboard/Leaderboard';
  * CampaignTabs Component
  * Tabbed interface for Campaign / Rewards / Creator / Leaderboard
  */
-const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
+const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {}, onTabChange }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    if (onTabChange) {
+      onTabChange(tabId);
+    }
+  };
 
   const tabs = [
     { id: 'campaign', label: 'Chiến dịch' },
@@ -33,7 +40,7 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
                 role="tab"
                 aria-selected={activeTab === tab.id}
                 aria-controls={`${tab.id}-panel`}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
                 className={`
                   py-4 px-4 text-md font-medium whitespace-nowrap
                   border-b-2 transition-colors duration-200 uppercase
@@ -76,6 +83,7 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {} }) => {
                 items={campaignProps.items || []}
                 addOns={campaignProps.addOns || []}
                 onPledge={campaignProps.onPledge}
+                campaignId={campaignProps.campaignId}
               />
             </div>
           )}

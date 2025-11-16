@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Dialog,
     DialogContent,
@@ -9,33 +10,32 @@ import { Button } from '../ui/Button';
 import { Plus, Minus, X, Users, Truck, Info } from 'lucide-react';
 import { RewardItem } from './RewardItem';
 
-export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns = [], onSelectReward }) {
-    const [quantity, setQuantity] = useState(1);
+export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns = [], onSelectReward, campaignId }) {
+    const navigate = useNavigate();
+    // Single reward selection - no quantity
     const [selectedAddOns, setSelectedAddOns] = useState([]);
 
-    // Get included items from reward.items array
-    const includedItems = (reward.items || []).map((selectedItem) => {
-        const item = items.find((i) => i.id === selectedItem.itemId);
+    // Get included items from reward.items.included array (API structure)
+    const includedItems = (reward.items?.included || []).map((includedItem) => {
+        // includedItem from API has: catalogItemId, name, price, quantity, imageUrl
         return {
-            id: selectedItem.itemId,
-            name: item?.title || 'Unknown Item',
-            image: item?.image || 'https://c.animaapp.com/mh96kubogMaabT/img/ai_1.png',
-            quantity: selectedItem.qty,
-            description: item?.description || '',
+            id: includedItem.catalogItemId,
+            name: includedItem.name || 'Unknown Item',
+            image: includedItem.imageUrl || 'https://c.animaapp.com/mh96kubogMaabT/img/ai_1.png',
+            quantity: includedItem.quantity || 1,
+            description: includedItem.description || '',
         };
     });
 
     // Filter add-ons that are allowed for this reward
-    const filteredAddOns = addOns.filter((addon) => {
-        if (addon.offeredWithRewardIds && Array.isArray(addon.offeredWithRewardIds)) {
-            return addon.offeredWithRewardIds.includes(reward.id || reward.reward_id);
-        }
-        return true;
-    });
-
-    const updateQuantity = (delta) => {
-        setQuantity((prev) => Math.max(1, prev + delta));
-    };
+    // API structure: reward.items.addOn contains the add-ons for this reward
+    const filteredAddOns = (reward.items?.addOn || []).map((addonItem) => ({
+        id: addonItem.catalogItemId,
+        title: addonItem.name,
+        image: addonItem.imageUrl,
+        price: addonItem.price || 0,
+        description: addonItem.description || '',
+    }));
 
     const toggleAddOn = (addonId) => {
         setSelectedAddOns((prev) => {
@@ -53,7 +53,7 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
         setSelectedAddOns((prev) =>
             prev.map((addon) =>
                 addon.id === addonId
-                    ? { ...addon, quantity: Math.max(1, addon.quantity + delta) }
+                    ? { ...addon, quantity: Math.max(1, Math.min(10, addon.quantity + delta)) } // Max 10
                     : addon
             )
         );
@@ -64,9 +64,10 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
     };
 
     const calculateTotal = () => {
-        const rewardTotal = (reward.minPledgeAmount || reward.min_pledge_amount || 0) * quantity;
+        // Single reward - no quantity multiplier
+        const rewardTotal = reward.minPledgedAmount || 0;
         const addOnsTotal = selectedAddOns.reduce(
-            (sum, addon) => sum + (addon.price || addon.minPledgeAmount || addon.min_pledge_amount || 0) * addon.quantity,
+            (sum, addon) => sum + (addon.price || 0) * addon.quantity,
             0
         );
         return rewardTotal + addOnsTotal;
@@ -77,14 +78,19 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
     };
 
     const handleSubmit = () => {
-        if (onSelectReward) {
-            onSelectReward({
-                reward,
-                quantity,
-                addOns: selectedAddOns,
-                total: calculateTotal(),
-            });
-        }
+        const pledgeData = {
+            reward,
+            quantity: 1, // Always 1
+            addOns: selectedAddOns,
+            total: calculateTotal(),
+            campaignId,
+        };
+
+        // Navigate to pledge summary page
+        navigate(`/campaigns/${campaignId}/pledge`, {
+            state: { pledgeData }
+        });
+
         onClose();
     };
 
@@ -121,35 +127,36 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-2 mb-2">
                                 <span className="text-3xl font-bold text-primary">
-                                    {formatPrice(reward.minPledgeAmount)} <span className="text-base">VND</span>
+                                    {formatPrice(reward.minPledgedAmount || 0)} <span className="text-base">VND</span>
                                 </span>
-                                {reward.originalPrice && reward.originalPrice > reward.minPledgeAmount && (
+                                {/* API không có originalPrice, comment lại */}
+                                {/* {reward.originalPrice && reward.originalPrice > reward.minPledgedAmount && (
                                     <span className="text-lg text-muted-foreground line-through">
                                         {formatPrice(reward.originalPrice)} VND
                                     </span>
-                                )}
+                                )} */}
                             </div>
                             <p className="text-sm text-muted-foreground mb-4">
-                                Giá thấp nhất trong 30 ngày qua: {formatPrice(reward.minPledgeAmount)} VND
+                                Giá thấp nhất trong 30 ngày qua: {formatPrice(reward.minPledgedAmount || 0)} VND
                             </p>
 
-                            {/* Perk name */}
-                            {reward.perkName && (
+                            {/* API không có perkName, comment lại */}
+                            {/* {reward.perkName && (
                                 <p className="text-base font-semibold text-foreground mb-4">
                                     {reward.perkName}
                                 </p>
-                            )}
+                            )} */}
 
                             <div className="flex items-center gap-6 text-sm text-muted-foreground">
                                 <div className="flex items-center gap-2">
                                     <Users className="w-4 h-4" />
-                                    <span>{reward.backers || 0} lượt ủng hộ</span>
+                                    <span>{reward.backersCount || 0} lượt ủng hộ</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Truck className="w-4 h-4" />
                                     <span>
-                                        {reward.estimated_delivery
-                                            ? new Date(reward.estimated_delivery).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })
+                                        {reward.estimatedDelivery
+                                            ? new Date(reward.estimatedDelivery).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })
                                             : 'Chưa xác định'}
                                     </span>
                                 </div>
@@ -213,6 +220,7 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                                                             variant="outline"
                                                             className="h-7 w-7"
                                                             onClick={() => updateAddOnQuantity(addon.id, -1)}
+                                                            disabled={addon.quantity === 1}
                                                         >
                                                             <Minus className="w-3 h-3" />
                                                         </Button>
@@ -224,6 +232,7 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                                                             variant="outline"
                                                             className="h-7 w-7"
                                                             onClick={() => updateAddOnQuantity(addon.id, 1)}
+                                                            disabled={addon.quantity === 10}
                                                         >
                                                             <Plus className="w-3 h-3" />
                                                         </Button>
@@ -256,7 +265,7 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
 
                     {/* Quantity selector and total */}
                     <div className="border-t border-border/50 pt-6 mt-6">
-                        <div className="flex items-center justify-between mb-6">
+                        {/* <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center gap-3">
                                 <span className="text-sm font-semibold text-muted-foreground">SỐ LƯỢNG ỦNG HỘ</span>
                                 <div className="flex items-center gap-2">
@@ -285,7 +294,7 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                                     {formatPrice(calculateTotal())} <span className="text-base">VND</span>
                                 </p>
                             </div>
-                        </div>
+                        </div> */}
 
                         <Button
                             className="w-full font-bold text-white bg-primary hover:bg-primary/90 h-14 text-base"

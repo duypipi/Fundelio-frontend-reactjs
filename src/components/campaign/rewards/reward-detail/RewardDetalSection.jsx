@@ -3,7 +3,7 @@ import { RewardDetailCard } from './RewardDetailCard';
 import { AddOnCard } from './AddOnCard';
 import { useState } from 'react';
 
-export function RewardDetailSection({ rewards = [], items = [], addOns = [], onSelectReward, onSelectAddOn }) {
+export function RewardDetailSection({ rewards = [], items = [], addOns = [], onSelectReward, onSelectAddOn, campaignId }) {
   const [selectedAddOns, setSelectedAddOns] = useState({});
 
   const handleToggleAddOn = (addon) => {
@@ -41,6 +41,7 @@ export function RewardDetailSection({ rewards = [], items = [], addOns = [], onS
                 items={items}
                 addOns={addOns}
                 onSelectReward={onSelectReward}
+                campaignId={campaignId}
               />
             </motion.div>
           );

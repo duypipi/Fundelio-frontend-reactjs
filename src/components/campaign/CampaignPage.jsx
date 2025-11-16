@@ -83,6 +83,7 @@ const CampaignPage = ({
   blanks = [],
   currency = 'USD',
   onPledge,
+  campaignId,
 }) => {
   // Sort blanks and get section IDs
   const sortedBlanks = [...blanks].sort((a, b) => a.order - b.order);
@@ -98,6 +99,8 @@ const CampaignPage = ({
       activeId,
     });
   }, [activeId, sortedBlanks.length]);
+
+  console.log("đã vào CampaignPage", { rewards, creator, blanks, currency, onPledge });
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_360px] gap-6 lg:gap-8">
@@ -119,6 +122,7 @@ const CampaignPage = ({
           creator={creator}
           currency={currency}
           onPledge={onPledge}
+          campaignId={campaignId}
         />
       </div>
     </div>

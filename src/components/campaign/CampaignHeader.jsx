@@ -40,16 +40,24 @@ const CampaignHeader = ({
 }) => {
   const {
     title = 'Campaign Title',
-    highlights = [],
-    creator = { name: 'Creator Name', location: 'Location', link: '#' },
+    description = '',
+    // highlights = [], // API không có field này
+    owner = null,
     introImageUrl = '/images/campaign-hero.jpg',
     introVideoUrl = null,
-    currency = 'HKD',
-    pledged = 0,
-    goal = 1,
-    backers = 0,
+    currency = 'VND',
+    pledgedAmount = 0,
+    goalAmount = 0,
+    backersCount = 0,
     daysLeft = 0,
   } = campaign;
+
+  // Prepare creator info from owner
+  const creator = owner ? {
+    name: `${owner.firstName || ''} ${owner.lastName || ''}`.trim() || 'Creator',
+    location: 'Vietnam', // API không có field này
+    link: '#creator-profile',
+  } : { name: 'Creator', location: 'Vietnam', link: '#creator-profile' };
 
   // State cho carousel
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
@@ -75,11 +83,11 @@ const CampaignHeader = ({
   };
 
   // Calculate progress percentage
-  const progressPercent = clampPercent((pledged / goal) * 100);
+  const progressPercent = clampPercent((pledgedAmount / goalAmount) * 100);
 
   // Format numbers
-  const formattedPledged = formatCurrency(pledged, currency);
-  const formattedGoal = formatCurrency(goal, currency);
+  const formattedPledged = formatCurrency(pledgedAmount, currency);
+  const formattedGoal = formatCurrency(goalAmount, currency);
 
   return (
     <div className="relative overflow-hidden bg-[#0a1628]">
@@ -172,7 +180,7 @@ const CampaignHeader = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              {highlights}
+              {description}
             </motion.p>
           </div>
         </div>
@@ -238,8 +246,8 @@ const CampaignHeader = ({
                         key={index}
                         onClick={() => setCurrentMediaIndex(index)}
                         className={`w-2 h-2 rounded-full transition-all duration-200 ${index === currentMediaIndex
-                            ? 'bg-white w-6'
-                            : 'bg-white/50 hover:bg-white/70'
+                          ? 'bg-white w-6'
+                          : 'bg-white/50 hover:bg-white/70'
                           }`}
                         aria-label={`Go to media ${index + 1}`}
                       />
@@ -317,7 +325,7 @@ const CampaignHeader = ({
                 <div className="grid grid-cols-2 gap-6">
                   <div>
                     <div className="text-2xl font-bold text-white">
-                      {backers.toLocaleString()}
+                      {backersCount.toLocaleString()}
                     </div>
                     <div className="text-xs text-gray-300 uppercase tracking-wide">
                       Người ủng hộ

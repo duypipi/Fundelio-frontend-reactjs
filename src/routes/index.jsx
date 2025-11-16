@@ -21,6 +21,7 @@ import YourProjectsPage from '@/pages/YourProjectsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ForbiddenPage from '@/pages/ForbiddenPage';
 import UserProfilePage from "@/pages/UserProfilePage";
+import PledgeSummaryPage from '@/pages/PledgeSummaryPage';
 
 import VerifyChangeEmail from '@/components/auth/VerifyChangeEmail';
 
@@ -49,6 +50,7 @@ export const router = createBrowserRouter([
           { path: 'detail', element: <CampaignDetailPage /> },
           { path: 'preview/:campaignId', element: <CampaignDetailPage isPreviewMode={true} /> },
           { path: ':campaignId', element: <CampaignDetailPage /> },
+          { path: ':campaignId/pledge', element: <PledgeSummaryPage /> },
           { path: ':campaignId/dashboard', element: <CampaignOverviewPage /> },
         ],
       },
