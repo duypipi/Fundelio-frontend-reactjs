@@ -101,9 +101,10 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
     setFieldErrors({});
 
     try {
-      // Only use date (YYYY-MM-DD), no time
-      // const startDateOnly = formData.startDate; // Already in YYYY-MM-DD format from date input
-      // const endDateOnly = formData.endDate; // Already in YYYY-MM-DD format from date input
+      // Keep dates in YYYY-MM-DD format as required by backend
+      console.log('📋 Form Data:', formData);
+      console.log('📅 Start Date:', formData.startDate);
+      console.log('📅 End Date:', formData.endDate);
 
       const payload = {
         title: formData.title,
@@ -132,6 +133,22 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
 
       if (response?.data?.data) {
         const responseData = response.data.data;
+
+        // Helper to parse date - backend returns YYYY-MM-DD format
+        const parseDate = (dateValue) => {
+          if (!dateValue) return '';
+          // If it's already YYYY-MM-DD format, use it as is
+          if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+            return dateValue;
+          }
+          // Otherwise try to parse it
+          try {
+            return new Date(dateValue).toISOString().split('T')[0];
+          } catch {
+            return '';
+          }
+        };
+
         const updatedFormData = {
           ...formData,
           campaignId: responseData.campaignId,
@@ -141,9 +158,13 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
           campaignCategory: responseData.campaignCategory || formData.campaignCategory,
           introImageUrl: responseData.introImageUrl || formData.introImageUrl,
           introVideoUrl: responseData.introVideoUrl || formData.introVideoUrl,
-          startDate: responseData.startDate ? new Date(responseData.startDate).toISOString().split('T')[0] : formData.startDate,
-          endDate: responseData.endDate ? new Date(responseData.endDate).toISOString().split('T')[0] : formData.endDate,
+          startDate: parseDate(responseData.startDate),
+          endDate: parseDate(responseData.endDate),
         };
+
+        console.log('📅 CHƯA startDate:', responseData.startDate);
+        console.log('📅 Parsed startDate:', parseDate(responseData.startDate));
+        console.log('📅 Parsed endDate:', parseDate(responseData.endDate));
 
         // Update local state
         setFormData(updatedFormData);

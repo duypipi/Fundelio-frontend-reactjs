@@ -1,4 +1,4 @@
-import { Edit2, Trash2, Copy } from 'lucide-react';
+import { Edit2, Trash2, Copy, Image } from 'lucide-react';
 import { useState } from 'react';
 import Button from '@/components/common/Button';
 import ConfirmModal from '@/components/common/ConfirmModal';
@@ -125,20 +125,18 @@ export default function RewardCard({
           )}
 
           {/* Show applicable rewards for item in column 2 */}
-          {type === 'item' && linkedRewards.length > 0 && (
+          {type === 'item' && linkedRewards.length > 0 && data?.items?.included?.length > 0 && (
             <div className="mt-2">
               <p className="text-xs font-medium text-muted-foreground mb-1">Được sử dụng trong:</p>
               <ul className="space-y-1">
-                {linkedRewards.map((reward, idx) => (
-                  <li key={reward.rewardId || idx} className="text-sm text-foreground flex items-center gap-2">
-                    {reward.imageUrl && (
-                      <img
-                        src={reward.imageUrl}
-                        alt={reward.title}
-                        className="w-6 h-6 object-cover rounded"
-                      />
+                {data.items.included.map((item) => (
+                  <li key={item.catalogItemId} className="text-sm text-foreground flex items-center gap-2">
+                    {item.imageUrl ? (
+                      <img src={item.imageUrl} alt={item.name} className="w-6 h-6 object-cover rounded" />
+                    ) : (
+                      <Image className="w-6 h-6 text-muted-foreground" />
                     )}
-                    <span>• {reward.title}</span>
+                    <p>{item.name} x {item.quantity || 1}</p>
                   </li>
                 ))}
               </ul>
@@ -155,7 +153,12 @@ export default function RewardCard({
                 <ul className="space-y-1">
                   {data.items.included.map((item) => (
                     <li key={item.catalogItemId} className="text-sm text-foreground flex items-center gap-2">
-                      <img src={item.imageUrl} alt={item.name} className="w-6 h-6 object-cover rounded" /> <p>{item.name} x {item.quantity || 1}</p>
+                      {item.imageUrl ? (
+                        <img src={item.imageUrl} alt={item.name} className="w-6 h-6 object-cover rounded" />
+                      ) : (
+                        <Image className="w-5 h-5 text-muted-foreground" />
+                      )}
+                      <p>{item.name} x {item.quantity || 1}</p>
                     </li>
                   ))}
                 </ul>
@@ -166,9 +169,14 @@ export default function RewardCard({
               <>
                 <h4 className="text-md font-semibold text-foreground my-4">Phụ</h4>
                 <ul className="space-y-1">
-                  {data.items.addOn.map((item, idx) => (
+                  {data.items?.addOn?.map((item, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-sm text-foreground">
-                      <img src={item.imageUrl} alt={item.name} className="w-6 h-6 object-cover rounded" /> <p>{item.name}</p>
+                      {item?.imageUrl ? (
+                        <img src={item.imageUrl} alt={item.name} className="w-6 h-6 object-cover rounded" />
+                      ) : (
+                        <Image className="w-5 h-5 text-muted-foreground" />
+                      )}
+                      <p>{item.name}</p>
                     </li>
                   ))}
                 </ul>

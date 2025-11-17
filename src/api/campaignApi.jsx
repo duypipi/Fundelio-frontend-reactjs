@@ -1,9 +1,28 @@
 import { httpService } from './http';
 
 export const campaignApi = {
-    getAllCampaigns(filter) {
+    getAllCampaigns(params = {}) {
+        const { filter, page = 1, size = 10, sort } = params;
+
+        // Build params object
+        const requestParams = {
+            page,
+            size,
+        };
+
+        // Add filter if provided (will be URL encoded by httpService)
+        if (filter) {
+            requestParams.filter = filter;
+        }
+
+        // Add sort if provided
+        if (sort) {
+            requestParams.sort = sort;
+        }
+
         return httpService.get('/campaigns', {
-            requireToken: true,
+            requireToken: false,
+            params: requestParams,
         });
     },
 

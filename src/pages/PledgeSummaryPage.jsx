@@ -25,6 +25,7 @@ export default function PledgeSummaryPage() {
     const [pledgeSuccess, setPledgeSuccess] = useState(null);
     const [pledgeError, setPledgeError] = useState(null);
     const [showErrorModal, setShowErrorModal] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
     const timeoutRef = useRef(null);
     const successIconRef = useRef(null);
     const errorIconRef = useRef(null);
@@ -32,6 +33,7 @@ export default function PledgeSummaryPage() {
     // Get pledge data from navigation state
     const pledgeData = location.state?.pledgeData;
 
+    console.log('pledgeData:', pledgeData);
     // Subscribe to pledge events - MUST be called before any early returns
     const handlePledgeSuccess = useCallback((data) => {
         console.log('✅ Pledge successful:', data);
@@ -266,7 +268,15 @@ export default function PledgeSummaryPage() {
             return;
         }
 
+        // Show confirmation modal
+        setShowConfirmModal(true);
+    };
+
+    const handleConfirmPledge = async () => {
+        setShowConfirmModal(false);
         setIsSubmitting(true);
+
+        console.log('PAYYYY pledge with data:', reward);
 
         try {
             const pledgePayload = {
@@ -275,10 +285,10 @@ export default function PledgeSummaryPage() {
                 amount: amount,
                 bonusAmount: bonusAmount || 0,
                 totalAmount: totalAmount,
-                addOns: addOns.map(addon => ({
-                    rewardItemId: addon.id,
+                addOns: addOns?.map(addon => ({
+                    rewardItemId: addon.rewardItemId,
                     quantity: addon.quantity || 1
-                }))
+                })) || []
             };
 
             console.log('📤 Sending pledge:', pledgePayload);
@@ -512,6 +522,79 @@ export default function PledgeSummaryPage() {
                     </button>
                 </div>
             </div>
+
+            {/* Confirmation Modal */}
+            <Dialog open={showConfirmModal} onOpenChange={setShowConfirmModal}>
+                <DialogContent className="sm:max-w-md">
+                    <div className="py-4">
+                        <h2 className="text-2xl font-bold text-foreground mb-4 text-center">
+                            Xác nhận thanh toán
+                        </h2>
+
+                        <div className="space-y-4 mb-6">
+                            <div className="bg-background-light-2 dark:bg-darker-2 rounded-lg p-4 space-y-3">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-sm text-muted-foreground">Phần thưởng</span>
+                                    <span className="text-sm font-semibold text-foreground">
+                                        {formatPrice(rewardAmount)} VND
+                                    </span>
+                                </div>
+
+                                {addOns.length > 0 && (
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-muted-foreground">
+                                            Add-ons ({addOns.length})
+                                        </span>
+                                        <span className="text-sm font-semibold text-foreground">
+                                            {formatPrice(addOnsAmount)} VND
+                                        </span>
+                                    </div>
+                                )}
+
+                                {bonusAmount > 0 && (
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-muted-foreground">Thêm ủng hộ</span>
+                                        <span className="text-sm font-semibold text-foreground">
+                                            {formatPrice(bonusAmount)} VND
+                                        </span>
+                                    </div>
+                                )}
+
+                                <div className="pt-3 border-t border-border">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-base font-bold text-foreground">Tổng cộng</span>
+                                        <span className="text-lg font-bold text-primary">
+                                            {formatPrice(totalAmount)} VND
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p className="text-sm text-muted-foreground text-center">
+                                Bạn có chắc chắn muốn tiếp tục thanh toán?
+                            </p>
+                        </div>
+
+                        <div className="flex gap-3">
+                            <Button
+                                onClick={() => setShowConfirmModal(false)}
+                                variant="outline"
+                                className="flex-1"
+                                disabled={isSubmitting}
+                            >
+                                Hủy
+                            </Button>
+                            <Button
+                                onClick={handleConfirmPledge}
+                                className="flex-1"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Đang xử lý...' : 'Xác nhận'}
+                            </Button>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
 
             {/* Error Modal */}
             <Dialog open={showErrorModal} onOpenChange={setShowErrorModal}>

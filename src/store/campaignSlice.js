@@ -16,8 +16,8 @@ const initialState = {
     campaignCategory: '',
     introImageUrl: '',
     introVideoUrl: '',
-    startTime: getDateString(0), // Today
-    endTime: getDateString(60), // 60 days from now
+    startDate: getDateString(0), // Today
+    endDate: getDateString(60), // 60 days from now
     acceptedTerms: false, // Not sent to API, only for UI validation
   },
 
