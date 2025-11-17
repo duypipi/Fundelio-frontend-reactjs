@@ -51,17 +51,9 @@ export const ProjectCard = ({
     onBookmarkToggle?.(campaignId, !bookmarked);
   };
 
-  const formatCurrency = (amount) => {
-    // If amount is already formatted as string, return it
-    if (typeof amount === 'string') return amount;
-
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('vi-VN').format(price);
+    };
 
   const formatNumber = (num) => {
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
@@ -181,7 +173,7 @@ export const ProjectCard = ({
             <div className="flex-1 min-w-0">
               <p className="text-xs text-muted-foreground mb-0.5">Tổng kinh phí</p>
               <p className="text-lg font-bold text-text-primary dark:text-white truncate">
-                {formatCurrency(pledgedAmount)}
+                {formatPrice(pledgedAmount)} VND
               </p>
             </div>
 
