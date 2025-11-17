@@ -65,13 +65,6 @@ export default function BecomeFounderPage() {
         return (
             <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center px-4">
                 <div className="w-full max-w-2xl">
-                    {/* Logo */}
-                    <div className="mb-8">
-                        <div className="inline-block bg-white dark:bg-darker-2 px-4 py-2 rounded">
-                            <span className="text-xl font-bold text-text-primary dark:text-white">Fundelio</span>
-                        </div>
-                    </div>
-
                     {/* Success Card */}
                     <div className="bg-white dark:bg-darker-2 rounded-lg p-12 text-center shadow-[0px_1px_11px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_12px_rgba(0,0,0,0.3)]">
                         {/* Check Icon */}
@@ -118,13 +111,6 @@ export default function BecomeFounderPage() {
     return (
         <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center px-4 py-8">
             <div className="w-full max-w-4xl">
-                {/* Logo */}
-                <div className="mb-8">
-                    <div className="inline-block bg-white dark:bg-darker px-4 py-2 rounded">
-                        <span className="text-xl font-bold text-text-primary">Fundelio</span>
-                    </div>
-                </div>
-
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-text-primary dark:text-white mb-3">Trở thành một creator</h1>

@@ -1,10 +1,9 @@
 import { httpService } from './http';
 
 export const campaignApi = {
-    getAllCampaigns(params) {
+    getAllCampaigns(filter) {
         return httpService.get('/campaigns', {
             requireToken: true,
-            params,
         });
     },
 
