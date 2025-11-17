@@ -22,6 +22,7 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import ForbiddenPage from '@/pages/ForbiddenPage';
 import UserProfilePage from "@/pages/UserProfilePage";
 import PledgeSummaryPage from '@/pages/PledgeSummaryPage';
+import BecomeFounderPage from '@/pages/BecomeFounderPage';
 
 import VerifyChangeEmail from '@/components/auth/VerifyChangeEmail';
 
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
 
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'profile', element: <UserProfilePage /> },
+      { path: 'become-founder', element: <BecomeFounderPage /> },
       {
         path: 'campaigns',
         children: [

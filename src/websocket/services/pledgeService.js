@@ -11,10 +11,10 @@ import { webSocketClient } from '../WebSocketClient';
  * @returns {string} subscriptionId
  */
 export const subscribeToPledgeSuccess = (callback) => {
-  const destination = '/user/private/pledge/success';
-  console.log('🔔 Subscribing to:', destination);
+  const destination = '/client/private/pledge/success';
+  console.log('🔔 Subscribing to pledge success:', destination);
   const subId = webSocketClient.subscribe(destination, callback);
-  console.log('🔔 Subscription ID:', subId);
+  console.log('🔔 Pledge success subscription ID:', subId);
   return subId;
 };
 
@@ -24,10 +24,10 @@ export const subscribeToPledgeSuccess = (callback) => {
  * @returns {string} subscriptionId
  */
 export const subscribeToErrors = (callback) => {
-  const destination = '/user/private/errors';
-  console.log('🔔 Subscribing to:', destination);
+  const destination = '/client/private/errors';
+  console.log('🔔 Subscribing to errors:', destination);
   const subId = webSocketClient.subscribe(destination, callback);
-  console.log('🔔 Subscription ID:', subId);
+  console.log('🔔 Error subscription ID:', subId);
   return subId;
 };
 
@@ -59,14 +59,14 @@ export const createPledge = (pledgeData) => {
  * Unsubscribe từ pledge success
  * @param {string} subscriptionId
  */
-export const unsubscribeFromPledgeSuccess = (subscriptionId) => {
-  webSocketClient.unsubscribe(subscriptionId);
-};
+// export const unsubscribeFromPledgeSuccess = (subscriptionId) => {
+//   webSocketClient.unsubscribe(subscriptionId);
+// };
 
 /**
  * Unsubscribe từ errors
  * @param {string} subscriptionId
  */
-export const unsubscribeFromErrors = (subscriptionId) => {
-  webSocketClient.unsubscribe(subscriptionId);
-};
+// export const unsubscribeFromErrors = (subscriptionId) => {
+//   webSocketClient.unsubscribe(subscriptionId);
+// };

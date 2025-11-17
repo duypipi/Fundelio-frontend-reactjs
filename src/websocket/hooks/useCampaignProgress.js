@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { 
   subscribeToCampaignProgress,
-  unsubscribeFromCampaignProgress
+ 
 } from '@/websocket';
-
+// unsubscribeFromCampaignProgress
 /**
  * Hook để subscribe campaign progress
  * @param {string} campaignId - ID của campaign
@@ -22,7 +22,7 @@ export const useCampaignProgress = (campaignId, onProgress) => {
     return () => {
       if (subscriptionIdRef.current) {
         console.log('🔌 Unsubscribing from campaign progress:', campaignId);
-        unsubscribeFromCampaignProgress(subscriptionIdRef.current);
+        // unsubscribeFromCampaignProgress(subscriptionIdRef.current);
       }
     };
   }, [campaignId, onProgress]);

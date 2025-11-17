@@ -13,13 +13,16 @@ import { webSocketClient } from '../WebSocketClient';
  */
 export const subscribeToCampaignProgress = (campaignId, callback) => {
   const destination = `/public/campaign/${campaignId}/progress`;
-  return webSocketClient.subscribe(destination, callback);
+  console.log('🔔 Subscribing to campaign progress:', destination);
+  const subId = webSocketClient.subscribe(destination, callback);
+  console.log('🔔 Campaign progress subscription ID:', subId);
+  return subId;
 };
 
 /**
  * Unsubscribe từ campaign progress
  * @param {string} subscriptionId
  */
-export const unsubscribeFromCampaignProgress = (subscriptionId) => {
-  webSocketClient.unsubscribe(subscriptionId);
-};
+// export const unsubscribeFromCampaignProgress = (subscriptionId) => {
+//   webSocketClient.unsubscribe(subscriptionId);
+// };

@@ -8,6 +8,7 @@ import { getPreviewData, isPreviewId } from '@/utils/previewStorage';
 import { campaignApi } from '@/api/campaignApi';
 import { rewardApi } from '@/api/rewardApi';
 import { getBlanksFromSections } from '@/data/mockCampaignStory';
+import { useCampaignProgress } from '@/websocket/hooks';
 
 export default function CampaignDetailPage() {
   const { previewId, campaignId } = useParams();
@@ -34,6 +35,29 @@ export default function CampaignDetailPage() {
       console.error('Error loading rewards:', error);
     }
   };
+
+  // Subscribe to campaign progress updates (real-time)
+  useCampaignProgress(
+    // Only subscribe if we have a real campaign ID (not in preview mode with preview ID)
+    campaignData?.campaignId && !isPreview ? campaignData.campaignId : null,
+    (progressData) => {
+      console.log('📊 Campaign progress updated via WebSocket:', progressData);
+
+      // Update campaign data with new progress
+      setCampaignData(prev => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          // Update các fields từ progress data
+          currentAmount: progressData.currentAmount ?? prev.currentAmount,
+          backerCount: progressData.backerCount ?? prev.backerCount,
+          percentFunded: progressData.percentFunded ?? prev.percentFunded,
+          // Có thể thêm các fields khác từ progressData nếu backend trả về
+        };
+      });
+    }
+  );
 
   // Refresh rewards when switching tabs (both Story and Rewards tabs show rewards)
   useEffect(() => {

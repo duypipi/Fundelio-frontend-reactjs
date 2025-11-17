@@ -81,24 +81,41 @@ const calculateStoryProgress = (campaign) => {
 const checkRewardsComplete = async (campaignId) => {
     try {
         const response = await rewardApi.getRewardsWithItems(campaignId);
+        console.log('Full response from getRewardsWithItems:', response);
+        console.log('Response data:', response?.data);
+        console.log('Response data.data:', response?.data?.data);
 
         if (!response?.data?.data?.content || response.data.data.content.length === 0) {
+            console.log('No rewards found or empty content');
             return false;
         }
 
         const rewards = response.data.data.content;
-        console.log('rewards for completeness check:', rewards);
+        console.log('Rewards for completeness check:', rewards);
 
         // Check if at least one reward has all required fields
         return rewards.some(reward => {
+            console.log('Checking reward:', reward);
             const hasTitle = !!reward.title;
             const hasDescription = !!reward.description;
-            const hasPledgeAmount = reward.pledgeAmount && reward.pledgeAmount > 0;
+            const hasPledgeAmount = reward.minPledgedAmount && reward.minPledgedAmount > 0;
             const hasEstimatedDelivery = !!reward.estimatedDelivery;
 
             // Check if has at least one included item (addon is optional)
             const hasIncludedItems = reward.items?.included &&
                 reward.items.included.length > 0;
+
+            console.log('Reward validation:', {
+                title: reward.title,
+                hasTitle,
+                hasDescription,
+                hasPledgeAmount,
+                minPledgeAmount: reward.minPledgedAmount,
+                hasEstimatedDelivery,
+                estimatedDelivery: reward.estimatedDelivery,
+                hasIncludedItems,
+                items: reward.items
+            });
 
             return hasTitle && hasDescription && hasPledgeAmount && hasEstimatedDelivery && hasIncludedItems;
         });
@@ -115,22 +132,27 @@ const checkRewardsComplete = async (campaignId) => {
 const calculateRewardsProgress = async (campaignId) => {
     try {
         const response = await rewardApi.getRewardsWithItems(campaignId);
+        console.log('calculateRewardsProgress - Full response:', response);
 
         if (!response?.data?.data?.content || response.data.data.content.length === 0) {
+            console.log('calculateRewardsProgress - No rewards found');
             return 0;
         }
 
         const rewards = response.data.data.content;
+        console.log('calculateRewardsProgress - Rewards:', rewards);
 
         const validRewards = rewards.filter(reward => {
             const hasTitle = !!reward.title;
             const hasDescription = !!reward.description;
-            const hasPledgeAmount = reward.pledgeAmount && reward.pledgeAmount > 0;
+            const hasPledgeAmount = reward.minPledgedAmount && reward.minPledgedAmount > 0;
             const hasEstimatedDelivery = !!reward.estimatedDelivery;
 
             // Check if has at least one included item (addon is optional)
             const hasIncludedItems = reward.items?.included &&
                 reward.items.included.length > 0;
+
+            console.log('valid reward:', { hasTitle, hasDescription, hasPledgeAmount, hasEstimatedDelivery, hasIncludedItems });
 
             return hasTitle && hasDescription && hasPledgeAmount && hasEstimatedDelivery && hasIncludedItems;
         });

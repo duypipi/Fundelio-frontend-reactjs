@@ -93,10 +93,6 @@ class WebSocketClient {
         this.isConnecting = false;
       },
 
-      // Tự động reconnect
-      reconnectDelay: 5000,
-      heartbeatIncoming: 10000,
-      heartbeatOutgoing: 10000,
     });
 
     this.client.activate();

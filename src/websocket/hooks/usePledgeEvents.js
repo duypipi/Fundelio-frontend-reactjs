@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { 
   subscribeToPledgeSuccess, 
   subscribeToErrors,
-  unsubscribeFromPledgeSuccess,
-  unsubscribeFromErrors,
+  // unsubscribeFromPledgeSuccess,
+  // unsubscribeFromErrors,
   webSocketClient
 } from '@/websocket';
 
@@ -49,15 +49,16 @@ export const usePledgeEvents = (onSuccess, onError) => {
 
     // Cleanup
     return () => {
-      if (successSubIdRef.current) {
-        console.log('🔌 Unsubscribing from pledge success');
-        unsubscribeFromPledgeSuccess(successSubIdRef.current);
-      }
+      // Temporarily disabled - không unsubscribe để giữ connection
+      // if (successSubIdRef.current) {
+      //   console.log('🔌 Unsubscribing from pledge success');
+      //   unsubscribeFromPledgeSuccess(successSubIdRef.current);
+      // }
       
-      if (errorSubIdRef.current) {
-        console.log('🔌 Unsubscribing from errors');
-        unsubscribeFromErrors(errorSubIdRef.current);
-      }
+      // if (errorSubIdRef.current) {
+      //   console.log('🔌 Unsubscribing from errors');
+      //   unsubscribeFromErrors(errorSubIdRef.current);
+      // }
     };
   }, [isReady, onSuccess, onError]);
 };
