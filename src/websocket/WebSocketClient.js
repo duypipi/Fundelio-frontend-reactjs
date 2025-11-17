@@ -8,7 +8,9 @@ import { storageService } from '@/services/storage';
 class WebSocketClient {
   constructor() {
     this.client = null;
-    this.subscriptions = new Map();
+    this.subscriptions = new Map(); // subscriptionId -> subscription object
+    this.destinationCallbacks = new Map(); // destination -> Set of callbacks
+    this.destinationSubscriptionIds = new Map(); // destination -> subscriptionId
     this.isConnecting = false;
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 5;
@@ -100,9 +102,10 @@ class WebSocketClient {
 
   /**
    * Subscribe tới một destination
+   * Nếu destination đã có subscription, chỉ thêm callback vào list
    * @param {string} destination - Destination path
    * @param {function} callback - Callback nhận message
-   * @returns {string} subscriptionId
+   * @returns {string} subscriptionId (hoặc unique callback ID)
    */
   subscribe(destination, callback) {
     if (!this.client?.connected) {
@@ -111,20 +114,56 @@ class WebSocketClient {
     }
 
     try {
+      // Kiểm tra xem destination đã có subscription chưa
+      const existingSubId = this.destinationSubscriptionIds.get(destination);
+      
+      if (existingSubId) {
+        // Destination đã được subscribe, chỉ thêm callback vào set
+        const callbacks = this.destinationCallbacks.get(destination);
+        callbacks.add(callback);
+        console.log(`✅ Added callback to existing subscription: ${destination} (${callbacks.size} callbacks)`);
+        
+        // Trả về unique ID cho callback này để có thể unsubscribe riêng
+        return `${existingSubId}-callback-${callbacks.size}`;
+      }
+
+      // Chưa có subscription cho destination này, tạo mới
       const subscription = this.client.subscribe(destination, (message) => {
         try {
           const data = JSON.parse(message.body);
           console.log(`📨 [${destination}]:`, data);
-          callback(data);
+          
+          // Gọi tất cả callbacks đã đăng ký cho destination này
+          const callbacks = this.destinationCallbacks.get(destination);
+          if (callbacks) {
+            callbacks.forEach(cb => {
+              try {
+                cb(data);
+              } catch (err) {
+                console.error('Error in callback:', err);
+              }
+            });
+          }
         } catch (error) {
           console.error('Error parsing message:', error);
-          callback(message.body);
+          
+          // Fallback: gọi callbacks với raw body
+          const callbacks = this.destinationCallbacks.get(destination);
+          if (callbacks) {
+            callbacks.forEach(cb => cb(message.body));
+          }
         }
       });
 
       const subscriptionId = subscription.id;
       this.subscriptions.set(subscriptionId, subscription);
-      console.log(`✅ Subscribed to: ${destination}`);
+      this.destinationSubscriptionIds.set(destination, subscriptionId);
+      
+      // Tạo Set cho callbacks của destination này
+      const callbackSet = new Set([callback]);
+      this.destinationCallbacks.set(destination, callbackSet);
+      
+      console.log(`✅ New subscription to: ${destination} (ID: ${subscriptionId})`);
       
       return subscriptionId;
     } catch (error) {
@@ -135,14 +174,48 @@ class WebSocketClient {
 
   /**
    * Unsubscribe từ một destination
+   * Nếu còn callbacks khác, chỉ xóa callback này
+   * Nếu không còn callback nào, mới unsubscribe thật sự
    * @param {string} subscriptionId
    */
   unsubscribe(subscriptionId) {
-    const subscription = this.subscriptions.get(subscriptionId);
+    // Tìm destination tương ứng với subscriptionId
+    let targetDestination = null;
+    for (const [dest, subId] of this.destinationSubscriptionIds.entries()) {
+      if (subId === subscriptionId || subscriptionId.startsWith(`${subId}-callback-`)) {
+        targetDestination = dest;
+        break;
+      }
+    }
+
+    if (!targetDestination) {
+      console.warn(`⚠️ Subscription not found: ${subscriptionId}`);
+      return;
+    }
+
+    const callbacks = this.destinationCallbacks.get(targetDestination);
+    
+    // Nếu là callback ID (có dạng "sub-X-callback-Y"), chỉ xóa callback đó
+    if (subscriptionId.includes('-callback-')) {
+      // TODO: Để xóa callback cụ thể, cần lưu map callback -> callbackId
+      // Hiện tại đơn giản hóa: nếu còn > 1 callback, giảm đi 1
+      if (callbacks && callbacks.size > 1) {
+        console.log(`⚠️ Cannot remove specific callback without reference, keeping subscription active`);
+        return;
+      }
+    }
+
+    // Không còn callback nào hoặc là subscription chính, unsubscribe thật sự
+    const subscription = this.subscriptions.get(
+      this.destinationSubscriptionIds.get(targetDestination)
+    );
+    
     if (subscription) {
       subscription.unsubscribe();
       this.subscriptions.delete(subscriptionId);
-      console.log(`✅ Unsubscribed: ${subscriptionId}`);
+      this.destinationSubscriptionIds.delete(targetDestination);
+      this.destinationCallbacks.delete(targetDestination);
+      console.log(`✅ Unsubscribed from: ${targetDestination}`);
     }
   }
 
@@ -181,6 +254,8 @@ class WebSocketClient {
       // Unsubscribe tất cả
       this.subscriptions.forEach(subscription => subscription.unsubscribe());
       this.subscriptions.clear();
+      this.destinationCallbacks.clear();
+      this.destinationSubscriptionIds.clear();
 
       this.client.deactivate();
       this.client = null;

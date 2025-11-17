@@ -25,7 +25,7 @@ export const userApi = {
     httpService.put("/users/update-password", payload),
 
   becomeFounder: () =>
-    httpService.post("/users/become-founder", null, {
+    httpService.post("/users/founder-requests", null, {
       requireToken: true,
     }),
 };

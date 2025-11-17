@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, Edit, X } from 'lucide-react';
 import CampaignHeader from '@/components/campaign/CampaignHeader';
@@ -37,26 +37,28 @@ export default function CampaignDetailPage() {
   };
 
   // Subscribe to campaign progress updates (real-time)
+  const handleCampaignProgress = useCallback((progressData) => {
+    console.log('📊 Campaign progress updated via WebSocket:', progressData);
+
+    // Update campaign data with new progress
+    setCampaignData(prev => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        // Update các fields từ progress data
+        currentAmount: progressData.currentAmount ?? prev.currentAmount,
+        backerCount: progressData.backerCount ?? prev.backerCount,
+        percentFunded: progressData.percentFunded ?? prev.percentFunded,
+        // Có thể thêm các fields khác từ progressData nếu backend trả về
+      };
+    });
+  }, []);
+
   useCampaignProgress(
     // Only subscribe if we have a real campaign ID (not in preview mode with preview ID)
     campaignData?.campaignId && !isPreview ? campaignData.campaignId : null,
-    (progressData) => {
-      console.log('📊 Campaign progress updated via WebSocket:', progressData);
-
-      // Update campaign data with new progress
-      setCampaignData(prev => {
-        if (!prev) return prev;
-
-        return {
-          ...prev,
-          // Update các fields từ progress data
-          currentAmount: progressData.currentAmount ?? prev.currentAmount,
-          backerCount: progressData.backerCount ?? prev.backerCount,
-          percentFunded: progressData.percentFunded ?? prev.percentFunded,
-          // Có thể thêm các fields khác từ progressData nếu backend trả về
-        };
-      });
-    }
+    handleCampaignProgress
   );
 
   // Refresh rewards when switching tabs (both Story and Rewards tabs show rewards)

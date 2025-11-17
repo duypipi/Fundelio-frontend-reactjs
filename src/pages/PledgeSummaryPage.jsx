@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Check, AlertCircle } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RewardItem } from '@/components/campaign/rewards/reward-detail/RewardItem';
@@ -8,6 +8,11 @@ import { Card } from '@/components/campaign/rewards/ui/Card';
 import { usePledgeEvents } from '@/websocket/hooks';
 import { createPledge, webSocketClient } from '@/websocket';
 import toast from 'react-hot-toast';
+import gsap from 'gsap';
+import {
+    Dialog,
+    DialogContent,
+} from '@/components/ui/dialog';
 
 export default function PledgeSummaryPage() {
     const location = useLocation();
@@ -17,73 +22,218 @@ export default function PledgeSummaryPage() {
     const [bonusAmount, setBonusAmount] = useState(0);
     const [agreeToTerms, setAgreeToTerms] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [pledgeSuccess, setPledgeSuccess] = useState(null);
+    const [pledgeError, setPledgeError] = useState(null);
+    const [showErrorModal, setShowErrorModal] = useState(false);
     const timeoutRef = useRef(null);
+    const successIconRef = useRef(null);
+    const errorIconRef = useRef(null);
 
     // Get pledge data from navigation state
     const pledgeData = location.state?.pledgeData;
 
-    // Subscribe to pledge events
+    // Subscribe to pledge events - MUST be called before any early returns
     const handlePledgeSuccess = useCallback((data) => {
         console.log('✅ Pledge successful:', data);
 
-        // Clear timeout
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
 
         setIsSubmitting(false);
-        toast.success('Ủng hộ thành công!');
-
-        // Navigate to success page or campaign page
-        setTimeout(() => {
-            navigate(`/campaigns/${campaignId}`, {
-                state: { pledgeSuccess: true, pledgeData: data }
-            });
-        }, 1000);
-    }, [navigate, campaignId]);
+        setPledgeSuccess(data);
+    }, []);
 
     const handlePledgeError = useCallback((error) => {
-        console.error('❌ Pledge failed:', error);
-        console.error('❌ Error type:', typeof error);
-        console.error('❌ Error details:', JSON.stringify(error, null, 2));
+        console.error('❌ Pledge failed:', error.errors?.[0]?.message);
 
-        // Clear timeout
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
 
         setIsSubmitting(false);
-
-        // Show detailed error
-        const errorMsg = error?.message || error?.error || error?.code || 'Ủng hộ thất bại. Vui lòng thử lại.';
-        toast.error(errorMsg);
+        setPledgeError(error.errors?.[0]?.message);
+        setShowErrorModal(true);
     }, []);
 
     usePledgeEvents(handlePledgeSuccess, handlePledgeError);
 
     useEffect(() => {
         if (!pledgeData) {
-            // Redirect back if no pledge data
             navigate(`/campaigns/${campaignId}`);
         } else {
-            // Log pledge data để kiểm tra cấu trúc
             console.log('📋 Pledge Data:', pledgeData);
             console.log('🎁 Reward:', pledgeData.reward);
             console.log('➕ Add-ons:', pledgeData.addOns);
         }
     }, [pledgeData, campaignId, navigate]);
 
-    if (!pledgeData) {
-        return null;
-    }
+    // Cleanup timeout khi unmount
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
 
-    const { reward, addOns = [], quantity = 1 } = pledgeData;
+    // Animate success icon when it appears
+    useEffect(() => {
+        if (pledgeSuccess && successIconRef.current) {
+            const icon = successIconRef.current;
+            const container = icon.parentElement;
+
+            // Set initial state
+            gsap.set(container, { scale: 0, rotation: -180 });
+            gsap.set(icon, { scale: 0 });
+
+            // Animate container
+            gsap.to(container, {
+                scale: 1,
+                rotation: 0,
+                duration: 0.6,
+                ease: "back.out(1.7)",
+            });
+
+            // Animate icon with delay
+            gsap.to(icon, {
+                scale: 1,
+                duration: 0.4,
+                delay: 0.3,
+                ease: "back.out(2)",
+            });
+
+            // Pulse effect
+            gsap.to(container, {
+                scale: 1.1,
+                duration: 0.3,
+                delay: 0.9,
+                yoyo: true,
+                repeat: 1,
+                ease: "power2.inOut",
+            });
+        }
+    }, [pledgeSuccess]);
+
+    // Animate error icon when modal opens
+    useEffect(() => {
+        if (showErrorModal && errorIconRef.current) {
+            const icon = errorIconRef.current;
+            const container = icon.parentElement;
+
+            // Set initial state
+            gsap.set(container, { scale: 0 });
+            gsap.set(icon, { rotation: -90, scale: 0 });
+
+            // Animate container
+            gsap.to(container, {
+                scale: 1,
+                duration: 0.5,
+                ease: "back.out(1.7)",
+            });
+
+            // Animate icon
+            gsap.to(icon, {
+                rotation: 0,
+                scale: 1,
+                duration: 0.5,
+                delay: 0.2,
+                ease: "back.out(2)",
+            });
+
+            // Shake effect
+            gsap.to(icon, {
+                x: -5,
+                duration: 0.1,
+                delay: 0.7,
+                yoyo: true,
+                repeat: 5,
+                ease: "power2.inOut",
+            });
+        }
+    }, [showErrorModal]);
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat('vi-VN').format(price);
     };
+
+    // Early returns AFTER all hooks
+    if (!pledgeData) {
+        return null;
+    }
+
+    // Success card
+    if (pledgeSuccess) {
+        const successData = pledgeSuccess.data || pledgeSuccess;
+        const message = pledgeSuccess.message || 'Đóng góp thành công! Cảm ơn bạn đã ủng hộ chiến dịch này';
+
+        return (
+            <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center px-4 py-8">
+                <div className="w-full max-w-lg">
+                    <div className="bg-white dark:bg-darker-2 rounded-lg p-12 text-center shadow-[0_8px_20px_rgba(0,0,0,0.35)] dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                        <div className="mb-6 flex justify-center">
+                            <div className="w-20 h-20 rounded-full bg-[#00D9A6] flex items-center justify-center">
+                                <Check ref={successIconRef} className="w-12 h-12 text-white" strokeWidth={3} />
+                            </div>
+                        </div>
+                        <h1 className="text-2xl font-bold text-[#00D9A6] mb-4">Ủng hộ thành công!</h1>
+                        <p className="text-muted-foreground text-md mb-8">{message}</p>
+                        {successData && (
+                            <div className="bg-background-light-2 dark:bg-darker rounded-lg p-6 mb-8 text-left">
+                                <h3 className="font-semibold text-foreground mb-4">Chi tiết đóng góp</h3>
+                                <div className="space-y-2 text-sm">
+                                    {successData.rewardTitle && (
+                                        <div className="flex justify-between">
+                                            <span className="text-muted-foreground">Phần thưởng:</span>
+                                            <span className="font-medium text-foreground">{successData.rewardTitle}</span>
+                                        </div>
+                                    )}
+                                    {successData.amount !== undefined && (
+                                        <div className="flex justify-between">
+                                            <span className="text-muted-foreground">Số tiền:</span>
+                                            <span className="font-medium text-foreground">{formatPrice(successData.amount)} VND</span>
+                                        </div>
+                                    )}
+                                    {successData.bonusAmount > 0 && (
+                                        <div className="flex justify-between">
+                                            <span className="text-muted-foreground">Thưởng thêm:</span>
+                                            <span className="font-medium text-foreground">{formatPrice(successData.bonusAmount)} VND</span>
+                                        </div>
+                                    )}
+                                    {successData.totalAmount !== undefined && (
+                                        <div className="flex justify-between pt-2 border-t border-border">
+                                            <span className="text-foreground font-semibold">Tổng cộng:</span>
+                                            <span className="font-bold text-primary">{formatPrice(successData.totalAmount)} VND</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                        <div className="space-y-4">
+                            <Button
+                                onClick={() => navigate(`/campaigns/${campaignId}`)}
+                                variant="primary"
+                                size="md"
+                                className="w-full bg-primary hover:bg-primary-600 text-white font-semibold py-3 rounded-lg text-base"
+                            >
+                                VỀ TRANG CHIẾN DỊCH
+                            </Button>
+                            <button
+                                onClick={() => navigate('/dashboard')}
+                                className="text-muted-foreground hover:text-foreground font-medium text-base transition-colors"
+                            >
+                                Về trang chủ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const { reward, addOns = [], quantity = 1 } = pledgeData;
 
     // Calculate amounts
     const rewardAmount = reward?.minPledgedAmount || 0;
@@ -153,15 +303,6 @@ export default function PledgeSummaryPage() {
             toast.error(error.message || 'Không thể gửi yêu cầu ủng hộ');
         }
     };
-
-    // Cleanup timeout khi unmount
-    useEffect(() => {
-        return () => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-        };
-    }, []);
 
     return (
         <div className="min-h-screen bg-background-light-2 dark:bg-darker py-8">
@@ -361,7 +502,7 @@ export default function PledgeSummaryPage() {
                     >
                         {isSubmitting ? 'Đang xử lý...' : `Ủng hộ ${formatPrice(totalAmount)} VND`}
                     </Button>
-            
+
                     {/* Back button */}
                     <button
                         onClick={() => navigate(-1)}
@@ -371,6 +512,32 @@ export default function PledgeSummaryPage() {
                     </button>
                 </div>
             </div>
+
+            {/* Error Modal */}
+            <Dialog open={showErrorModal} onOpenChange={setShowErrorModal}>
+                <DialogContent className="sm:max-w-md">
+                    <div className="text-center py-6">
+                        <div className="mb-4 flex justify-center">
+                            <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
+                                <AlertCircle ref={errorIconRef} className="w-10 h-10 text-destructive" strokeWidth={2} />
+                            </div>
+                        </div>
+                        <h2 className="text-2xl font-bold text-foreground mb-3">
+                            Ủng hộ thất bại
+                        </h2>
+                        <p className="text-muted-foreground mb-6">
+                            {pledgeError || 'Đã xảy ra lỗi. Vui lòng thử lại sau.'}
+                        </p>
+                        <Button
+                            onClick={() => setShowErrorModal(false)}
+                            variant="outline"
+                            className="w-full"
+                        >
+                            Đóng
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

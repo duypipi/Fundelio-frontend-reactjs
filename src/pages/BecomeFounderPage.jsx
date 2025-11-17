@@ -17,11 +17,12 @@ export default function BecomeFounderPage() {
     // Check if user is already a founder
     useEffect(() => {
         if (user) {
-            const hasFounderRole = user.roles?.some(role => role.name === 'FOUNDER');
+            const hasFounderRole = user.rolesSecured?.some(role => role.name === 'FOUNDER');
             setIsAlreadyFounder(hasFounderRole);
         }
     }, [user]);
 
+    console.log('User roles:', user.roles);
     const handleBecomeFounder = async () => {
         if (!acceptedTerms) {
             toast.error('Vui lòng đồng ý với điều khoản và điều kiện');
@@ -57,23 +58,22 @@ export default function BecomeFounderPage() {
     };
 
     const handleGoToSettings = () => {
-        navigate('/profile');
+        navigate('/dashboard');
     };
 
-    // Success screen - Already a founder
     if (isAlreadyFounder) {
         return (
-            <div className="min-h-screen bg-[#2C2E3E] flex items-center justify-center px-4">
+            <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center px-4">
                 <div className="w-full max-w-2xl">
                     {/* Logo */}
                     <div className="mb-8">
-                        <div className="inline-block bg-white px-4 py-2 rounded">
-                            <span className="text-xl font-bold text-[#2C2E3E]">Fundelio</span>
+                        <div className="inline-block bg-white dark:bg-darker-2 px-4 py-2 rounded">
+                            <span className="text-xl font-bold text-text-primary dark:text-white">Fundelio</span>
                         </div>
                     </div>
 
                     {/* Success Card */}
-                    <div className="bg-[#383A4D] rounded-lg p-12 text-center">
+                    <div className="bg-white dark:bg-darker-2 rounded-lg p-12 text-center shadow-[0px_1px_11px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_12px_rgba(0,0,0,0.3)]">
                         {/* Check Icon */}
                         <div className="mb-6 flex justify-center">
                             <div className="w-16 h-16 rounded-full bg-[#00D9A6] flex items-center justify-center">
@@ -85,7 +85,7 @@ export default function BecomeFounderPage() {
                         <h1 className="text-3xl font-bold text-[#00D9A6] mb-4">
                             Bạn đã là một Fundelio creator!
                         </h1>
-                        <p className="text-gray-300 text-lg mb-8">
+                        <p className="text-muted-foreground text-lg mb-8">
                             Hồ sơ creator của bạn đã sẵn sàng để sử dụng.
                         </p>
 
@@ -95,12 +95,12 @@ export default function BecomeFounderPage() {
                                 onClick={handleCreateProject}
                                 variant="primary"
                                 size="lg"
-                                className="w-full bg-[#A6B3FF] hover:bg-[#8FA0FF] text-[#2C2E3E] font-semibold py-3 rounded-lg text-base"
+                                className="w-full bg-primary hover:bg-primary-600 text-white font-semibold py-3 rounded-lg text-base"
                             >
                                 TẠO DỰ ÁN ĐẦU TIÊN CỦA BẠN
                             </Button>
 
-                            <div className="text-gray-400 text-sm">hoặc</div>
+                            <div className="text-muted-foreground text-sm">hoặc</div>
 
                             <button
                                 onClick={handleGoToSettings}
@@ -115,27 +115,26 @@ export default function BecomeFounderPage() {
         );
     }
 
-    // Registration form
     return (
-        <div className="min-h-screen bg-[#2C2E3E] flex items-center justify-center px-4 py-8">
+        <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center px-4 py-8">
             <div className="w-full max-w-4xl">
                 {/* Logo */}
                 <div className="mb-8">
-                    <div className="inline-block bg-white px-4 py-2 rounded">
-                        <span className="text-xl font-bold text-[#2C2E3E]">Fundelio</span>
+                    <div className="inline-block bg-white dark:bg-darker px-4 py-2 rounded">
+                        <span className="text-xl font-bold text-text-primary">Fundelio</span>
                     </div>
                 </div>
 
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-white mb-3">Trở thành một creator</h1>
-                    <p className="text-gray-300 text-lg">
+                    <h1 className="text-4xl font-bold text-text-primary dark:text-white mb-3">Trở thành một creator</h1>
+                    <p className="text-muted-foreground text-lg">
                         Hoàn thành các bước bên dưới để trở thành Fundelio creator và bắt đầu dự án đầu tiên của bạn.
                     </p>
                 </div>
 
                 {/* Main Card */}
-                <div className="bg-[#383A4D] rounded-lg p-8 space-y-8">
+                <div className="bg-white dark:bg-darker-2 rounded-lg p-8 space-y-8 shadow-[0px_1px_11px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_12px_rgba(0,0,0,0.3)]">
                     {/* Step 1 - Login Status */}
                     <div>
                         <div className="flex items-start gap-4">
@@ -145,39 +144,39 @@ export default function BecomeFounderPage() {
                                 </div>
                             </div>
                             <div className="flex-1">
-                                <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
+                                <h2 className="text-2xl font-bold text-text-primary dark:text-white mb-2 flex items-center gap-3">
                                     1. Đăng nhập / Đăng ký
                                     <Check className="w-6 h-6 text-[#00D9A6]" strokeWidth={3} />
                                 </h2>
-                                <p className="text-gray-300">
+                                <p className="text-muted-foreground">
                                     Hồ sơ creator của bạn sẽ được liên kết với tài khoản Fundelio sau:{' '}
-                                    <span className="font-semibold text-white">{user?.email || 'user@example.com'}</span>
+                                    <span className="font-semibold text-text-primary dark:text-white">{user?.email || 'user@example.com'}</span>
                                 </p>
                             </div>
                         </div>
                     </div>
 
                     {/* Divider */}
-                    <div className="border-t border-gray-600"></div>
+                    <div className="border-t border-border"></div>
 
                     {/* Step 2 - Terms and Conditions */}
                     <div>
-                        <h2 className="text-2xl font-bold text-white mb-4">
+                        <h2 className="text-2xl font-bold text-text-primary dark:text-white mb-4">
                             2. Đồng ý với điều khoản và điều kiện
                         </h2>
-                        <p className="text-gray-300 mb-6">
+                        <p className="text-muted-foreground mb-6">
                             Vui lòng đọc và chấp nhận điều khoản sử dụng để tiếp tục.
                         </p>
 
                         {/* Terms Checkbox */}
-                        <div className="bg-[#2C2E3E] rounded-lg p-6 mb-6">
+                        <div className="bg-blue-50 dark:bg-darker rounded-lg p-6 mb-6">
                             <label className="flex items-start gap-3 cursor-pointer group">
                                 <Checkbox
                                     checked={acceptedTerms}
-                                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                                    onChange={(checked) => setAcceptedTerms(checked)}
                                     className="mt-1"
                                 />
-                                <span className="text-gray-300 leading-relaxed">
+                                <span className="text-muted-foreground leading-relaxed">
                                     Tôi đã đọc và đồng ý với{' '}
                                     <a
                                         href="/terms"
@@ -211,8 +210,8 @@ export default function BecomeFounderPage() {
                                 variant="primary"
                                 size="lg"
                                 className={`px-12 py-3 rounded-lg font-semibold text-base transition-all ${acceptedTerms && !loading
-                                        ? 'bg-[#00D9A6] hover:bg-[#00F5B8] text-[#2C2E3E]'
-                                        : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                                    ? 'bg-[#00D9A6] hover:bg-[#00F5B8] text-white'
+                                    : 'bg-muted text-muted-foreground cursor-not-allowed'
                                     }`}
                             >
                                 {loading ? 'ĐANG XỬ LÝ...' : 'TIẾP TỤC'}
@@ -222,7 +221,7 @@ export default function BecomeFounderPage() {
                 </div>
 
                 {/* Footer Note */}
-                <div className="mt-6 text-center text-gray-400 text-sm">
+                <div className="mt-6 text-center text-muted-foreground text-sm">
                     <p>Bạn cần hỗ trợ? <a href="/contact" className="text-[#00D9A6] hover:text-[#00F5B8] underline">Liên hệ với chúng tôi</a></p>
                 </div>
             </div>

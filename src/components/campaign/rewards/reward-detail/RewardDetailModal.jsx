@@ -112,13 +112,6 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
 
                     {/* Right - Reward Info */}
                     <div className="flex-1 p-6 md:p-8">
-                        <button
-                            onClick={onClose}
-                            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 flex items-center justify-center transition-colors z-10"
-                        >
-                            <X className="w-5 h-5 text-foreground" />
-                        </button>
-
                         <DialogHeader className="mb-4">
                             <DialogTitle className="text-2xl font-bold pr-10">{reward.title}</DialogTitle>
                         </DialogHeader>
@@ -302,13 +295,6 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                         >
                             XÁC NHẬN ỦNG HỘ
                         </Button>
-
-                        <button
-                            className="w-full text-primary font-semibold mt-4 hover:underline"
-                            onClick={onClose}
-                        >
-                            quản lý khoản ủng hộ
-                        </button>
                     </div>
                 </div>
             </DialogContent>

@@ -18,11 +18,15 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {}, onTabChange
     }
   };
 
+  // Check if campaign is in preview/draft mode
+  const isPreviewMode = campaignProps.campaignStatus === 'DRAFT' || campaignProps.isPreview;
+
   const tabs = [
     { id: 'campaign', label: 'Chiến dịch' },
     { id: 'rewards', label: 'Phần thưởng' },
     { id: 'creator', label: 'Người tạo' },
-    { id: 'leaderboard', label: 'Bảng xếp hạng' },
+    // Hide leaderboard tab in preview/draft mode
+    ...(!isPreviewMode ? [{ id: 'leaderboard', label: 'Bảng xếp hạng' }] : []),
   ];
 
   return (
@@ -102,14 +106,14 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {}, onTabChange
             </div>
           )}
 
-          {/* Leaderboard Tab - Placeholder */}
-          {activeTab === 'leaderboard' && (
+          {/* Leaderboard Tab - Only show if not in preview mode */}
+          {activeTab === 'leaderboard' && !isPreviewMode && (
             <div
               role="tabpanel"
               id="leaderboard-panel"
               aria-labelledby="leaderboard-tab"
             >
-              <Leaderboard />
+              <Leaderboard campaignId={campaignProps.campaignId} />
             </div>
           )}
         </div>

@@ -16,6 +16,17 @@ export const usePledgeEvents = (onSuccess, onError) => {
   const successSubIdRef = useRef(null);
   const errorSubIdRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
+
+  // Update refs khi callbacks thay đổi
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+  }, [onSuccess]);
+
+  useEffect(() => {
+    onErrorRef.current = onError;
+  }, [onError]);
 
   useEffect(() => {
     // Đợi WebSocket connected
@@ -37,15 +48,24 @@ export const usePledgeEvents = (onSuccess, onError) => {
 
     console.log('📡 Setting up pledge subscriptions...');
 
+    // Wrap callbacks trong refs
+    const wrappedSuccess = (data) => {
+      if (onSuccessRef.current) {
+        onSuccessRef.current(data);
+      }
+    };
+
+    const wrappedError = (error) => {
+      if (onErrorRef.current) {
+        onErrorRef.current(error);
+      }
+    };
+
     // Subscribe to pledge success
-    if (onSuccess) {
-      successSubIdRef.current = subscribeToPledgeSuccess(onSuccess);
-    }
+    successSubIdRef.current = subscribeToPledgeSuccess(wrappedSuccess);
 
     // Subscribe to errors
-    if (onError) {
-      errorSubIdRef.current = subscribeToErrors(onError);
-    }
+    errorSubIdRef.current = subscribeToErrors(wrappedError);
 
     // Cleanup
     return () => {
@@ -60,5 +80,5 @@ export const usePledgeEvents = (onSuccess, onError) => {
       //   unsubscribeFromErrors(errorSubIdRef.current);
       // }
     };
-  }, [isReady, onSuccess, onError]);
+  }, [isReady]); // CHỈ phụ thuộc isReady, KHÔNG phụ thuộc callbacks
 };

@@ -56,19 +56,9 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
 
               {/* Price Section */}
               <div className="mb-4">
-                <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-[22px] font-bold text-primary">
-                    {formatPrice(reward.minPledgeAmount)} <span className="text-base">VND</span>
-                  </span>
-                  {hasDiscount && (
-                    <span className="text-lg text-muted-foreground line-through">
-                      {formatPrice(reward.originalPrice)} VND
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Giá thấp nhất trong 30 ngày qua: {formatPrice(reward.min_pledge_amount)} VND
-                </p>
+                <span className="text-[22px] font-bold text-primary">
+                  {formatPrice(reward.minPledgedAmount)} <span className="text-base">VND</span>
+                </span>
               </div>
 
               {/* Perks info if available */}
