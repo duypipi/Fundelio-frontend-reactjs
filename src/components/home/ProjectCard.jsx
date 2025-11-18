@@ -1,6 +1,7 @@
 'use client';
 import { Clock, Bookmark, Heart, Users } from 'lucide-react';
 import expired from '/expired.svg';
+import placeholderImage from '/logo.png'
 export const ProjectCard = ({
   project,
   onBookmarkToggle,
@@ -77,13 +78,13 @@ export const ProjectCard = ({
       {/* Image Container - Square aspect ratio */}
       <div className="relative aspect-square overflow-hidden">
         <img
-          src={imageUrl || '/placeholder.svg'}
+          src={imageUrl || placeholderImage}
           alt={`Cover image for ${title} project`}
           className="w-full h-full object-cover transform-gpu transition-transform duration-500 group-hover:scale-105"
           style={{ willChange: 'transform' }}
           loading="lazy"
           onError={(e) => {
-            e.target.src = '/placeholder.svg';
+            e.target.src = placeholderImage;
           }}
         />        {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
