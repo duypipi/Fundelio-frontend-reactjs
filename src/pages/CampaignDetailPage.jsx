@@ -206,6 +206,18 @@ export default function CampaignDetailPage() {
   const handleTabChange = (tabId) => {
     console.log("Tab changed to:", tabId);
     setActiveTab(tabId);
+
+    // Scroll to tabs section smoothly
+    setTimeout(() => {
+      const tabsElement = document.querySelector('[role="tablist"]');
+      if (tabsElement) {
+        const offsetTop = tabsElement.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+          top: offsetTop - 20, // 20px offset for better visibility
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   };
 
   if (loading) {
@@ -303,23 +315,37 @@ export default function CampaignDetailPage() {
           onPickPerk={handlePickPerk}
           onSave={handleSave}
           onShare={handleShare}
+          onTabChange={handleTabChange}
         />
 
-        <CampaignTabs
-          initialTab="campaign"
-          onTabChange={handleTabChange}
-          campaignProps={{
-            rewards: rewards,
-            items: [], // TODO: Add items from API when available
-            addOns: [], // TODO: Add addOns grid later
-            creator: creatorData,
-            otherProjects: [], // TODO: Add related projects
-            blanks: campaignData.blanks || [],
-            currency: campaignData.currency || 'VND',
-            onPledge: handlePledge,
-            campaignId: campaignData.campaignId,
-          }}
-        />
+        {isPreview ?
+          <CampaignTabs
+            initialTab={activeTab}
+            onTabChange={handleTabChange}
+            campaignProps={{
+              rewards: rewards,
+              creator: creatorData,
+              otherProjects: [], // TODO: Add related projects
+              blanks: campaignData.blanks || [],
+              currency: campaignData.currency || 'VND',
+              onPledge: handlePledge,
+              campaignId: campaignData.campaignId,
+              isPreview: true
+            }}
+          /> : <CampaignTabs
+            initialTab={activeTab}
+            onTabChange={handleTabChange}
+            campaignProps={{
+              rewards: rewards,
+              creator: creatorData,
+              otherProjects: [], // TODO: Add related projects
+              blanks: campaignData.blanks || [],
+              currency: campaignData.currency || 'VND',
+              onPledge: handlePledge,
+              campaignId: campaignData.campaignId,
+            }}
+          />
+        }
 
         {/* Related Campaigns Section */}
         <RelatedCampaigns

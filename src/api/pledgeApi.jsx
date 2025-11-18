@@ -1,7 +1,7 @@
 import { httpService } from "@/api/http";
 
 export const pledgeApi = {
-    getPledgeMyCampaign: async (campaignId) => {
+    getPledgeByCampaign: async (campaignId) => {
         return httpService.get(`/campaigns/${campaignId}/pledges`, {
             requireToken: true,
         });
@@ -13,9 +13,10 @@ export const pledgeApi = {
         });
     },
 
-    getMyPledges: async () => {
+    getMyPledges: async (params = {}) => {
         return httpService.get('/users/me/pledges', {
             requireToken: true,
+            params, // Pass params for pagination & filtering
         });
     }
 

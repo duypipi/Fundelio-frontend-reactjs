@@ -5,6 +5,7 @@ import Checkbox from "@/components/common/Checkbox"
 import ItemSelector from "@/components/common/ItemSelector"
 import Textarea from "@/components/common/Textarea"
 import Tip from "@/components/common/Tip"
+import { Switch } from "@/components/ui/switch"
 import { Trash2, X } from "lucide-react"
 import { storageApi } from "@/api/storageApi"
 import { rewardApi } from "@/api/rewardApi"
@@ -27,6 +28,7 @@ const RewardForm = forwardRef(({ reward, items, rewards, onSave, onCancel, onCha
     },
     shipping: isAddon ? undefined : "anywhere",
     limitTotal: null,
+    rewardStatus: "AVAILABLE", // Default status
     ...reward, // Merge with existing reward data if editing
   })
   const [isUploadingImage, setIsUploadingImage] = useState(false)
@@ -350,6 +352,35 @@ const RewardForm = forwardRef(({ reward, items, rewards, onSave, onCancel, onCha
               Tạo ấn tượng đầu tiên tốt nhất cho <strong>nhà tài trợ</strong> với tiêu đề tuyệt vời.
             </Tip>
           </div>
+        </div>
+      </div>
+
+      {/* Reward Status Section */}
+      <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Trạng thái phần thưởng</h3>
+        <div className="flex items-center justify-between p-4 bg-muted/30 dark:bg-muted/10 rounded-lg">
+          <div className="flex-1">
+            <p className="font-medium text-foreground mb-1">
+              {formData.rewardStatus === "AVAILABLE" ? "Đang mở bán" : "Đã hết hàng"}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {formData.rewardStatus === "AVAILABLE"
+                ? "Người ủng hộ có thể chọn phần thưởng này"
+                : "Phần thưởng tạm thời không khả dụng"}
+            </p>
+          </div>
+          <Switch
+            checked={formData.rewardStatus === "AVAILABLE"}
+            onCheckedChange={(checked) => {
+              const newData = {
+                ...formData,
+                rewardStatus: checked ? "AVAILABLE" : "SOLD_OUT"
+              }
+              setFormData(newData)
+              if (onChange) onChange(newData)
+            }}
+            className="ml-4"
+          />
         </div>
       </div>
 

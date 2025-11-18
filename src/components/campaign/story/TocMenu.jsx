@@ -4,13 +4,23 @@ import React, { useEffect } from 'react';
  * TocMenu — NestJS-like timeline with dots + vertical line
  */
 const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
-  
+
   if (!blanks?.length) return null;
 
   const handleClick = (id) => {
     if (onClickItem) return onClickItem(id);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) {
+      // Calculate offset for sticky header + tabs (~136px total)
+      const headerOffset = 140;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (

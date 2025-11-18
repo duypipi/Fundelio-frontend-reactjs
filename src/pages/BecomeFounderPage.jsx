@@ -76,10 +76,10 @@ export default function BecomeFounderPage() {
 
                         {/* Success Message */}
                         <h1 className="text-3xl font-bold text-[#00D9A6] mb-4">
-                            Bạn đã là một Fundelio creator!
+                            Bạn đã là một Fundelio Founder!
                         </h1>
                         <p className="text-muted-foreground text-lg mb-8">
-                            Hồ sơ creator của bạn đã sẵn sàng để sử dụng.
+                            Hồ sơ founder của bạn đã sẵn sàng để sử dụng.
                         </p>
 
                         {/* Actions */}
@@ -99,7 +99,7 @@ export default function BecomeFounderPage() {
                                 onClick={handleGoToSettings}
                                 className="text-[#00D9A6] hover:text-[#00F5B8] font-medium text-base transition-colors"
                             >
-                                đi tới cài đặt creator
+                                Đi tới cài đặt founder
                             </button>
                         </div>
                     </div>

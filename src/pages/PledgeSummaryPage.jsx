@@ -285,7 +285,7 @@ export default function PledgeSummaryPage() {
                 amount: amount,
                 bonusAmount: bonusAmount || 0,
                 totalAmount: totalAmount,
-                addOns: addOns?.map(addon => ({
+                addOns: reward.items.addOn?.map(addon => ({
                     rewardItemId: addon.rewardItemId,
                     quantity: addon.quantity || 1
                 })) || []

@@ -92,30 +92,16 @@ const CampaignPage = ({
   // Use scroll spy to track active section
   const activeId = useScrollSpy(sectionIds);
 
-  // Debug log
-  useEffect(() => {
-    console.log('🔍 CampaignPage State:', {
-      totalBlanks: sortedBlanks.length,
-      activeId,
-    });
-  }, [activeId, sortedBlanks.length]);
-
-  console.log("đã vào CampaignPage", { rewards, creator, blanks, currency, onPledge });
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_360px] gap-6 lg:gap-8">
-      {/* Left Column - Rewards */}
       <div className="order-1 hidden lg:block">
         <TocMenu blanks={sortedBlanks} activeId={activeId} />
       </div>
 
-
-      {/* Middle Column - Story */}
       <div className="order-2">
         <StoryWithMenu blanks={sortedBlanks} />
       </div>
 
-      {/* Right Column - TOC Menu */}
       <div className="order-3">
         <RewardsColumn
           rewards={rewards}

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CampaignPage from './CampaignPage';
 import RewardsPage from './RewardsPage';
 import CreatorProfile from './creator/CreatorProfile';
 import Leaderboard from './leaderboard/Leaderboard';
 
-/**
- * CampaignTabs Component
- * Tabbed interface for Campaign / Rewards / Creator / Leaderboard
- */
 const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {}, onTabChange }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
+
+  // Sync with parent's initialTab when it changes
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -18,14 +19,17 @@ const CampaignTabs = ({ initialTab = 'campaign', campaignProps = {}, onTabChange
     }
   };
 
-  // Check if campaign is in preview/draft mode
-  const isPreviewMode = campaignProps.campaignStatus === 'DRAFT' || campaignProps.isPreview;
+  console.log('CvcampaignProps:', campaignProps);
 
+  // Fix: Check both campaignStatus and isPreview, with proper fallback
+  const isPreviewMode = campaignProps.campaignStatus === 'DRAFT' ||
+    campaignProps.isPreview === true ||
+    campaignProps.campaign?.campaignStatus === 'DRAFT';
+  console.log('CampaignTabs - isPreviewMode:', isPreviewMode);
   const tabs = [
     { id: 'campaign', label: 'Chiến dịch' },
     { id: 'rewards', label: 'Phần thưởng' },
     { id: 'creator', label: 'Người tạo' },
-    // Hide leaderboard tab in preview/draft mode
     ...(!isPreviewMode ? [{ id: 'leaderboard', label: 'Bảng xếp hạng' }] : []),
   ];
 

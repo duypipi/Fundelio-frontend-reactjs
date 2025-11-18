@@ -1,7 +1,50 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Share2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bell, Share2, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import Button from '@/components/common/Button';
+
+// VideoPlayer component with play button overlay
+const VideoPlayer = ({ url }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = React.useRef(null);
+
+  const handlePlay = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div className="relative w-full h-full">
+      <video
+        ref={videoRef}
+        src={url}
+        className="w-full h-full object-cover"
+        controls={isPlaying}
+        muted
+        loop
+        onPause={handlePause}
+        onEnded={handlePause}
+      />
+      {!isPlaying && (
+        <button
+          onClick={handlePlay}
+          className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors duration-200 group"
+          aria-label="Play video"
+        >
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-lg transition-all duration-200 group-hover:scale-110">
+            <Play className="w-8 h-8 sm:w-10 sm:h-10 text-primary ml-1" fill="currentColor" />
+          </div>
+        </button>
+      )}
+    </div>
+  );
+};
 
 /**
  * Format currency with locale-specific formatting
@@ -20,11 +63,11 @@ const formatCurrency = (amount, currency) => {
 };
 
 /**
- * Clamp percentage between 0 and 100
+ * Clamp percentage between 0 and 100 for display, but allow calculation > 100
  * @param {number} value - The percentage value
- * @returns {number} Clamped value
+ * @returns {number} Clamped value for display
  */
-const clampPercent = (value) => {
+const clampPercentForDisplay = (value) => {
   return Math.min(100, Math.max(0, Math.floor(value)));
 };
 
@@ -37,6 +80,7 @@ const CampaignHeader = ({
   onPickPerk = () => { },
   onSave = () => { },
   onShare = () => { },
+  onTabChange = () => { },
 }) => {
   const {
     title = 'Campaign Title',
@@ -82,8 +126,9 @@ const CampaignHeader = ({
     setCurrentMediaIndex((prev) => (prev === totalMedia - 1 ? 0 : prev + 1));
   };
 
-  // Calculate progress percentage
-  const progressPercent = clampPercent((pledgedAmount / goalAmount) * 100);
+  // Calculate progress percentage - Allow > 100% but clamp for width
+  const actualProgressPercent = Math.floor((pledgedAmount / goalAmount) * 100);
+  const progressPercentForWidth = clampPercentForDisplay(actualProgressPercent);
 
   // Format numbers
   const formattedPledged = formatCurrency(pledgedAmount, currency);
@@ -194,7 +239,7 @@ const CampaignHeader = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
           >
-            <div className="relative aspect-video overflow-hidden rounded-sm border-2 border-white/10 shadow-2xl">
+            <div className="relative aspect-video rounded-sm border-2 border-white/10 shadow-2xl">
               {/* Media Display */}
               {mediaItems.length > 0 && mediaItems[currentMediaIndex] && (
                 <>
@@ -206,14 +251,7 @@ const CampaignHeader = ({
                       loading="eager"
                     />
                   ) : (
-                    <video
-                      src={mediaItems[currentMediaIndex].url}
-                      className="w-full h-full object-cover"
-                      controls
-                      autoPlay
-                      muted
-                      loop
-                    />
+                    <VideoPlayer url={mediaItems[currentMediaIndex].url} />
                   )}
                 </>
               )}
@@ -224,7 +262,7 @@ const CampaignHeader = ({
                   {/* Previous Button */}
                   <button
                     onClick={handlePrevMedia}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
+                    className="absolute -left-4 top-1/2 -translate-y-1/2 w-7 h-7 bg-white/50 hover:bg-white/70 rounded-full flex items-center justify-center text-black transition-all duration-200 backdrop-blur-sm"
                     aria-label="Previous media"
                   >
                     <ChevronLeft size={24} />
@@ -233,19 +271,19 @@ const CampaignHeader = ({
                   {/* Next Button */}
                   <button
                     onClick={handleNextMedia}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
+                    className="absolute -right-4 top-1/2 -translate-y-1/2 w-7 h-7 bg-white/50 hover:bg-white/70 rounded-full flex items-center justify-center text-black transition-all duration-200 backdrop-blur-sm"
                     aria-label="Next media"
                   >
                     <ChevronRight size={24} />
                   </button>
 
                   {/* Media Indicators */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
                     {mediaItems.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentMediaIndex(index)}
-                        className={`w-2 h-2 rounded-full transition-all duration-200 ${index === currentMediaIndex
+                        className={`w-1.5 h-1.5 rounded-full transition-all duration-200 ${index === currentMediaIndex
                           ? 'bg-white w-6'
                           : 'bg-white/50 hover:bg-white/70'
                           }`}
@@ -293,10 +331,10 @@ const CampaignHeader = ({
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#fce65a] rounded-full" />
                 <div className="pl-6">
                   <div className="text-3xl lg:text-4xl font-bold text-white mb-2">
-                    {currency} {formattedPledged}
+                    {formattedPledged} {currency}
                   </div>
                   <div className="text-sm text-gray-300">
-                    đã gây quỹ trên mục tiêu {currency} {formattedGoal}
+                    đã gây quỹ trên mục tiêu {formattedGoal} {currency}
                   </div>
                 </div>
               </div>
@@ -307,7 +345,7 @@ const CampaignHeader = ({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-2xl font-bold text-white">
-                      {progressPercent}%
+                      {actualProgressPercent}%
                     </span>
                     <span className="text-sm text-gray-300">đạt được</span>
                   </div>
@@ -315,7 +353,7 @@ const CampaignHeader = ({
                     <motion.div
                       className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#0894e2] to-[#0894e2] rounded-full"
                       initial={{ width: 0 }}
-                      animate={{ width: `${progressPercent}%` }}
+                      animate={{ width: `${progressPercentForWidth}%` }}
                       transition={{ duration: 1.5, ease: 'easeOut' }}
                     />
                   </div>
@@ -347,8 +385,11 @@ const CampaignHeader = ({
                 <Button
                   variant="gradient"
                   size="lg"
-                  className="w-full text-base font-bold shadow-lg shadow-[#0894e2]/30"
-                  onClick={onPickPerk}
+                  className="w-full text-base font-bold shadow-lg shadow-[#0894e2]/30 focus:outline-none focus-visible:ring-0"
+                  onClick={() => {
+                    onTabChange('rewards');
+                    onPickPerk();
+                  }}
                 >
                   ỦNG HỘ DỰ ÁN NÀY
                 </Button>

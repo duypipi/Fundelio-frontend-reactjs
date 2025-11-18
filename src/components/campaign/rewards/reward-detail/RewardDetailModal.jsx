@@ -7,60 +7,46 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '../ui/Button';
-import { Plus, Minus, X, Users, Truck, Info } from 'lucide-react';
+import { Plus, Minus, X, Users, Truck, Info, Trash2 } from 'lucide-react';
 import { RewardItem } from './RewardItem';
 
 export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns = [], onSelectReward, campaignId }) {
     const navigate = useNavigate();
-    // Single reward selection - no quantity
     const [selectedAddOns, setSelectedAddOns] = useState([]);
+    const includedItems = reward.items?.included || [];
+    const filteredAddOns = reward.items?.addOn || [];
 
-    // Get included items from reward.items.included array (API structure)
-    const includedItems = (reward.items?.included || []).map((includedItem) => {
-        // includedItem from API has: catalogItemId, name, price, quantity, imageUrl
-        return {
-            id: includedItem.catalogItemId,
-            name: includedItem.name || 'Unknown Item',
-            image: includedItem.imageUrl || 'https://c.animaapp.com/mh96kubogMaabT/img/ai_1.png',
-            quantity: includedItem.quantity || 1,
-            description: includedItem.description || '',
-        };
-    });
-
-    // Filter add-ons that are allowed for this reward
-    // API structure: reward.items.addOn contains the add-ons for this reward
-    const filteredAddOns = (reward.items?.addOn || []).map((addonItem) => ({
-        id: addonItem.catalogItemId,
-        title: addonItem.name,
-        image: addonItem.imageUrl,
-        price: addonItem.price || 0,
-        description: addonItem.description || '',
-    }));
-
-    const toggleAddOn = (addonId) => {
+    const toggleAddOn = (addonCatalogId) => {
         setSelectedAddOns((prev) => {
-            const exists = prev.find((a) => a.id === addonId);
+            const exists = prev.find((a) => String(a.catalogItemId) === String(addonCatalogId));
             if (exists) {
-                return prev.filter((a) => a.id !== addonId);
+                return prev.filter((a) => String(a.catalogItemId) !== String(addonCatalogId));
             } else {
-                const addon = filteredAddOns.find((a) => a.id === addonId);
-                return [...prev, { ...addon, quantity: 1 }];
+                const addon = filteredAddOns.find((a) => String(a.catalogItemId) === String(addonCatalogId));
+                if (addon) {
+                    console.log('Adding add-on with rewardItemId:', addon.rewardItemId || addon.catalogItemId);
+                    return [...prev, {
+                        ...addon,
+                        quantity: 1,
+                    }];
+                }
+                return prev;
             }
         });
     };
 
-    const updateAddOnQuantity = (addonId, delta) => {
+    const updateAddOnQuantity = (addonCatalogId, delta) => {
         setSelectedAddOns((prev) =>
             prev.map((addon) =>
-                addon.id === addonId
-                    ? { ...addon, quantity: Math.max(1, Math.min(10, addon.quantity + delta)) } // Max 10
+                String(addon.catalogItemId) === String(addonCatalogId)
+                    ? { ...addon, quantity: Math.max(1, Math.min(10, (addon.quantity || 1) + delta)) } // Max 10
                     : addon
             )
         );
     };
 
-    const removeAddOn = (addonId) => {
-        setSelectedAddOns((prev) => prev.filter((a) => a.id !== addonId));
+    const removeAddOn = (addonCatalogId) => {
+        setSelectedAddOns((prev) => prev.filter((a) => String(a.catalogItemId) !== String(addonCatalogId)));
     };
 
     const calculateTotal = () => {
@@ -80,13 +66,12 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
     const handleSubmit = () => {
         const pledgeData = {
             reward,
-            quantity: 1, // Always 1
+            quantity: 1, 
             addOns: selectedAddOns,
             total: calculateTotal(),
             campaignId,
         };
 
-        // Navigate to pledge summary page
         navigate(`/campaigns/${campaignId}/pledge`, {
             state: { pledgeData }
         });
@@ -171,7 +156,7 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {includedItems.map((item) => (
                             <RewardItem
-                                key={item.id}
+                                key={item.catalogItemId || item.id}
                                 item={item}
                                 variant="default"
                                 showQuantity={true}
@@ -190,46 +175,43 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                                 <div className="space-y-3 mb-4">
                                     {selectedAddOns.map((addon) => (
                                         <RewardItem
-                                            key={addon.id}
-                                            item={{
-                                                id: addon.id,
-                                                name: addon.title,
-                                                image: addon.image,
-                                                quantity: addon.quantity,
-                                            }}
+                                            key={addon.catalogItemId || addon.id}
+                                            item={addon}
                                             variant="addon"
                                             showQuantity={false}
                                             rightContent={
-                                                <div className="flex flex-col gap-2">
-                                                    <button
-                                                        onClick={() => removeAddOn(addon.id)}
-                                                        className="text-destructive hover:text-destructive/80"
-                                                    >
-                                                        <X className="w-5 h-5" />
-                                                    </button>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button
-                                                            size="icon"
-                                                            variant="outline"
-                                                            className="h-7 w-7"
-                                                            onClick={() => updateAddOnQuantity(addon.id, -1)}
-                                                            disabled={addon.quantity === 1}
+                                                <div className="flex flex-1 items-center justify-end gap-3">
+                                                    {/* Quantity controls - Improved UI */}
+                                                    <div className="flex items-center border border-border dark:border-gray-600 rounded-lg bg-background dark:bg-darker overflow-hidden shadow-sm">
+                                                        <button
+                                                            onClick={() => updateAddOnQuantity(addon.catalogItemId || addon.id, -1)}
+                                                            disabled={(addon.quantity || 1) === 1}
+                                                            className="h-9 w-9 flex items-center justify-center hover:bg-muted dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                                         >
-                                                            <Minus className="w-3 h-3" />
-                                                        </Button>
-                                                        <span className="font-semibold min-w-[2rem] text-center">
-                                                            {addon.quantity}
-                                                        </span>
-                                                        <Button
-                                                            size="icon"
-                                                            variant="outline"
-                                                            className="h-7 w-7"
-                                                            onClick={() => updateAddOnQuantity(addon.id, 1)}
-                                                            disabled={addon.quantity === 10}
+                                                            <Minus className="w-4 h-4 text-foreground" />
+                                                        </button>
+
+                                                        <div className="w-10 h-9 flex items-center justify-center text-sm font-semibold border-x border-border dark:border-gray-600 text-foreground dark:text-white bg-muted/30 dark:bg-gray-800/50">
+                                                            {addon.quantity || 1}
+                                                        </div>
+
+                                                        <button
+                                                            onClick={() => updateAddOnQuantity(addon.catalogItemId || addon.id, 1)}
+                                                            disabled={(addon.quantity || 1) === 10}
+                                                            className="h-9 w-9 flex items-center justify-center hover:bg-muted dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                                         >
-                                                            <Plus className="w-3 h-3" />
-                                                        </Button>
+                                                            <Plus className="w-4 h-4 text-foreground" />
+                                                        </button>
                                                     </div>
+
+                                                    {/* Remove button - Better styling */}
+                                                    <button
+                                                        onClick={() => removeAddOn(addon.catalogItemId || addon.id)}
+                                                        className="h-9 w-9 flex items-center justify-center rounded-lg text-muted-foreground hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all shadow-sm border border-transparent hover:border-red-200 dark:hover:border-red-800"
+                                                        title="Xóa tiện ích này"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
                                                 </div>
                                             }
                                         />
@@ -239,20 +221,24 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                                 <p className="text-muted-foreground mb-4 text-center py-4">Chưa chọn tiện ích bổ sung</p>
                             )}
 
-                            <Button
-                                variant="outline"
-                                className="w-full font-semibold"
+                            {/* Improved Add-on Button */}
+                            <button
                                 onClick={() => {
                                     // Toggle add-ons picker
                                     const firstAddon = filteredAddOns[0];
                                     if (firstAddon && selectedAddOns.length === 0) {
-                                        toggleAddOn(firstAddon.id);
+                                        toggleAddOn(firstAddon.catalogItemId || firstAddon.id);
                                     }
                                 }}
+                                className="w-full h-12 flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-primary/30 dark:border-primary/40 bg-primary/5 dark:bg-primary/10 hover:bg-primary/10 dark:hover:bg-primary/20 hover:border-primary/50 dark:hover:border-primary/60 transition-all group"
                             >
-                                <Plus className="w-4 h-4 mr-2" />
-                                CHỌN TIỆN ÍCH BỔ SUNG
-                            </Button>
+                                <div className="p-1.5 rounded-full bg-primary/10 dark:bg-primary/20 group-hover:bg-primary/20 dark:group-hover:bg-primary/30 transition-colors">
+                                    <Plus className="w-4 h-4 text-primary dark:text-primary-light" />
+                                </div>
+                                <span className="font-semibold text-sm text-primary dark:text-primary-light tracking-wide">
+                                    CHỌN TIỆN ÍCH BỔ SUNG
+                                </span>
+                            </button>
                         </div>
                     )}
 
@@ -290,10 +276,12 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                         </div> */}
 
                         <Button
-                            className="w-full font-bold text-white bg-primary hover:bg-primary/90 h-14 text-base"
+                            className="w-full font-bold text-white bg-primary hover:bg-primary/90 h-14 text-base flex items-center justify-center gap-3"
                             onClick={handleSubmit}
                         >
-                            XÁC NHẬN ỦNG HỘ
+                            <span>XÁC NHẬN ỦNG HỘ</span>
+                            <span className="text-lg">•</span>
+                            <span className="font-bold">{formatPrice(calculateTotal())} VND</span>
                         </Button>
                     </div>
                 </div>

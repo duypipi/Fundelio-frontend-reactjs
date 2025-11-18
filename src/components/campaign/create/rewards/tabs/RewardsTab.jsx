@@ -95,6 +95,7 @@ export default function RewardTiersTab({ campaignId }) {
         description: reward.description,
         imageUrl: reward.imageUrl,
         estimatedDelivery: reward.estimatedDelivery,
+        rewardStatus: reward.rewardStatus || "AVAILABLE",
       }
 
       if (reward.shipping === "anywhere") {
@@ -193,9 +194,9 @@ export default function RewardTiersTab({ campaignId }) {
       }
 
       // Convert addOnItems array to object { catalogItemId: quantity }
-      if (reward.items?.addon && reward.items.addon.length > 0) {
+      if (reward.items?.addOn && reward.items.addOn.length > 0) {
         const itemQuantities = {}
-        reward.items.addon.forEach(item => {
+        reward.items.addOn.forEach(item => {
           itemQuantities[item.catalogItemId] = 0
         })
 
