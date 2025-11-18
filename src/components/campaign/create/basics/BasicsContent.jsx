@@ -164,17 +164,13 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
           endDate: parseDate(responseData.endDate),
         };
 
-        console.log('📅 CHƯA startDate:', responseData.startDate);
-        console.log('📅 Parsed startDate:', parseDate(responseData.startDate));
-        console.log('📅 Parsed endDate:', parseDate(responseData.endDate));
-
         // Update local state
         setFormData(updatedFormData);
 
         // Save merged data to Redux
         dispatch(setBasics(updatedFormData));
         toast.success(successMsg, { id: toastId });
-        
+
         if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
         navigationTimeoutRef.current = setTimeout(() => {
           navigate(`/campaigns/${responseData.campaignId}/dashboard`);
