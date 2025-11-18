@@ -39,7 +39,6 @@ export const campaignApi = {
     },
 
     updateCampaign(campaignId, campaignData) {
-        console.log('Updating campaign:', campaignId, 'with data:', campaignData);
         return httpService.patch(`/campaigns/${campaignId}`, campaignData, {
             requireToken: true,
         });
