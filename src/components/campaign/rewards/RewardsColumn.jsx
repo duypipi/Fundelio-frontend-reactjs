@@ -12,9 +12,11 @@ const RewardsColumn = ({
   creator,
   currency = 'USD',
   onPledge,
+  campaignId,
 }) => {
+  console.log("đã ở trong RewardsColumn", { rewards, creator, currency, onPledge });
   return (
-    <div className="space-y-4 sticky top-[150px] max-h-[calc(100vh-88px)] overflow-auto pr-2 scrollbar-primary">
+    <div className="space-y-4 sticky top-[88px] max-h-[calc(100vh-88px)] overflow-auto pr-2 scrollbar-primary">
       {/* Creator Info */}
       {creator && <CreatorInfoCard creator={creator} />}
 
@@ -29,9 +31,11 @@ const RewardsColumn = ({
       {/* All Rewards */}
       {rewards.map((reward) => (
         <RewardCard
-          key={reward.id}
+          key={reward.reward_id || reward.id}
           reward={reward}
+          layoutMode="vertical"
           onPledge={(r) => onPledge && onPledge({ type: 'reward', reward: r })}
+          campaignId={campaignId}
         />
       ))}
     </div>

@@ -1,0 +1,66 @@
+import { useState, useEffect } from "react"
+import ComponentsTab from "./tabs/ComponenstTab"
+import RewardsTab from "./tabs/RewardsTab"
+
+export default function RewardCreateTab({ campaignId }) {
+  const [activeTab, setActiveTab] = useState("component");
+
+  // Sync URL hash with active tab
+  useEffect(() => {
+    const hash = window.location.hash.slice(1) || "component";
+    if (["component", "rewards"].includes(hash)) {
+      setActiveTab(hash);
+    }
+  }, []);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab)
+    window.location.hash = tab
+  }
+
+  const tabs = [
+    { id: "component", label: "Thành phần" },
+    { id: "rewards", label: "Phần thưởng" },
+  ]
+
+  return (
+    <div>
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Phần thưởng</h2>
+        <p className="text-muted-foreground">Quản lý các phần thưởng và thành phần cho dự án của bạn</p>
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="border-b border-border mb-6">
+        <div className="flex gap-2 overflow-x-auto">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => handleTabChange(tab.id)}
+              className={`flex items-center gap-2 px-4 py-3 font-semibold text-md border-b-2 transition-colors whitespace-nowrap ${activeTab === tab.id
+                ? "border-primary text-primary"
+                : "border-transparent text-text-primary dark:text-white hover:text-primary/70 hover:border-primary/70"
+                }`}
+            >
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div className="space-y-6">
+        {activeTab === "component" && (
+          <ComponentsTab
+            campaignId={campaignId}
+          />
+        )}
+        {activeTab === "rewards" && (
+          <RewardsTab
+            campaignId={campaignId}
+          />
+        )}
+      </div>
+    </div>
+  )
+}

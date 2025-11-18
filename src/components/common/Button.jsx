@@ -48,6 +48,13 @@ const Button = ({
     // Button với nền xanh nhạt
     light:
       'bg-background-light hover:bg-background-lighter text-primary border border-primary-200',
+
+    // Button với gradient cyan-blue
+    gradient:
+      'bg-gradient-to-r from-cyan-500 via-blue-600 to-blue-700 hover:from-cyan-400 hover:via-blue-500 hover:to-blue-600 text-white shadow-2xl hover:shadow-cyan-500/50 border-0 outline-none',
+    
+    gray:
+      'bg-gray-100 text-text-primary shadow-sm hover:shadow-md',
   };
 
   // Định nghĩa các size
@@ -60,7 +67,7 @@ const Button = ({
 
   // Class cơ bản cho button
   const baseClasses =
-    'inline-flex items-center justify-center rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none font-inter';
+    'inline-flex items-center justify-center rounded-md transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none font-inter';
 
   // Kết hợp tất cả classes
   const buttonClasses = cn(

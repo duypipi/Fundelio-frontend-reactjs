@@ -1,178 +1,360 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { Eye, Edit, X } from 'lucide-react';
 import CampaignHeader from '@/components/campaign/CampaignHeader';
 import CampaignTabs from '@/components/campaign/CampaignTabs';
+import RelatedCampaigns from '@/components/campaign/RelatedCampaigns';
+import { getPreviewData, isPreviewId } from '@/utils/previewStorage';
+import { campaignApi } from '@/api/campaignApi';
+import { rewardApi } from '@/api/rewardApi';
+import { getBlanksFromSections } from '@/data/mockCampaignStory';
+import { useCampaignProgress } from '@/websocket/hooks';
 
-/**
- * CampaignDetailPage Component
- * Displays the full campaign detail page with header and additional content
- */
 export default function CampaignDetailPage() {
-  // Mock campaign data
-  const campaignData = {
-    title: 'Odin 3: The Ultimate 6" 120Hz OLED Gaming Handheld',
-    highlights: [
-      '8 Elite | Exclusive 6" 120Hz AMOLED Touch Screen',
-      'Full Size Stick | 8000mAh | 390g | Ergonomic Grip',
-      'Premium Build Quality with Advanced Cooling System',
-    ],
-    creator: {
-      name: 'AYN Technologies',
-      location: 'Shenzhen, China',
-      link: '#creator-profile',
-    },
-    imageUrl:
-      'https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1200&auto=format&fit=crop',
-    currency: 'USD',
-    pledged: 7697612,
-    goal: 50000,
-    backers: 2018,
-    daysLeft: 4,
+  const { previewId, campaignId } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [campaignData, setCampaignData] = useState(null);
+  const [rewards, setRewards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('campaign');
+
+  // Check if we're in preview mode based on route path
+  const isPreview = location.pathname.includes('/preview/');
+
+  // Check if opened from admin (to hide edit button)
+  const fromAdmin = location.state?.fromAdmin || false;
+
+  const loadRewards = async (campId) => {
+    try {
+      const response = await rewardApi.getRewardsWithItems(campId);
+      if (response?.data?.data?.content) {
+        setRewards(response.data.data.content);
+      }
+    } catch (error) {
+      console.error('Error loading rewards:', error);
+    }
   };
 
-  // Mock rewards data
-  const rewards = [
-    {
-      id: 'reward-1',
-      title: 'DiskPro 1TB [Kickstarter Price]',
-      priceLabel: 'US$ 199',
-      description: `DiskPro Kickstarter Price! 16.7% Off the retail price!\n\nBuilt-in 1TB SSD for massive storage capacity. Ultra-fast read/write speeds up to 550MB/s. Compact and portable design fits in your pocket.`,
-      coverUrl:
-        'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=600&auto=format&fit=crop',
-      backers: 4,
-      shipsTo: 'Only certain countries',
-      eta: 'Dec 2025',
-      itemsIncluded: 4,
-      thumbnails: [
-        'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=150&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=150&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=150&auto=format&fit=crop',
-      ],
-      addOnCount: 1,
-      detailsHref: '#reward-1-details',
-      pledgeActionLabel: 'Pledge US$ 199',
-    },
-    {
-      id: 'reward-2',
-      title: 'Early Bird Special - 2TB Edition',
-      priceLabel: 'US$ 349',
-      description: `Limited Early Bird offer! 2TB storage for power users.\n\nDouble the storage, same blazing-fast speed. Perfect for professionals and content creators. Only 50 units available at this price!`,
-      coverUrl:
-        'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=600&auto=format&fit=crop',
-      backers: 12,
-      shipsTo: 'Worldwide',
-      eta: 'Jan 2026',
-      itemsIncluded: 5,
-      thumbnails: [
-        'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=150&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=150&auto=format&fit=crop',
-      ],
-      addOnCount: 2,
-      detailsHref: '#reward-2-details',
-      pledgeActionLabel: 'Pledge US$ 349',
-    },
-  ];
+  // Subscribe to campaign progress updates (real-time)
+  const handleCampaignProgress = useCallback((progressData) => {
+    console.log('📊 Campaign progress updated via WebSocket:', progressData);
 
-  // Mock creator data
-  const creator = {
-    name: 'BEAVERLAB TECH',
-    created: 5,
-    backed: 9,
-    avatarUrl: 'https://i.pravatar.cc/150?img=12',
-    bio: "BEAVERLAB is a trailblazer in merging optics and technology innovation. We create cutting-edge products that push the boundaries of what's possible.",
+    // Update campaign data with new progress
+    setCampaignData(prev => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        // Update các fields từ progress data
+        currentAmount: progressData.currentAmount ?? prev.currentAmount,
+        backerCount: progressData.backerCount ?? prev.backerCount,
+        percentFunded: progressData.percentFunded ?? prev.percentFunded,
+        // Có thể thêm các fields khác từ progressData nếu backend trả về
+      };
+    });
+  }, []);
+
+  useCampaignProgress(
+    // Only subscribe if we have a real campaign ID (not in preview mode with preview ID)
+    campaignData?.campaignId && !isPreview ? campaignData.campaignId : null,
+    handleCampaignProgress
+  );
+
+  // Refresh rewards when switching tabs (both Story and Rewards tabs show rewards)
+  useEffect(() => {
+    if ((activeTab === 'campaign' || activeTab === 'rewards') && campaignData?.campaignId) {
+      loadRewards(campaignData.campaignId);
+    }
+  }, [activeTab, campaignData?.campaignId]);
+
+  useEffect(() => {
+    const loadCampaignData = async () => {
+      setLoading(true);
+
+      try {
+        // Preview mode - check previewId
+        if (isPreview && previewId) {
+          console.log('Preview mode - previewId:', previewId);
+
+          // First try to load real campaign if previewId is actually a campaignId (UUID)
+          if (!isPreviewId(previewId)) {
+            const response = await campaignApi.getCampaignById(previewId);
+
+            if (response?.data?.data) {
+              const apiData = response.data.data;
+
+              // Calculate days left
+              const endDate = apiData.endDate ? new Date(apiData.endDate) : new Date();
+              const today = new Date();
+              const daysLeft = Math.max(0, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
+
+              // Process campaign sections to get blanks for story tab
+              const blanks = apiData.campaignSections ? getBlanksFromSections(apiData.campaignSections) : [];
+
+              setCampaignData({
+                ...apiData,
+                daysLeft,
+                blanks,
+                currency: 'VND',
+              });
+
+              // Load rewards immediately after campaign data
+              await loadRewards(apiData.campaignId);
+            } else {
+              console.error('Campaign not found');
+              navigate('/campaigns/create');
+            }
+          } else {
+            // It's a real preview ID - load from localStorage
+            const stateData = location.state?.campaignData;
+            console.log('Preview ID mode - state data:', stateData);
+
+            if (stateData) {
+              const { basics, story, rewards: previewRewards } = stateData;
+
+              // Calculate days left
+              const endDate = basics?.endDate ? new Date(basics.endDate) : new Date();
+              const today = new Date();
+              const daysLeft = Math.max(0, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
+
+              setCampaignData({
+                ...basics,
+                daysLeft,
+                blanks: story?.blanks || [],
+                currency: 'VND',
+              });
+
+              // Set preview rewards if available
+              if (previewRewards?.rewards) {
+                setRewards(previewRewards.rewards);
+              }
+            } else {
+              const storedData = getPreviewData(previewId);
+              console.log('Stored preview data:', storedData);
+
+              if (storedData) {
+                const { basics, story, rewards: previewRewards } = storedData;
+
+                const endDate = basics?.endDate ? new Date(basics.endDate) : new Date();
+                const today = new Date();
+                const daysLeft = Math.max(0, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
+
+                setCampaignData({
+                  ...basics,
+                  daysLeft,
+                  blanks: story?.blanks || [],
+                  currency: 'VND',
+                });
+
+                if (previewRewards?.rewards) {
+                  setRewards(previewRewards.rewards);
+                }
+              } else {
+                console.error('Preview data not found');
+                navigate('/campaigns/create');
+                return;
+              }
+            }
+          }
+        }
+        // Normal mode - load campaign by ID
+        else if (campaignId) {
+          console.log('Normal mode - loading campaign:', campaignId);
+          const response = await campaignApi.getCampaignById(campaignId);
+
+          if (response?.data?.data) {
+            const apiData = response.data.data;
+            console.log('API data:', apiData);
+
+            // Calculate days left
+            const endDate = apiData.endDate ? new Date(apiData.endDate) : new Date();
+            const today = new Date();
+            const daysLeft = Math.max(0, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
+
+            // Process campaign sections to get blanks for story tab
+            const blanks = apiData.campaignSections ? getBlanksFromSections(apiData.campaignSections) : [];
+
+            setCampaignData({
+              ...apiData,
+              daysLeft,
+              blanks,
+              currency: 'VND',
+            });
+
+            // Load rewards immediately after campaign data
+            await loadRewards(apiData.campaignId);
+          } else {
+            console.error('Campaign not found');
+          }
+        }
+      } catch (error) {
+        console.error('Error loading campaign:', error);
+      }
+
+      setLoading(false);
+    };
+
+    loadCampaignData();
+  }, [previewId, campaignId, isPreview, location.state, navigate]);
+
+  const handlePickPerk = () => console.log('Pick Your Perk clicked');
+  const handleSave = () => console.log('Save For Later clicked');
+  const handleShare = () => console.log('Share clicked');
+  const handlePledge = (pledgeData) => console.log('Pledge:', pledgeData);
+
+  const handleTabChange = (tabId) => {
+    console.log("Tab changed to:", tabId);
+    setActiveTab(tabId);
+
+    // Scroll to tabs section smoothly
+    setTimeout(() => {
+      const tabsElement = document.querySelector('[role="tablist"]');
+      if (tabsElement) {
+        const offsetTop = tabsElement.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+          top: offsetTop - 20, // 20px offset for better visibility
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!campaignData) {
+    return (
+      <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-foreground">Không tìm thấy chiến dịch</p>
+          <p className="mt-2 text-muted-foreground">Vui lòng thử lại sau</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Prepare creator data from campaign owner
+  const creatorData = campaignData.owner ? {
+    name: `${campaignData.owner.firstName || ''} ${campaignData.owner.lastName || ''}`.trim() || 'Creator',
+    username: campaignData.owner.email || 'creator',
+    avatar: campaignData.owner.profileImage || 'https://i.pravatar.cc/150?img=12',
+    bio: campaignData.owner.bio || 'Campaign creator',
+    badges: [],
+    stats: {
+      createdProjects: 0,
+      backedProjects: 0,
+      lastLogin: new Date().toLocaleDateString(),
+      accountCreated: campaignData.owner.createdAt ? new Date(campaignData.owner.createdAt).toLocaleDateString() : new Date().toLocaleDateString()
+    },
+    socials: {},
+    isVerified: false,
     moreHref: '#creator-profile',
-  };
-
-  // Mock story blanks
-  const blanks = [
-    {
-      id: 'blank-intro',
-      order: 0,
-      title_text: 'Our Commitments - Two 100%',
-      title_html: 'Our Commitments - Two 100%',
-      content_html: `
-        <h2 class="text-2xl font-bold mt-4 mb-2">Khởi đầu từ một ý tưởng</h2>
-        <p>Dự án này bắt đầu từ một ý tưởng đơn giản: tạo ra một thiết bị lưu trữ di động vừa mạnh mẽ, vừa tiện lợi. Sau nhiều tháng nghiên cứu và phát triển, chúng tôi tự hào giới thiệu DiskPro - giải pháp lưu trữ hoàn hảo cho thế kỷ 21.</p>
-        <img src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?q=80&w=1200&auto=format&fit=crop" class="max-w-full h-auto block mx-auto my-4 rounded-xl" alt="Product concept" />
-        <p>Với tốc độ đọc/ghi lên đến 550MB/s và thiết kế siêu gọn nhẹ, DiskPro là người bạn đồng hành lý tưởng cho mọi chuyến đi.</p>
-      `,
-    },
-    {
-      id: 'blank-video',
-      order: 1,
-      title_text: 'Video giới thiệu',
-      title_html: 'Video giới thiệu',
-      content_html: `
-        <p>Xem video giới thiệu chi tiết về dự án và tìm hiểu thêm về công nghệ đằng sau DiskPro:</p>
-        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen class="w-full aspect-video rounded-xl my-4"></iframe>
-        <p>Video này sẽ giúp bạn hiểu rõ hơn về quy trình sản xuất và những tính năng độc đáo của sản phẩm.</p>
-      `,
-    },
-    {
-      id: 'blank-features',
-      order: 2,
-      title_text: 'Tính năng nổi bật',
-      title_html: 'Tính năng nổi bật',
-      content_html: `
-        <h3 class="text-xl font-semibold mt-4 mb-2">Công nghệ tiên tiến</h3>
-        <ul>
-          <li>Chip điều khiển thế hệ mới nhất</li>
-          <li>Tốc độ truyền dữ liệu siêu nhanh</li>
-          <li>Tiết kiệm năng lượng tối ưu</li>
-          <li>Chống sốc và chống nước IP67</li>
-        </ul>
-        <h3 class="text-xl font-semibold mt-4 mb-2">Thiết kế hoàn hảo</h3>
-        <p>Chúng tôi đã dành hàng trăm giờ để tối ưu hóa từng chi tiết, từ chất liệu vỏ nhôm cao cấp đến đèn LED thông minh báo trạng thái.</p>
-        <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1200&auto=format&fit=crop" class="max-w-full h-auto block mx-auto my-4 rounded-xl" alt="Design details" />
-      `,
-    },
-    
-  ];
-
-  // Handler functions
-  const handlePickPerk = () => {
-    console.log('Pick Your Perk clicked');
-    // Navigate to perks section or show perks modal
-  };
-
-  const handleSave = () => {
-    console.log('Save For Later clicked');
-    // Save campaign to user's saved list
-  };
-
-  const handleShare = () => {
-    console.log('Share clicked');
-    // Open share modal or native share dialog
-  };
-
-  const handlePledge = (pledgeData) => {
-    console.log('Pledge:', pledgeData);
-    // Handle pledge action
-  };
+  } : null;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black pt-20">
-      {/* Campaign Header Section */}
-      <CampaignHeader
-        campaign={campaignData}
-        onPickPerk={handlePickPerk}
-        onSave={handleSave}
-        onShare={handleShare}
-      />
+    <div className="min-h-screen bg-background-light-2 dark:bg-darker">
+      {isPreview && (
+        <div className="bg-blue-600 dark:bg-blue-700 text-white py-2.5 sm:py-3 px-3 sm:px-4 fixed top-0 left-0 right-0 z-40 shadow-lg">
+          <div className="container mx-auto flex sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+                <span className="font-semibold text-sm sm:text-base">Chế độ xem trước</span>
+                <span className="text-xs sm:text-sm opacity-90">
+                  {fromAdmin ? 'Xem trước chiến dịch từ Admin' : 'Chỉ bạn mới thấy trang này'}
+                </span>
+              </div>
+            </div>
+            <div className="flex gap-2 w-full sm:w-auto">
+              {!fromAdmin && (
+                <button
+                  onClick={() => {
+                    // Get the real campaign ID from previewId or campaignData
+                    const realCampaignId = previewId && !isPreviewId(previewId)
+                      ? previewId
+                      : campaignData?.campaignId;
 
-      {/* Tabbed Content */}
-      <CampaignTabs
-        initialTab="campaign"
-        campaignProps={{
-          rewards,
-          creator,
-          blanks,
-          currency: campaignData.currency,
-          onPledge: handlePledge,
-        }}
-      />
+                    if (realCampaignId && realCampaignId !== 'preview') {
+                      navigate(`/campaigns/${realCampaignId}/edit?tab=basic`);
+                    } else {
+                      navigate('/campaigns/create');
+                    }
+                  }}
+                  className="flex items-center gap-1.5 bg-white text-blue-600 dark:text-blue-700 px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-100 transition-colors whitespace-nowrap flex-1 sm:flex-none justify-center"
+                >
+                  <Edit className="w-4 h-4" />
+                  <span className="hidden sm:inline">Thoát xem trước</span>
+                  <span className="sm:hidden">Chỉnh sửa</span>
+                </button>
+              )}
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center gap-1.5 bg-blue-700 dark:bg-blue-800 text-white px-3 sm:px-4 py-1.5 rounded-md text-sm font-medium hover:bg-blue-800 dark:hover:bg-blue-900 transition-colors border border-blue-500 dark:border-blue-600 whitespace-nowrap"
+                aria-label="Đóng preview"
+              >
+                <X className="w-4 h-4" />
+                <span className="hidden sm:inline">Đóng</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className={isPreview ? 'pt-[52px] sm:pt-[58px]' : ''}>
+        <CampaignHeader
+          campaign={campaignData}
+          onPickPerk={handlePickPerk}
+          onSave={handleSave}
+          onShare={handleShare}
+          onTabChange={handleTabChange}
+        />
+
+        {isPreview ?
+          <CampaignTabs
+            initialTab={activeTab}
+            onTabChange={handleTabChange}
+            campaignProps={{
+              rewards: rewards,
+              creator: creatorData,
+              otherProjects: [], // TODO: Add related projects
+              blanks: campaignData.blanks || [],
+              currency: campaignData.currency || 'VND',
+              onPledge: handlePledge,
+              campaignId: campaignData.campaignId,
+              isPreview: true
+            }}
+          /> : <CampaignTabs
+            initialTab={activeTab}
+            onTabChange={handleTabChange}
+            campaignProps={{
+              rewards: rewards,
+              creator: creatorData,
+              otherProjects: [], // TODO: Add related projects
+              blanks: campaignData.blanks || [],
+              currency: campaignData.currency || 'VND',
+              onPledge: handlePledge,
+              campaignId: campaignData.campaignId,
+            }}
+          />
+        }
+
+        {/* Related Campaigns Section */}
+        <RelatedCampaigns
+          category={campaignData.campaignCategory}
+          currentCampaignId={campaignData.campaignId}
+        />
+      </div>
     </div>
   );
 }
 
-// Export named for backward compatibility
 export { CampaignDetailPage };

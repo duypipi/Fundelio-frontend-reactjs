@@ -4,25 +4,28 @@ import React, { useEffect } from 'react';
  * TocMenu — NestJS-like timeline with dots + vertical line
  */
 const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
-  useEffect(() => {
-    console.log('📋 TocMenu received:', {
-      blanksCount: blanks.length,
-      activeId,
-      blankIds: blanks.map((b) => b.id),
-    });
-  }, [activeId, blanks]);
 
   if (!blanks?.length) return null;
 
   const handleClick = (id) => {
     if (onClickItem) return onClickItem(id);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) {
+      // Calculate offset for sticky header + tabs (~136px total)
+      const headerOffset = 140;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
     <nav
-      className="sticky top-[150px] max-h-[calc(100vh-88px)] overflow-auto pr-2 scrollbar-primary"
+      className="sticky top-[88px] max-h-[calc(100vh-88px)] overflow-auto pr-2 scrollbar-primary"
       aria-label="Story sections"
     >
       {/* Timeline wrapper */}
@@ -35,7 +38,7 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
       >
         <ul className="space-y-1">
           {blanks.map((b, idx) => {
-            const isActive = activeId === b.id;
+            const isActive = String(activeId) === String(b.id);
 
             return (
               <li key={b.id}>
@@ -45,10 +48,9 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
                     group relative w-full text-left py-2 pr-3 pl-4 rounded-md
                     transition-colors duration-200
                    
-                    ${
-                      isActive
-                        ? 'text-primary font-semibold'
-                        : 'text-text-secondary dark:text-text-white'
+                    ${isActive
+                      ? 'text-primary font-semibold'
+                      : 'text-text-secondary dark:text-white'
                     }
                   `}
                   aria-current={isActive ? 'true' : undefined}
@@ -58,10 +60,9 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
                     className={`
                       absolute left-[-11px] top-1/2 -translate-y-1/2
                       h-2.5 w-2.5 rounded-full border
-                      ${
-                        isActive
-                          ? 'bg-primary border-primary'
-                          : 'bg-muted border-border'
+                      ${isActive
+                        ? 'bg-primary border-primary'
+                        : 'bg-muted border-border'
                       }
                     `}
                     aria-hidden="true"
@@ -79,7 +80,7 @@ const TocMenu = ({ blanks = [], activeId, onClickItem }) => {
                     />
                   )}
 
-                  <span className="block truncate">{b.title_text}</span>
+                  <span className="block truncate">{b.titleText}</span>
                 </button>
               </li>
             );
