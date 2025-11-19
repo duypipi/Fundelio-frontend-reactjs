@@ -24,6 +24,7 @@ import {
   Star,
   FolderOpen,
   LayoutDashboard,
+  ShieldCheck,
 } from 'lucide-react';
 import Button from './Button';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -501,7 +502,19 @@ export const Header = ({ variant = 'transparent', isFixed = true, landing = fals
                         <span>Bảng điều khiển</span>
                       </Link>
 
-                       {/* thêm link để connect đến page profile */}
+                      {/* Admin link - only show if user has ADMIN role */}
+                      {user?.rolesSecured?.some(role => role.name === 'ADMIN') && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
+                        >
+                          <ShieldCheck className="w-4 h-4" />
+                          <span>Quản trị hệ thống</span>
+                        </Link>
+                      )}
+
+                      {/* thêm link để connect đến page profile */}
                       <Link
                         to="/profile"
                         onClick={() => setIsUserMenuOpen(false)}
@@ -613,12 +626,25 @@ export const Header = ({ variant = 'transparent', isFixed = true, landing = fals
           <nav className='space-y-2'>
             <Link
               to="/dashboard"
-              onClick={() => setIsUserMenuOpen(false)}
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
             >
               <LayoutDashboard className="w-4 h-4" />
               <span>Bảng điều khiển</span>
             </Link>
+
+            {/* Admin link - only show if user has ADMIN role */}
+            {user?.rolesSecured?.some(role => role.name === 'ADMIN') && (
+              <Link
+                to="/admin"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span>Quản trị hệ thống</span>
+              </Link>
+            )}
+
             <div className="border-t-2 border-border my-3"></div>
             <Link
               to='/home'

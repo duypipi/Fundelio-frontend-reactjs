@@ -28,6 +28,7 @@ import VerifyChangeEmail from '@/components/auth/VerifyChangeEmail';
 
 import CampaignOverviewPage from '@/components/campaign/dashboard/CampaignOverviewPage';
 import CampaignStatisticsPage from '@/components/campaign/dashboard/CampaignStatisticsPage';
+import FounderDashboardPage from '@/pages/FounderDashboardPage';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import WebSocketTestComponent from '@/components/websocket/WebSocketTestComponent';
 import MyPledgesPage from '@/pages/pledges/MyPledgesPage';
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
       { path: 'search', element: <SearchPage /> },
 
       { path: 'dashboard', element: <DashboardPage /> },
+      { path: 'founder-dashboard', element: <FounderDashboardPage /> },
       { path: 'profile', element: <UserProfilePage /> },
       { path: 'become-founder', element: <BecomeFounderPage /> },
       { path: 'my-pledges', element: <MyPledgesPage /> },
