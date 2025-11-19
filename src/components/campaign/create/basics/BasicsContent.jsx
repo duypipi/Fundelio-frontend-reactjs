@@ -10,7 +10,8 @@ import { setBasics } from '@/store/campaignSlice';
 import { storageApi } from '@/api/storageApi';
 import { campaignApi } from '@/api/campaignApi';
 import { useCategories } from '@/hooks/useCategories';
-
+import { useNavigate } from 'react-router-dom';
+import { buildVideoEmbed } from '@/utils/embed';
 // Category label mapping for Vietnamese
 const CATEGORY_LABELS = {
   ART: 'Nghệ thuật',
@@ -29,6 +30,7 @@ const CATEGORY_LABELS = {
 export default function BasicsContent({ campaignId, isEditMode = false }) {
   const dispatch = useDispatch();
   const basicsData = useSelector((state) => state.campaign.basics);
+  const navigate = useNavigate();
 
   // Use custom hook for categories with error handling
   const { categories: categoriesData, loading: loadingCategories, error: categoriesError, refetch: refetchCategories } = useCategories();
@@ -42,17 +44,20 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
     campaignCategory: '',
     introImageUrl: '',
     introVideoUrl: '',
-    startTime: '',
-    endTime: '',
+    startDate: '',
+    endDate: '',
     acceptedTerms: false,
   });
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+  const [videoUrlInput, setVideoUrlInput] = useState('');
+  const [isLoadingVideoUrl, setIsLoadingVideoUrl] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [isInitialized, setIsInitialized] = useState(false);
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
+  const navigationTimeoutRef = useRef(null);
 
   // Show error toast if categories fail to load
   useEffect(() => {
@@ -63,14 +68,14 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
 
   // Initialize with default dates if empty
   useEffect(() => {
-    if (!formData.startTime || !formData.endTime) {
+    if (!formData.startDate || !formData.endDate) {
       const today = new Date();
-      const endTime = new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000); // 60 days from now
+      const endDate = new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000); // 60 days from now
 
       setFormData(prev => ({
         ...prev,
-        startTime: today.toISOString().split('T')[0],
-        endTime: endTime.toISOString().split('T')[0],
+        startDate: today.toISOString().split('T')[0],
+        endDate: endDate.toISOString().split('T')[0],
       }));
     }
   }, []);
@@ -101,8 +106,10 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
     setFieldErrors({});
 
     try {
-      const startTimeISO = new Date(formData.startTime).toISOString();
-      const endTimeISO = new Date(formData.endTime).toISOString();
+      // Keep dates in YYYY-MM-DD format as required by backend
+      console.log('📋 Form Data:', formData);
+      console.log('📅 Start Date:', formData.startDate);
+      console.log('📅 End Date:', formData.endDate);
 
       const payload = {
         title: formData.title,
@@ -111,8 +118,8 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
         campaignCategory: formData.campaignCategory,
         introImageUrl: formData.introImageUrl || undefined,
         introVideoUrl: formData.introVideoUrl || undefined,
-        startTime: startTimeISO,
-        endTime: endTimeISO,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
       };
 
       // Remove undefined fields
@@ -131,6 +138,22 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
 
       if (response?.data?.data) {
         const responseData = response.data.data;
+
+        // Helper to parse date - backend returns YYYY-MM-DD format
+        const parseDate = (dateValue) => {
+          if (!dateValue) return '';
+          // If it's already YYYY-MM-DD format, use it as is
+          if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+            return dateValue;
+          }
+          // Otherwise try to parse it
+          try {
+            return new Date(dateValue).toISOString().split('T')[0];
+          } catch {
+            return '';
+          }
+        };
+
         const updatedFormData = {
           ...formData,
           campaignId: responseData.campaignId,
@@ -140,8 +163,8 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
           campaignCategory: responseData.campaignCategory || formData.campaignCategory,
           introImageUrl: responseData.introImageUrl || formData.introImageUrl,
           introVideoUrl: responseData.introVideoUrl || formData.introVideoUrl,
-          startTime: responseData.startTime ? new Date(responseData.startTime).toISOString().split('T')[0] : formData.startTime,
-          endTime: responseData.endTime ? new Date(responseData.endTime).toISOString().split('T')[0] : formData.endTime,
+          startDate: parseDate(responseData.startDate),
+          endDate: parseDate(responseData.endDate),
         };
 
         // Update local state
@@ -150,6 +173,11 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
         // Save merged data to Redux
         dispatch(setBasics(updatedFormData));
         toast.success(successMsg, { id: toastId });
+
+        if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
+        navigationTimeoutRef.current = setTimeout(() => {
+          navigate(`/campaigns/${responseData.campaignId}/dashboard`);
+        }, 3000);
       } else {
         toast.error('Không nhận được phản hồi từ server', { id: toastId });
       }
@@ -192,6 +220,15 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
       }
     }
   };
+
+  // Clear any pending navigation timeout when component unmounts
+  useEffect(() => {
+    return () => {
+      if (navigationTimeoutRef.current) {
+        clearTimeout(navigationTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
@@ -247,6 +284,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
       if (response?.data?.data?.fileUrl) {
         const videoUrl = response.data.data.fileUrl;
         setFormData(prev => ({ ...prev, introVideoUrl: videoUrl }));
+        setVideoUrlInput(''); // Clear URL input when uploading file
         console.log('Video uploaded successfully:', videoUrl);
         toast.success('Tải video lên thành công!', { id: 'upload-video' });
       } else {
@@ -259,6 +297,40 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
     } finally {
       setIsUploadingVideo(false);
       if (videoInputRef.current) videoInputRef.current.value = '';
+    }
+  };
+
+  const handleVideoUrlSubmit = async () => {
+    if (!videoUrlInput.trim()) {
+      toast.error('Vui lòng nhập URL video');
+      return;
+    }
+
+    try {
+      setIsLoadingVideoUrl(true);
+      toast.loading('Đang kiểm tra video...', { id: 'load-video-url' });
+
+      // Use buildVideoEmbed to validate and extract video URL
+      const embedElement = buildVideoEmbed(videoUrlInput);
+
+      if (!embedElement) {
+        toast.error('URL không được hỗ trợ. Vui lòng sử dụng YouTube hoặc Vimeo', { id: 'load-video-url' });
+        setIsLoadingVideoUrl(false);
+        return;
+      }
+
+      // Extract the embed URL from the iframe
+      const embedUrl = embedElement.src;
+
+      // Set the embed URL as the video URL
+      setFormData(prev => ({ ...prev, introVideoUrl: embedUrl }));
+      toast.success('Thêm video thành công!', { id: 'load-video-url' });
+      setVideoUrlInput(''); // Clear input after success
+    } catch (error) {
+      console.error('Error loading video URL:', error);
+      toast.error('Không thể tải video từ URL này', { id: 'load-video-url' });
+    } finally {
+      setIsLoadingVideoUrl(false);
     }
   };
 
@@ -537,6 +609,36 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
         <div className="rounded-sm border border-border bg-white dark:bg-darker-2 p-6">
           <h3 className="text-md font-semibold text-text-primary dark:text-white mb-4">Video giới thiệu</h3>
 
+          {/* Video URL Input - Always show when no video */}
+          {!formData.introVideoUrl && (
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
+                Dán URL video (YouTube, Vimeo, v.v.)
+              </label>
+              <div className="flex gap-2">
+                <Input
+                  type="url"
+                  value={videoUrlInput}
+                  onChange={(e) => setVideoUrlInput(e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  className="flex-1"
+                  disabled={isLoadingVideoUrl}
+                />
+                <Button
+                  type="button"
+                  onClick={handleVideoUrlSubmit}
+                  disabled={isLoadingVideoUrl || !videoUrlInput.trim()}
+                  className="px-6"
+                >
+                  {isLoadingVideoUrl ? 'Đang tải...' : 'Thêm'}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Hoặc tải video lên từ máy tính của bạn bên dưới
+              </p>
+            </div>
+          )}
+
           {/* Upload Area - Only show when no video */}
           {!formData.introVideoUrl && (
             <div className="flex flex-col items-center">
@@ -577,11 +679,21 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
             <div className="flex flex-col items-center">
               <div className="w-full max-w-2xl">
                 <div className="relative aspect-video rounded-sm overflow-hidden bg-muted border border-border">
-                  <video
-                    src={formData.introVideoUrl}
-                    className="w-full h-full object-cover"
-                    controls
-                  />
+                  {/* Check if it's an embed URL (YouTube/Vimeo) or uploaded video */}
+                  {formData.introVideoUrl.includes('youtube.com/embed') || formData.introVideoUrl.includes('player.vimeo.com') ? (
+                    <iframe
+                      src={formData.introVideoUrl}
+                      className="w-full h-full"
+                      allowFullScreen
+                      title="Video preview"
+                    />
+                  ) : (
+                    <video
+                      src={formData.introVideoUrl}
+                      className="w-full h-full object-cover"
+                      controls
+                    />
+                  )}
                 </div>
                 <div className="mt-3 flex justify-center gap-3">
                   <button
@@ -593,7 +705,10 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, introVideoUrl: null }))}
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, introVideoUrl: null }));
+                      setVideoUrlInput(''); // Clear URL input when removing video
+                    }}
                     className="px-4 py-2 border border-destructive text-destructive rounded-sm hover:bg-destructive/10 transition-colors text-sm font-medium"
                   >
                     Xóa video
@@ -638,13 +753,13 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
               </label>
               <Input
                 type="date"
-                name="startTime"
-                value={formData.startTime}
+                name="startDate"
+                value={formData.startDate}
                 onChange={handleChange}
-                className={fieldErrors.startTime ? 'border-red-500 focus:ring-red-500' : ''}
+                className={fieldErrors.startDate ? 'border-red-500 focus:ring-red-500' : ''}
               />
-              {fieldErrors.startTime && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.startTime}</p>
+              {fieldErrors.startDate && (
+                <p className="text-xs text-red-500 mt-1">{fieldErrors.startDate}</p>
               )}
             </div>
 
@@ -654,23 +769,23 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
               </label>
               <Input
                 type="date"
-                name="endTime"
-                value={formData.endTime}
+                name="endDate"
+                value={formData.endDate}
                 onChange={handleChange}
-                min={formData.startTime}
-                className={fieldErrors.endTime ? 'border-red-500 focus:ring-red-500' : ''}
+                min={formData.startDate}
+                className={fieldErrors.endDate ? 'border-red-500 focus:ring-red-500' : ''}
               />
-              {fieldErrors.endTime && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.endTime}</p>
+              {fieldErrors.endDate && (
+                <p className="text-xs text-red-500 mt-1">{fieldErrors.endDate}</p>
               )}
             </div>
           </div>
 
-          {formData.startTime && formData.endTime && (
+          {formData.startDate && formData.endDate && (
             <div className="mt-4 p-3 bg-primary/10 border-l-4 border-primary">
               <p className="text-sm text-text-primary dark:text-white">
                 <span className="font-medium"><strong>Thời gian chiến dịch</strong>:</span>{' '}
-                {Math.ceil((new Date(formData.endTime) - new Date(formData.startTime)) / (1000 * 60 * 60 * 24))} ngày
+                {Math.ceil((new Date(formData.endDate) - new Date(formData.startDate)) / (1000 * 60 * 60 * 24))} ngày
               </p>
             </div>
           )}

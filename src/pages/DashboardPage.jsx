@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import Header from '@/components/common/Header';
 import Button from '@/components/common/Button';
+import Input from '@/components/common/Input';
 import CampaignDashboardItem from '@/components/campaign/dashboard/CampaignDashboardItem';
 import { useAuth } from '@/contexts/AuthContext';
 import { campaignApi } from '@/api/campaignApi';
 import toast from 'react-hot-toast';
+
+/**
+ * Status color mapping - gray only for DRAFT
+ */
+const getStatusColor = (status) => {
+    const colors = {
+        DRAFT: 'bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600',
+        PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-700',
+        APPROVED: 'bg-green-100 text-green-800 border-green-300 dark:bg-green-900/30 dark:text-green-200 dark:border-green-700',
+        REJECTED: 'bg-red-100 text-red-800 border-red-300 dark:bg-red-900/30 dark:text-red-200 dark:border-red-700',
+        ACTIVE: 'bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/30 dark:text-blue-200 dark:border-blue-700',
+        SUCCESSFUL: 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/30 dark:text-emerald-200 dark:border-emerald-700',
+        FAILED: 'bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/30 dark:text-orange-200 dark:border-orange-700',
+        ENDED: 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/30 dark:text-purple-200 dark:border-purple-700',
+    };
+    return colors[status] || colors.DRAFT;
+};
 
 /**
  * DashboardPage - User's dashboard showing their campaigns
@@ -17,6 +35,9 @@ export default function DashboardPage() {
 
     const [campaigns, setCampaigns] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('ALL');
+    const [campaignStatuses, setCampaignStatuses] = useState({});
     const [pagination, setPagination] = useState({
         currentPage: 1,
         pageSize: 9,
@@ -26,37 +47,60 @@ export default function DashboardPage() {
         hasPrevious: false,
     });
 
-    // Fetch campaigns
+    // Fetch campaign statuses
     useEffect(() => {
-        const fetchCampaigns = async () => {
-            if (!user?.userId) {
-                setLoading(false);
-                return;
-            }
-
+        const fetchStatuses = async () => {
             try {
-                setLoading(true);
-                const response = await campaignApi.getUserCampaigns(user.userId, {
-                    page: pagination.currentPage,
-                    size: pagination.pageSize,
-                    sort: 'createdAt,desc',
-                });
-
+                const response = await campaignApi.getAllCampaignStatus();
                 if (response?.data?.data) {
-                    const { content, meta } = response.data.data;
-                    setCampaigns(content);
-                    setPagination(meta);
+                    setCampaignStatuses(response.data.data);
                 }
             } catch (error) {
-                console.error('Error fetching campaigns:', error);
-                toast.error('Không thể tải danh sách chiến dịch');
-            } finally {
-                setLoading(false);
+                console.error('Error fetching campaign statuses:', error);
             }
         };
 
+        fetchStatuses();
+    }, []);
+
+    // Fetch campaigns
+    const fetchCampaigns = async () => {
+        if (!user?.userId) {
+            setLoading(false);
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const response = await campaignApi.getUserCampaigns(user.userId, {
+                page: pagination.currentPage,
+                size: pagination.pageSize,
+                sort: 'createdAt,desc',
+            });
+
+            if (response?.data?.data) {
+                const { content, meta } = response.data.data;
+                setCampaigns(content);
+                setPagination(meta);
+            }
+        } catch (error) {
+            console.error('Error fetching campaigns:', error);
+            toast.error('Không thể tải danh sách chiến dịch');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchCampaigns();
     }, [user?.userId, pagination.currentPage, pagination.pageSize]);
+
+    // Filter campaigns based on search and status
+    const filteredCampaigns = campaigns.filter(campaign => {
+        const matchesSearch = campaign.title?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus = selectedStatus === 'ALL' || campaign.campaignStatus === selectedStatus;
+        return matchesSearch && matchesStatus;
+    });
 
     const handleCreateCampaign = () => {
         navigate('/campaigns/create');
@@ -74,13 +118,40 @@ export default function DashboardPage() {
             <main className="flex-1 pt-20">
                 <div className="max-w-container mx-auto px-4 sm:px-6 py-12">
                     {/* Page Header */}
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-text-primary dark:text-white mb-2">
-                            Bảng điều khiển
-                        </h1>
-                        <p className="text-muted-foreground">
-                            Quản lý các chiến dịch gây quỹ của bạn
-                        </p>
+                    <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h1 className="text-3xl font-bold text-text-primary dark:text-white mb-2">
+                                Bảng điều khiển
+                            </h1>
+                            <p className="text-muted-foreground">
+                                Quản lý các chiến dịch gây quỹ của bạn
+                            </p>
+                        </div>
+
+                        {/* Founder Dashboard Link */}
+                        {campaigns.length > 0 && (
+                            <Button
+                                variant="outline"
+                                size="md"
+                                onClick={() => navigate('/founder-dashboard')}
+                                className="flex items-center gap-2"
+                            >
+                                <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                    />
+                                </svg>
+                                Xem Dashboard Tổng Quan
+                            </Button>
+                        )}
                     </div>
 
                     {loading ? (
@@ -142,29 +213,97 @@ export default function DashboardPage() {
                     ) : (
                         /* Campaigns Grid */
                         <div>
+                            {/* Filters and Search */}
+                            <div className="mb-6 space-y-4">
+                                {/* Search Bar */}
+                                <div className="relative max-w-md">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                                    <Input
+                                        type="text"
+                                        placeholder="Tìm kiếm chiến dịch..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="pl-10"
+                                    />
+                                </div>
+
+                                {/* Status Filter */}
+                                <div className="flex flex-wrap gap-2">
+                                    <button
+                                        onClick={() => setSelectedStatus('ALL')}
+                                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${selectedStatus === 'ALL'
+                                            ? 'bg-primary text-white border-primary'
+                                            : 'bg-white dark:bg-darker-2 text-text-primary dark:text-white border-border hover:border-primary/50'
+                                            }`}
+                                    >
+                                        Tất cả ({campaigns.length})
+                                    </button>
+                                    {Object.entries(campaignStatuses).map(([status, label]) => {
+                                        const count = campaigns.filter(c => c.campaignStatus === status).length;
+                                        return (
+                                            <button
+                                                key={status}
+                                                onClick={() => setSelectedStatus(status)}
+                                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${selectedStatus === status
+                                                    ? getStatusColor(status)
+                                                    : 'bg-white dark:bg-darker-2 text-text-primary dark:text-white border-border hover:border-primary/50'
+                                                    }`}
+                                            >
+                                                {label.split(' – ')[0]} ({count})
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
                             {/* Create New Campaign Button */}
                             <div className="mb-6 flex justify-between items-center">
                                 <h2 className="text-xl font-semibold text-text-primary dark:text-white">
                                     Chiến dịch của bạn ({pagination.totalElements})
                                 </h2>
-                                <Button
+                                {/* <Button
                                     variant="gradient"
                                     onClick={handleCreateCampaign}
                                     className="flex items-center gap-2"
                                 >
                                     <Plus className="w-5 h-5" />
                                     Tạo chiến dịch mới
-                                </Button>
+                                </Button> */}
+                                <button onClick={handleCreateCampaign} className="border-2 border-blue-400 bg-blue-400 rounded-lg cursor-pointer py-2.5 px-4 transition-all duration-200 ease-in-out text-base hover:bg-blue-600 hover:border-blue-600">
+                                    <span class="flex justify-center items-center text-white font-semibold">
+                                        <svg
+                                            height="24"
+                                            width="24"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" fill="currentColor"></path>
+                                        </svg>
+                                        Tạo chiến dịch
+                                    </span>
+                                </button>
                             </div>
 
                             {/* Campaigns List (horizontal items) */}
                             <div className="space-y-6 mb-8">
-                                {campaigns.map((campaign) => (
-                                    <CampaignDashboardItem
-                                        key={campaign.campaignId}
-                                        campaign={campaign}
-                                    />
-                                ))}
+                                {filteredCampaigns.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <p className="text-muted-foreground">
+                                            {searchTerm || selectedStatus !== 'ALL'
+                                                ? 'Không tìm thấy chiến dịch nào phù hợp'
+                                                : 'Chưa có chiến dịch nào'}
+                                        </p>
+                                    </div>
+                                ) : (
+                                    filteredCampaigns.map((campaign) => (
+                                        <CampaignDashboardItem
+                                            key={campaign.campaignId}
+                                            campaign={campaign}
+                                            onActionComplete={fetchCampaigns}
+                                        />
+                                    ))
+                                )}
                             </div>
 
                             {/* Pagination */}

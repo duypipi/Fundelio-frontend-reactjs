@@ -13,6 +13,7 @@ import {
   FolderOpen,     
   Plus,           
   Settings        
+  ShieldCheck,
 } from 'lucide-react';
 import Button from './Button';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -140,11 +141,67 @@ export const Header = ({ variant = 'transparent', isFixed = true, landing = fals
             <div className="relative user-menu-container">
               <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}><img src={avatarUrl} className='w-9 h-9 rounded-full' alt="User"/></button>
               {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-[280px] bg-white dark:bg-darker rounded-lg shadow-xl border border-border z-50 p-2">
-                    
-                    <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 mb-2">
-                        <p className="text-sm font-semibold text-text-primary dark:text-white truncate">{displayName}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                <div className="absolute right-0 top-full mt-2 w-[280px] max-w-[calc(100vw-2rem)] bg-white dark:bg-darker rounded-lg shadow-xl border border-border overflow-hidden z-50">
+                  <div className="p-4">
+                    {/* Your Account Section */}
+                    <h4 className="text-xs font-bold text-text-primary dark:text-white mb-3 uppercase">
+                      Tài khoản
+                    </h4>
+                    <div className="space-y-1 mb-3">
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <LayoutDashboard className="w-4 h-4" />
+                        <span>Bảng điều khiển</span>
+                      </Link>
+
+                      {/* Admin link - only show if user has ADMIN role */}
+                      {user?.rolesSecured?.some(role => role.name === 'ADMIN') && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
+                        >
+                          <ShieldCheck className="w-4 h-4" />
+                          <span>Quản trị hệ thống</span>
+                        </Link>
+                      )}
+
+                      {/* thêm link để connect đến page profile */}
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        <span>Hồ sơ</span>
+                      </Link>
+
+                      <a
+                        href="#"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <Settings className="w-4 h-4" />
+                        <span>Cài đặt</span>
+                      </a>
+                      <Link
+                        to="/your-projects"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <FolderOpen className="w-4 h-4" />
+                        <span>Dự án của bạn</span>
+                      </Link>
+                      <Link
+                        to="/wallet"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+                      >
+                        <Wallet className="w-4 h-4" />
+                        <span>Ví</span>
+                      </Link>
                     </div>
 
                     <div className="space-y-1">
@@ -188,6 +245,150 @@ export const Header = ({ variant = 'transparent', isFixed = true, landing = fals
           <button className={`lg:hidden p-2 rounded-lg ${currentVariant.button}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}><Menu className='w-6 h-6'/></button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className='lg:hidden mt-4 py-4 border-t border-white/20 dark:border-gray-700 transition-colors duration-300'>
+          <nav className='space-y-2'>
+            <Link
+              to="/dashboard"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span>Bảng điều khiển</span>
+            </Link>
+
+            {/* Admin link - only show if user has ADMIN role */}
+            {user?.rolesSecured?.some(role => role.name === 'ADMIN') && (
+              <Link
+                to="/admin"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span>Quản trị hệ thống</span>
+              </Link>
+            )}
+
+            <div className="border-t-2 border-border my-3"></div>
+            <Link
+              to='/home'
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink
+                } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${location.pathname === '/home'
+                  ? 'text-primary dark:text-primary-400'
+                  : ''
+                }`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Trang chủ
+            </Link>
+            <Link
+              to='/campaigns/create'
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink
+                } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${location.pathname === '/campaigns/create'
+                  ? 'text-primary dark:text-primary-400'
+                  : ''
+                }`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Tạo chiến dịch
+            </Link>
+            <a
+              href="#about"
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-2 transition-colors font-medium`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Về chúng tôi
+            </a>
+            <a
+              href="#contact"
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-2 transition-colors font-medium`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Liên hệ
+            </a>
+
+            {/* Categories in mobile */}
+            <div className='pt-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300'>
+              <p
+                className={`px-4 py-2 text-sm font-semibold ${currentVariant.title}`}
+              >
+                Khám phá
+              </p>
+              {loadingCategories ? (
+                <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                  Đang tải danh mục...
+                </div>
+              ) : categories.length > 0 ? (
+                categories.map((category) => {
+                  const IconComponent = category.icon;
+                  return (
+                    <Link
+                      key={category.id}
+                      to={category.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center space-x-3 px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors`}
+                    >
+                      <IconComponent className={`w-4 h-4 ${category.color}`} />
+                      <span className='text-sm'>{category.name}</span>
+                    </Link>
+                  );
+                })
+              ) : (
+                <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                  Không có danh mục
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Theme Toggle */}
+            <div className='px-4 py-2 border-t border-white/20 dark:border-gray-700 mt-2 transition-colors duration-300'>
+              <button
+                onClick={toggleTheme}
+                className={`flex items-center space-x-3 w-full px-4 py-2 rounded-lg ${currentVariant.navLink} hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors`}
+              >
+                {isDark ? (
+                  <>
+                    <Sun className='w-4 h-4' />
+                    <span className='text-sm'>Chế độ sáng</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className='w-4 h-4' />
+                    <span className='text-sm'>Chế độ tối</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Mobile Auth Buttons */}
+            <div className='flex gap-2 px-4 pt-4 sm:hidden'>
+              <Button
+                size='sm'
+                className='flex-1'
+                onClick={() => {
+                  navigate('/auth', { state: { mode: 'register' } });
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Đăng ký
+              </Button>
+              <Button
+                variant='outline'
+                size='sm'
+                className='flex-1 border-current dark:border-gray-600'
+                onClick={() => {
+                  navigate('/auth', { state: { mode: 'login' } });
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Đăng nhập
+              </Button>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };

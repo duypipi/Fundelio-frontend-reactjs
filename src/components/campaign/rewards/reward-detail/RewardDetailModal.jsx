@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Dialog,
     DialogContent,
@@ -6,67 +7,61 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '../ui/Button';
-import { Plus, Minus, X, Users, Truck, Info } from 'lucide-react';
+import { Plus, Minus, X, Users, Truck, Info, Trash2 } from 'lucide-react';
 import { RewardItem } from './RewardItem';
 
-export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns = [], onSelectReward }) {
-    const [quantity, setQuantity] = useState(1);
+export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns = [], onSelectReward, campaignId }) {
+    const navigate = useNavigate();
     const [selectedAddOns, setSelectedAddOns] = useState([]);
+    const includedItems = reward.items?.included || [];
+    const filteredAddOns = reward.items?.addOn || [];
 
-    // Get included items from reward.items array
-    const includedItems = (reward.items || []).map((selectedItem) => {
-        const item = items.find((i) => i.id === selectedItem.itemId);
-        return {
-            id: selectedItem.itemId,
-            name: item?.title || 'Unknown Item',
-            image: item?.image || 'https://c.animaapp.com/mh96kubogMaabT/img/ai_1.png',
-            quantity: selectedItem.qty,
-            description: item?.description || '',
-        };
-    });
-
-    // Filter add-ons that are allowed for this reward
-    const filteredAddOns = addOns.filter((addon) => {
-        if (addon.offeredWithRewardIds && Array.isArray(addon.offeredWithRewardIds)) {
-            return addon.offeredWithRewardIds.includes(reward.id || reward.reward_id);
-        }
-        return true;
-    });
-
-    const updateQuantity = (delta) => {
-        setQuantity((prev) => Math.max(1, prev + delta));
-    };
-
-    const toggleAddOn = (addonId) => {
+    const toggleAddOn = (addonCatalogId) => {
         setSelectedAddOns((prev) => {
-            const exists = prev.find((a) => a.id === addonId);
+            const exists = prev.find((a) => String(a.catalogItemId) === String(addonCatalogId));
             if (exists) {
-                return prev.filter((a) => a.id !== addonId);
+                return prev.filter((a) => String(a.catalogItemId) !== String(addonCatalogId));
             } else {
-                const addon = filteredAddOns.find((a) => a.id === addonId);
-                return [...prev, { ...addon, quantity: 1 }];
+                const addon = filteredAddOns.find((a) => String(a.catalogItemId) === String(addonCatalogId));
+                if (addon) {
+                    console.log('Adding add-on with rewardItemId:', addon.rewardItemId || addon.catalogItemId);
+                    return [...prev, {
+                        ...addon,
+                        quantity: 1,
+                    }];
+                }
+                return prev;
             }
         });
     };
 
-    const updateAddOnQuantity = (addonId, delta) => {
+    const selectedAddOnMap = useMemo(() => {
+        return selectedAddOns.reduce((map, addon) => {
+            const key = String(addon.catalogItemId || addon.rewardItemId || addon.id);
+            map[key] = addon;
+            return map;
+        }, {});
+    }, [selectedAddOns]);
+
+    const updateAddOnQuantity = (addonCatalogId, delta) => {
         setSelectedAddOns((prev) =>
             prev.map((addon) =>
-                addon.id === addonId
-                    ? { ...addon, quantity: Math.max(1, addon.quantity + delta) }
+                String(addon.catalogItemId) === String(addonCatalogId)
+                    ? { ...addon, quantity: Math.max(1, Math.min(10, (addon.quantity || 1) + delta)) } // Max 10
                     : addon
             )
         );
     };
 
-    const removeAddOn = (addonId) => {
-        setSelectedAddOns((prev) => prev.filter((a) => a.id !== addonId));
+    const removeAddOn = (addonCatalogId) => {
+        setSelectedAddOns((prev) => prev.filter((a) => String(a.catalogItemId) !== String(addonCatalogId)));
     };
 
     const calculateTotal = () => {
-        const rewardTotal = (reward.minPledgeAmount || reward.min_pledge_amount || 0) * quantity;
+        // Single reward - no quantity multiplier
+        const rewardTotal = reward.minPledgedAmount || 0;
         const addOnsTotal = selectedAddOns.reduce(
-            (sum, addon) => sum + (addon.price || addon.minPledgeAmount || addon.min_pledge_amount || 0) * addon.quantity,
+            (sum, addon) => sum + (addon.price || 0) * addon.quantity,
             0
         );
         return rewardTotal + addOnsTotal;
@@ -77,15 +72,23 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
     };
 
     const handleSubmit = () => {
-        if (onSelectReward) {
-            onSelectReward({
-                reward,
-                quantity,
-                addOns: selectedAddOns,
-                total: calculateTotal(),
-            });
-        }
+        const pledgeData = {
+            reward,
+            quantity: 1,
+            addOns: selectedAddOns,
+            total: calculateTotal(),
+            campaignId,
+        };
+
         onClose();
+
+        navigate(`/campaigns/${campaignId}/pledge`, {
+            state: { pledgeData }
+        });
+
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
     };
 
     return (
@@ -106,13 +109,6 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
 
                     {/* Right - Reward Info */}
                     <div className="flex-1 p-6 md:p-8">
-                        <button
-                            onClick={onClose}
-                            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 flex items-center justify-center transition-colors z-10"
-                        >
-                            <X className="w-5 h-5 text-foreground" />
-                        </button>
-
                         <DialogHeader className="mb-4">
                             <DialogTitle className="text-2xl font-bold pr-10">{reward.title}</DialogTitle>
                         </DialogHeader>
@@ -121,35 +117,36 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                         <div className="mb-6">
                             <div className="flex items-baseline gap-2 mb-2">
                                 <span className="text-3xl font-bold text-primary">
-                                    {formatPrice(reward.minPledgeAmount)} <span className="text-base">VND</span>
+                                    {formatPrice(reward.minPledgedAmount || 0)} <span className="text-base">VND</span>
                                 </span>
-                                {reward.originalPrice && reward.originalPrice > reward.minPledgeAmount && (
+                                {/* API không có originalPrice, comment lại */}
+                                {/* {reward.originalPrice && reward.originalPrice > reward.minPledgedAmount && (
                                     <span className="text-lg text-muted-foreground line-through">
                                         {formatPrice(reward.originalPrice)} VND
                                     </span>
-                                )}
+                                )} */}
                             </div>
                             <p className="text-sm text-muted-foreground mb-4">
-                                Giá thấp nhất trong 30 ngày qua: {formatPrice(reward.minPledgeAmount)} VND
+                                Giá thấp nhất trong 30 ngày qua: {formatPrice(reward.minPledgedAmount || 0)} VND
                             </p>
 
-                            {/* Perk name */}
-                            {reward.perkName && (
+                            {/* API không có perkName, comment lại */}
+                            {/* {reward.perkName && (
                                 <p className="text-base font-semibold text-foreground mb-4">
                                     {reward.perkName}
                                 </p>
-                            )}
+                            )} */}
 
                             <div className="flex items-center gap-6 text-sm text-muted-foreground">
                                 <div className="flex items-center gap-2">
                                     <Users className="w-4 h-4" />
-                                    <span>{reward.backers || 0} lượt ủng hộ</span>
+                                    <span>{reward.backersCount || 0} lượt ủng hộ</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Truck className="w-4 h-4" />
                                     <span>
-                                        {reward.estimated_delivery
-                                            ? new Date(reward.estimated_delivery).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })
+                                        {reward.estimatedDelivery
+                                            ? new Date(reward.estimatedDelivery).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })
                                             : 'Chưa xác định'}
                                     </span>
                                 </div>
@@ -171,7 +168,7 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {includedItems.map((item) => (
                             <RewardItem
-                                key={item.id}
+                                key={item.catalogItemId || item.id}
                                 item={item}
                                 variant="default"
                                 showQuantity={true}
@@ -182,81 +179,78 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                     {/* Add-ons section */}
                     {filteredAddOns.length > 0 && (
                         <div className="mt-8">
-                            <h3 className="text-lg font-bold text-foreground mb-4">
-                                {selectedAddOns.length > 0 ? 'Tiện ích bổ sung của bạn' : 'Chưa chọn tiện ích bổ sung'}
+                            <h3 className="text-lg font-bold text-foreground mb-4 flex items-center justify-between">
+                                <span>Tiện ích bổ sung</span>
+                                {selectedAddOns.length > 0 && (
+                                    <span className="text-sm font-medium text-primary">
+                                        Đã chọn {selectedAddOns.length}
+                                    </span>
+                                )}
                             </h3>
 
-                            {selectedAddOns.length > 0 ? (
-                                <div className="space-y-3 mb-4">
-                                    {selectedAddOns.map((addon) => (
+                            <div className="space-y-3">
+                                {filteredAddOns.map((addon) => {
+                                    const key = String(addon.catalogItemId || addon.rewardItemId || addon.id);
+                                    const isSelected = Boolean(selectedAddOnMap[key]);
+                                    const quantity = selectedAddOnMap[key]?.quantity || 1;
+
+                                    return (
                                         <RewardItem
-                                            key={addon.id}
-                                            item={{
-                                                id: addon.id,
-                                                name: addon.title,
-                                                image: addon.image,
-                                                quantity: addon.quantity,
-                                            }}
+                                            key={key}
+                                            item={addon}
                                             variant="addon"
                                             showQuantity={false}
                                             rightContent={
-                                                <div className="flex flex-col gap-2">
-                                                    <button
-                                                        onClick={() => removeAddOn(addon.id)}
-                                                        className="text-destructive hover:text-destructive/80"
-                                                    >
-                                                        <X className="w-5 h-5" />
-                                                    </button>
-                                                    <div className="flex items-center gap-2">
-                                                        <Button
-                                                            size="icon"
-                                                            variant="outline"
-                                                            className="h-7 w-7"
-                                                            onClick={() => updateAddOnQuantity(addon.id, -1)}
+                                                <div className="flex items-center gap-3">
+                                                    {isSelected ? (
+                                                        <>
+                                                            <div className="flex items-center border border-border dark:border-gray-600 rounded-lg bg-background dark:bg-darker overflow-hidden shadow-sm">
+                                                                <button
+                                                                    onClick={() => updateAddOnQuantity(key, -1)}
+                                                                    disabled={quantity === 1}
+                                                                    className="h-9 w-9 flex items-center justify-center hover:bg-muted dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                >
+                                                                    <Minus className="w-4 h-4 text-foreground" />
+                                                                </button>
+                                                                <div className="w-10 h-9 flex items-center justify-center text-sm font-semibold border-x border-border dark:border-gray-600 text-foreground dark:text-white bg-muted/30 dark:bg-gray-800/50">
+                                                                    {quantity}
+                                                                </div>
+                                                                <button
+                                                                    onClick={() => updateAddOnQuantity(key, 1)}
+                                                                    disabled={quantity === 10}
+                                                                    className="h-9 w-9 flex items-center justify-center hover:bg-muted dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                >
+                                                                    <Plus className="w-4 h-4 text-foreground" />
+                                                                </button>
+                                                            </div>
+                                                            <button
+                                                                onClick={() => removeAddOn(key)}
+                                                                className="h-9 w-9 flex items-center justify-center rounded-lg text-muted-foreground hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all shadow-sm border border-transparent hover:border-red-200 dark:hover:border-red-800"
+                                                                title="Xóa tiện ích này"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => toggleAddOn(key)}
+                                                            className="px-4 py-2 rounded-lg border border-dashed border-primary/40 text-sm font-semibold text-primary hover:bg-primary/5 transition-colors"
                                                         >
-                                                            <Minus className="w-3 h-3" />
-                                                        </Button>
-                                                        <span className="font-semibold min-w-[2rem] text-center">
-                                                            {addon.quantity}
-                                                        </span>
-                                                        <Button
-                                                            size="icon"
-                                                            variant="outline"
-                                                            className="h-7 w-7"
-                                                            onClick={() => updateAddOnQuantity(addon.id, 1)}
-                                                        >
-                                                            <Plus className="w-3 h-3" />
-                                                        </Button>
-                                                    </div>
+                                                            Thêm
+                                                        </button>
+                                                    )}
                                                 </div>
                                             }
                                         />
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-muted-foreground mb-4 text-center py-4">Chưa chọn tiện ích bổ sung</p>
-                            )}
-
-                            <Button
-                                variant="outline"
-                                className="w-full font-semibold"
-                                onClick={() => {
-                                    // Toggle add-ons picker
-                                    const firstAddon = filteredAddOns[0];
-                                    if (firstAddon && selectedAddOns.length === 0) {
-                                        toggleAddOn(firstAddon.id);
-                                    }
-                                }}
-                            >
-                                <Plus className="w-4 h-4 mr-2" />
-                                CHỌN TIỆN ÍCH BỔ SUNG
-                            </Button>
+                                    );
+                                })}
+                            </div>
                         </div>
                     )}
 
                     {/* Quantity selector and total */}
                     <div className="border-t border-border/50 pt-6 mt-6">
-                        <div className="flex items-center justify-between mb-6">
+                        {/* <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center gap-3">
                                 <span className="text-sm font-semibold text-muted-foreground">SỐ LƯỢNG ỦNG HỘ</span>
                                 <div className="flex items-center gap-2">
@@ -285,21 +279,16 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
                                     {formatPrice(calculateTotal())} <span className="text-base">VND</span>
                                 </p>
                             </div>
-                        </div>
+                        </div> */}
 
                         <Button
-                            className="w-full font-bold text-white bg-primary hover:bg-primary/90 h-14 text-base"
+                            className="w-full font-bold text-white bg-primary hover:bg-primary/90 h-14 text-base flex items-center justify-center gap-3"
                             onClick={handleSubmit}
                         >
-                            XÁC NHẬN ỦNG HỘ
+                            <span>XÁC NHẬN ỦNG HỘ</span>
+                            <span className="text-lg">•</span>
+                            <span className="font-bold">{formatPrice(calculateTotal())} VND</span>
                         </Button>
-
-                        <button
-                            className="w-full text-primary font-semibold mt-4 hover:underline"
-                            onClick={onClose}
-                        >
-                            quản lý khoản ủng hộ
-                        </button>
                     </div>
                 </div>
             </DialogContent>

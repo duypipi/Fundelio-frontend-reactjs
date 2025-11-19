@@ -19,16 +19,24 @@ import AdminCampaignsPage from '@/pages/admin/AdminCampaignsPage';
 import YourProjectsPage from '@/pages/YourProjectsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ForbiddenPage from '@/pages/ForbiddenPage';
-import UserProfilePage from "@/pages/UserProfilePage";
+import UserProfilePage from '@/pages/UserProfilePage';
+import PledgeSummaryPage from '@/pages/PledgeSummaryPage';
+import BecomeFounderPage from '@/pages/BecomeFounderPage';
 
 import VerifyChangeEmail from '@/components/auth/VerifyChangeEmail';
 import CampaignOverviewPage from '@/components/campaign/dashboard/CampaignOverviewPage';
+import CampaignStatisticsPage from '@/components/campaign/dashboard/CampaignStatisticsPage';
+import FounderDashboardPage from '@/pages/FounderDashboardPage';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-
-// --- IMPORT CÁC COMPONENT VÍ ---
 import PaymentPage from '@/components/wallet/PaymentPage';
 import History from '@/components/wallet/History';
-import PaymentCallback from '@/components/wallet/PaymentCallback'; // <--- MỚI THÊM
+import PaymentCallback from '@/components/wallet/PaymentCallback';
+import WebSocketTestComponent from '@/components/websocket/WebSocketTestComponent';
+import MyPledgesPage from '@/pages/pledges/MyPledgesPage';
+import SearchPage from '@/pages/SearchPage';
+import TermsOfServicePage from '@/pages/TermsOfServicePage';
+import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
+import RefundPolicyPage from '@/pages/RefundPolicyPage';
 
 export const router = createBrowserRouter([
   {
@@ -37,15 +45,34 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <LandingPage /> },
       { path: 'home', element: <HomePage /> },
+      { path: 'search', element: <SearchPage /> },
+
+      { path: 'terms-of-service', element: <TermsOfServicePage /> },
+      { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+      { path: 'refund-policy', element: <RefundPolicyPage /> },
+
+
       { path: 'dashboard', element: <DashboardPage /> },
+      { path: 'founder-dashboard', element: <FounderDashboardPage /> },
       { path: 'profile', element: <UserProfilePage /> },
+      { path: 'become-founder', element: <BecomeFounderPage /> },
+      { path: 'my-pledges', element: <MyPledgesPage /> },
+      { path: 'search', element: <SearchPage /> },
       {
         path: 'campaigns',
         children: [
           { path: 'detail', element: <CampaignDetailPage /> },
-          { path: 'preview/:campaignId', element: <CampaignDetailPage isPreviewMode={true} /> },
+          {
+            path: 'preview/:campaignId',
+            element: <CampaignDetailPage isPreviewMode={true} />,
+          },
           { path: ':campaignId', element: <CampaignDetailPage /> },
+          { path: ':campaignId/pledge', element: <PledgeSummaryPage /> },
           { path: ':campaignId/dashboard', element: <CampaignOverviewPage /> },
+          {
+            path: ':campaignId/statistics',
+            element: <CampaignStatisticsPage />,
+          },
         ],
       },
 
@@ -55,7 +82,8 @@ export const router = createBrowserRouter([
       { path: 'payment/callback', element: <PaymentCallback /> }, // Trang xử lý kết quả
 
       { path: 'your-projects', element: <YourProjectsPage /> },
-    ]
+      { path: 'websocket', element: <WebSocketTestComponent /> },
+    ],
   },
   {
     path: '/campaigns/create',
@@ -77,7 +105,7 @@ export const router = createBrowserRouter([
   {
     path: '/admin',
     element: (
-      <ProtectedRoute requiredRole="ADMIN">
+      <ProtectedRoute requiredRole='ADMIN'>
         <AdminLayout />
       </ProtectedRoute>
     ),
