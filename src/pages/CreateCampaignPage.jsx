@@ -146,7 +146,6 @@ export default function CreateCampaignPage() {
     } catch (error) {
       console.error('Auto-save error:', error);
       setSaveStatus('idle');
-      toast.error('Lỗi khi tự động lưu');
     }
   }, [isEditMode, campaignId, blanks]);
 
@@ -349,7 +348,6 @@ export default function CreateCampaignPage() {
       navigate(`/campaigns/preview/${campaignId}`, {
         state: { isPreview: true },
       });
-      toast.success('Đang chuyển đến trang xem trước...');
       return;
     }
 
@@ -392,8 +390,6 @@ export default function CreateCampaignPage() {
     navigate(`/campaigns/preview/${previewId}`, {
       state: { campaignData, isPreview: true },
     });
-
-    toast.success('Đang chuyển đến trang xem trước...');
   };
 
   return (
