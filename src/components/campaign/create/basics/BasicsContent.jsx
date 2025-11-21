@@ -852,6 +852,7 @@ export default function BasicsContent({ campaignId, isEditMode = false }) {
           size="lg"
           onClick={handleSave}
           className="px-8"
+          disabled={!formData.acceptedTerms}
         >
           {isEditMode ? 'Lưu thay đổi' : 'Tạo chiến dịch'}
         </Button>

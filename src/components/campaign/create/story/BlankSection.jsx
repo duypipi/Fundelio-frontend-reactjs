@@ -1,7 +1,36 @@
 import { useRef, useEffect, memo } from 'react';
 import toast from 'react-hot-toast';
+import DOMPurify from 'dompurify';
 import { buildVideoEmbed } from '../../../../utils/embed';
 import { storageApi } from '@/api/storageApi';
+
+const SANITIZE_CONFIG = {
+  ALLOWED_TAGS: [
+    'p',
+    'br',
+    'strong',
+    'em',
+    'u',
+    'ol',
+    'ul',
+    'li',
+    'blockquote',
+    'code',
+    'pre',
+    'a',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'span',
+    'div',
+  ],
+  ALLOWED_ATTR: ['href', 'target', 'rel'],
+  FORBID_ATTR: ['style', 'class', 'id'],
+  KEEP_CONTENT: true,
+};
 
 /**
  * BlankSection component - A single editable section with title and content
@@ -104,16 +133,54 @@ function BlankSection({ blank, onTitleChange, onContentChange, onFocus }) {
     }
   };
 
+  const insertHtml = (html) => {
+    const selection = window.getSelection();
+    if (!selection?.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = html;
+
+    const fragment = document.createDocumentFragment();
+    while (tempContainer.firstChild) {
+      fragment.appendChild(tempContainer.firstChild);
+    }
+
+    range.insertNode(fragment);
+    range.collapse(false);
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+  };
+
   const handlePaste = (e) => {
-    const text = e.clipboardData.getData('text/plain');
+    const html = e.clipboardData.getData('text/html');
+    const text = e.clipboardData.getData('text/plain') || '';
+
     if (text && /^https?:\/\//i.test(text)) {
       const iframe = buildVideoEmbed(text);
       if (iframe) {
         e.preventDefault();
         placeBlock(editorRef.current, iframe);
-        // Trigger content change callback immediately
         handleContentInput();
+        return;
       }
+    }
+
+    if (html) {
+      e.preventDefault();
+      const cleanHtml = DOMPurify.sanitize(html, SANITIZE_CONFIG).trim();
+      insertHtml(cleanHtml || text);
+      handleContentInput();
+      return;
+    }
+
+    if (text) {
+      e.preventDefault();
+      insertHtml(text.replace(/\n/g, '<br />'));
+      handleContentInput();
     }
   };
 

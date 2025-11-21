@@ -433,78 +433,78 @@ const CommunityInsightsPanel = ({ data }) => {
     );
 };
 
-const FulfillmentReadinessPanel = ({ data }) => {
-    if (!data) return null;
+// const FulfillmentReadinessPanel = ({ data }) => {
+//     if (!data) return null;
 
-    return (
-        <div className="bg-white dark:bg-darker-2 rounded-sm border border-border p-4 sm:p-5 shadow-card">
-            <div className="flex items-center justify-between mb-4">
-                <div>
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Fulfillment</p>
-                    <h3 className="text-base sm:text-lg font-semibold text-text-primary dark:text-white">
-                        Chuẩn bị giao phần thưởng
-                    </h3>
-                </div>
-                <div className="text-xs text-muted-foreground text-right">
-                    Giá trị cam kết
-                    <p className="text-sm font-semibold text-text-primary dark:text-white">
-                        {formatCurrency(data.totalCommittedValue)}
-                    </p>
-                </div>
-            </div>
+//     return (
+//         <div className="bg-white dark:bg-darker-2 rounded-sm border border-border p-4 sm:p-5 shadow-card">
+//             <div className="flex items-center justify-between mb-4">
+//                 <div>
+//                     <p className="text-xs uppercase tracking-wide text-muted-foreground">Fulfillment</p>
+//                     <h3 className="text-base sm:text-lg font-semibold text-text-primary dark:text-white">
+//                         Chuẩn bị giao phần thưởng
+//                     </h3>
+//                 </div>
+//                 <div className="text-xs text-muted-foreground text-right">
+//                     Giá trị cam kết
+//                     <p className="text-sm font-semibold text-text-primary dark:text-white">
+//                         {formatCurrency(data.totalCommittedValue)}
+//                     </p>
+//                 </div>
+//             </div>
 
-            {data.topRewardsByRevenue.length === 0 ? (
-                <div className="text-sm text-muted-foreground py-6 text-center">
-                    Chưa có dữ liệu phần thưởng
-                </div>
-            ) : (
-                <div className="space-y-3">
-                    {data.topRewardsByRevenue.map(reward => (
-                        <div key={reward.rewardId || reward.title} className="border border-border rounded-sm p-3">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm font-semibold text-text-primary dark:text-white">{reward.title}</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        Doanh thu: {formatCurrency(reward.revenue)} · {reward.claimed} backer
-                                    </p>
-                                </div>
-                                {Number.isFinite(reward.totalQuantity) && (
-                                    <span className="text-xs font-medium text-muted-foreground">
-                                        Còn {reward.remaining}/{reward.totalQuantity}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+//             {data.topRewardsByRevenue.length === 0 ? (
+//                 <div className="text-sm text-muted-foreground py-6 text-center">
+//                     Chưa có dữ liệu phần thưởng
+//                 </div>
+//             ) : (
+//                 <div className="space-y-3">
+//                     {data.topRewardsByRevenue.map(reward => (
+//                         <div key={reward.rewardId || reward.title} className="border border-border rounded-sm p-3">
+//                             <div className="flex items-center justify-between">
+//                                 <div>
+//                                     <p className="text-sm font-semibold text-text-primary dark:text-white">{reward.title}</p>
+//                                     <p className="text-xs text-muted-foreground">
+//                                         Doanh thu: {formatCurrency(reward.revenue)} · {reward.claimed} backer
+//                                     </p>
+//                                 </div>
+//                                 {Number.isFinite(reward.totalQuantity) && (
+//                                     <span className="text-xs font-medium text-muted-foreground">
+//                                         Còn {reward.remaining}/{reward.totalQuantity}
+//                                     </span>
+//                                 )}
+//                             </div>
+//                         </div>
+//                     ))}
+//                 </div>
+//             )}
 
-            <div className="mt-6">
-                {data.lowInventoryRewards.length > 0 ? (
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm font-semibold text-amber-600 dark:text-amber-400">
-                            <AlertCircle className="w-4 h-4" />
-                            Reward sắp hết hàng
-                        </div>
-                        {data.lowInventoryRewards.slice(0, 3).map(reward => (
-                            <div key={`low-${reward.rewardId || reward.title}`} className="flex items-center justify-between text-xs border border-amber-200 dark:border-amber-800/70 bg-amber-50 dark:bg-amber-900/20 rounded-sm px-3 py-2">
-                                <span className="font-medium text-text-primary dark:text-white truncate pr-2">{reward.title}</span>
-                                <span className="text-amber-600 dark:text-amber-400">
-                                    {reward.remaining} còn lại ({formatRatioPercent(reward.remainingRatio || 0)})
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/70 rounded-sm px-3 py-2">
-                        <CheckCircle className="w-4 h-4" />
-                        Tồn kho phần thưởng đang an toàn.
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
+//             <div className="mt-6">
+//                 {data.lowInventoryRewards.length > 0 ? (
+//                     <div className="space-y-2">
+//                         <div className="flex items-center gap-2 text-sm font-semibold text-amber-600 dark:text-amber-400">
+//                             <AlertCircle className="w-4 h-4" />
+//                             Reward sắp hết hàng
+//                         </div>
+//                         {data.lowInventoryRewards.slice(0, 3).map(reward => (
+//                             <div key={`low-${reward.rewardId || reward.title}`} className="flex items-center justify-between text-xs border border-amber-200 dark:border-amber-800/70 bg-amber-50 dark:bg-amber-900/20 rounded-sm px-3 py-2">
+//                                 <span className="font-medium text-text-primary dark:text-white truncate pr-2">{reward.title}</span>
+//                                 <span className="text-amber-600 dark:text-amber-400">
+//                                     {reward.remaining} còn lại ({formatRatioPercent(reward.remainingRatio || 0)})
+//                                 </span>
+//                             </div>
+//                         ))}
+//                     </div>
+//                 ) : (
+//                     <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/70 rounded-sm px-3 py-2">
+//                         <CheckCircle className="w-4 h-4" />
+//                         Tồn kho phần thưởng đang an toàn.
+//                     </div>
+//                 )}
+//             </div>
+//         </div>
+//     );
+// };
 
 export default function CampaignStatisticsPage() {
     const { campaignId } = useParams();
@@ -1032,11 +1032,11 @@ export default function CampaignStatisticsPage() {
                         </div>
                     )}
 
-                    {founderOpsData && (
+                    {/* {founderOpsData && (
                         <div className="grid grid-cols-1 gap-6">
                             <FulfillmentReadinessPanel data={founderOpsData.fulfillmentMetrics} />
                         </div>
-                    )}
+                    )} */}
                 </div>
             </main>
         </div>

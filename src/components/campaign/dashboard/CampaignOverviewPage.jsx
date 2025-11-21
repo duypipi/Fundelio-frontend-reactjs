@@ -576,7 +576,7 @@ export default function CampaignOverviewPage() {
                     {/* Review Section */}
                     <div className="mb-4">
                         <SubmissionSection
-                            title="Đánh giá dự án"
+                            title="Gửi dự án"
                             description="Chúng tôi sẽ kiểm tra để đảm bảo rằng nó tuân thủ các quy tắc và hướng dẫn của chúng tôi. Vui lòng chờ 1-3 ngày làm việc để nhận được phản hồi."
                             icon={Send}
                             disabled={campaign.campaignStatus === "PENDING"}
@@ -672,7 +672,7 @@ export default function CampaignOverviewPage() {
                 isOpen={showSubmitReviewModal}
                 onClose={() => setShowSubmitReviewModal(false)}
                 onConfirm={handleConfirmSubmitReview}
-                title="Gửi dự án để Admin phê duyệt"
+                title="Gửi dự án để admin phê duyệt"
                 description={`Bạn có chắc chắn muốn gửi dự án này để admin phê duyệt? Sau khi gửi, dự án sẽ chuyển sang trạng thái "Đang chờ duyệt" và bạn cần chờ 1-3 ngày làm việc để nhận phản hồi.`}
                 confirmButtonText="Gửi đánh giá"
                 cancelButtonText="Hủy"

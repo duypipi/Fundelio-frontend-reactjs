@@ -39,8 +39,8 @@ export const CreateCampaignHeader = ({
   const { isLoggedIn, user, logout } = useAuth();
 
   const avatarUrl = useMemo(() => {
-    if (user?.avatar) {
-      return user.avatar;
+    if (user?.avatarUrl) {
+      return user.avatarUrl;
     }
 
     // Lấy tên từ user để tạo avatar
@@ -168,7 +168,7 @@ export const CreateCampaignHeader = ({
                   <img
                     src={avatarUrl}
                     alt={displayName}
-                    className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700 relative z-10'
+                    className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700 object-cover relative z-10'
                   />
                   {/* <ChevronDown
                     className={`w-4 h-4 text-text-primary dark:text-white transition-transform ${isUserMenuOpen ? 'rotate-180' : ''
@@ -321,7 +321,7 @@ export const CreateCampaignHeader = ({
                 <img
                   src={avatarUrl}
                   alt={displayName}
-                  className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700'
+                  className='w-9 h-9 rounded-full ring-2 ring-gray-200 dark:ring-gray-700 object-cover'
                   onError={(e) => {
                     // Fallback nếu avatar lỗi
                     const firstName = user?.firstName || user?.first_name || '';

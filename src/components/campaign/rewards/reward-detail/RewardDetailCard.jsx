@@ -5,7 +5,7 @@ import { Button } from '../ui/Button';
 import { useState } from 'react';
 import { RewardDetailModal } from './RewardDetailModal';
 
-export function RewardDetailCard({ reward, items = [], addOns = [], onSelectReward, showChooseButton = false, campaignId }) {
+export function RewardDetailCard({ reward, items = [], addOns = [], onSelectReward, showChooseButton = false, campaignId, isPreview = false, isOwnerViewing = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Check if sold out
@@ -23,6 +23,12 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
 
   // Get original price if discounted
   const hasDiscount = reward.original_price && reward.original_price > reward.min_pledge_amount;
+  const isInteractionLocked = isPreview || isOwnerViewing;
+  const lockedLabel = isPreview
+    ? 'Chỉ xem trước'
+    : isOwnerViewing
+      ? 'Tác giả không thể tự ủng hộ'
+      : '';
 
   return (
     <>
@@ -105,10 +111,10 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
                 <div className="space-y-3 p-5 md:p-7 pt-0">
                   <Button
                     className="w-full font-bold text-white bg-primary hover:bg-primary/90 shadow-lg h-14 text-base"
-                    onClick={() => !isSoldOut && setIsModalOpen(true)}
-                    disabled={isSoldOut}
+                    onClick={() => !isSoldOut && !isInteractionLocked && setIsModalOpen(true)}
+                    disabled={isSoldOut || isInteractionLocked}
                   >
-                    {isSoldOut ? 'ĐÃ HẾT - KHÔNG KHẢ DỤNG' : 'CHỌN GÓI NÀY'}
+                    {isSoldOut ? 'ĐÃ HẾT - KHÔNG KHẢ DỤNG' : isInteractionLocked ? lockedLabel : 'CHỌN GÓI NÀY'}
                   </Button>
                   {!isSoldOut && (
                     <>
@@ -116,9 +122,10 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
                       <Button
                         variant="outline"
                         className="w-full font-bold h-14 text-base border-2 border-primary text-primary hover:bg-primary/10"
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => !isInteractionLocked && setIsModalOpen(true)}
+                        disabled={isInteractionLocked}
                       >
-                        + CHỌN GÓI KHÁC
+                        {isInteractionLocked ? lockedLabel : '+ CHỌN GÓI KHÁC'}
                       </Button>
                     </>
                   )}
@@ -126,10 +133,10 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
               ) : (
                 <Button
                   className="w-full font-bold text-white bg-primary hover:bg-primary/90 shadow-lg rounded-none rounded-b-r-lg h-11 text-base"
-                  onClick={() => !isSoldOut && setIsModalOpen(true)}
-                  disabled={isSoldOut}
+                  onClick={() => !isSoldOut && !isInteractionLocked && setIsModalOpen(true)}
+                  disabled={isSoldOut || isInteractionLocked}
                 >
-                  {isSoldOut ? 'ĐÃ HẾT' : 'THÊM VÀO GIỎ'}
+                  {isSoldOut ? 'ĐÃ HẾT' : isInteractionLocked ? lockedLabel : 'THÊM VÀO GIỎ'}
                 </Button>
               )}
             </div>
@@ -146,6 +153,8 @@ export function RewardDetailCard({ reward, items = [], addOns = [], onSelectRewa
         addOns={addOns}
         onSelectReward={onSelectReward}
         campaignId={campaignId}
+        isPreview={isPreview}
+        isOwnerViewing={isOwnerViewing}
       />
     </>
   );
