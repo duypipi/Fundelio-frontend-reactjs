@@ -383,10 +383,10 @@ const SearchPage = () => {
 
                         <button
                             onClick={handleOpenFilters}
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 transition-colors"
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-white/10 transition-colors"
                         >
-                            <SlidersHorizontal className="w-4 h-4" />
-                            <span className="text-sm font-medium text-white">Bộ lọc</span>
+                            <SlidersHorizontal className="w-4 h-4 text-text-primary dark:text-white" />
+                            <span className="text-sm font-medium text-text-primary dark:text-white">Bộ lọc</span>
                             {activeFilterCount > 0 && (
                                 <span className="flex items-center justify-center w-5 h-5 rounded-full bg-secondary text-black text-xs font-bold">
                                     {activeFilterCount}
