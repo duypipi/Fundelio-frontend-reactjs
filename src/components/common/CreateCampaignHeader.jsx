@@ -71,6 +71,21 @@ export const CreateCampaignHeader = ({
     { id: 'rewards', label: 'Phần thưởng' },
   ];
 
+  const buildSearchUrl = (params = {}) => {
+    const searchParams = new URLSearchParams();
+    if (params.status) {
+      searchParams.set('status', params.status);
+    }
+    if (params.sort) {
+      searchParams.set('sort', params.sort);
+    }
+    if (params.category) {
+      searchParams.set('category', params.category);
+    }
+    const query = searchParams.toString();
+    return `/search${query ? `?${query}` : ''}`;
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -222,7 +237,7 @@ export const CreateCampaignHeader = ({
                           <span>Cài đặt</span>
                         </a>
                         <Link
-                          to="/your-projects"
+                          to="/my-pledges"
                           onClick={() => setIsUserMenuOpen(false)}
                           className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                         >

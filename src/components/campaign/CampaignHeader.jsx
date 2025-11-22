@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Share2, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import Button from '@/components/common/Button';
-import { buildVideoEmbed } from '@/utils/embed';
 
 // Helper function to check if URL is YouTube
 const isYouTubeUrl = (url) => {
@@ -119,11 +118,12 @@ const CampaignHeader = ({
   onSave = () => { },
   onShare = () => { },
   onTabChange = () => { },
+  isPreview = false,
+  isOwnerViewing = false,
 }) => {
   const {
     title = 'Campaign Title',
     description = '',
-    // highlights = [], // API không có field này
     owner = null,
     introImageUrl = '/images/campaign-hero.jpg',
     introVideoUrl = null,
@@ -133,13 +133,6 @@ const CampaignHeader = ({
     backersCount = 0,
     daysLeft = 0,
   } = campaign;
-
-  // Prepare creator info from owner
-  const creator = owner ? {
-    name: `${owner.firstName || ''} ${owner.lastName || ''}`.trim() || 'Creator',
-    location: 'Vietnam', // API không có field này
-    link: '#creator-profile',
-  } : { name: 'Creator', location: 'Vietnam', link: '#creator-profile' };
 
   // State cho carousel
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
@@ -439,6 +432,7 @@ const CampaignHeader = ({
                     onTabChange('rewards');
                     onPickPerk();
                   }}
+                  disabled={isPreview || isOwnerViewing}
                 >
                   ỦNG HỘ DỰ ÁN NÀY
                 </Button>

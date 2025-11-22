@@ -40,9 +40,7 @@ export default function CampaignDetailPage() {
 
   // Subscribe to campaign progress updates (real-time)
   const handleCampaignProgress = useCallback((progressData) => {
-    console.log('📊 Campaign progress updated via WebSocket:', progressData);
 
-    // Update campaign data with new progress
     setCampaignData(prev => {
       if (!prev) return prev;
 
@@ -351,6 +349,8 @@ export default function CampaignDetailPage() {
           onSave={handleSave}
           onShare={handleShare}
           onTabChange={handleTabChange}
+          isPreview={isPreview}
+          isOwnerViewing={isOwnerViewing}
         />
 
         {isPreview ?

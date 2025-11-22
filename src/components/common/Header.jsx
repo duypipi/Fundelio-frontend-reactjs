@@ -40,6 +40,21 @@ export const Header = ({
 
   const { categories, loading: loadingCategories } = useCategories();
 
+  const buildSearchUrl = (params = {}) => {
+    const searchParams = new URLSearchParams();
+    if (params.status) {
+      searchParams.set('status', params.status);
+    }
+    if (params.sort) {
+      searchParams.set('sort', params.sort);
+    }
+    if (params.category) {
+      searchParams.set('category', params.category);
+    }
+    const query = searchParams.toString();
+    return `/search${query ? `?${query}` : ''}`;
+  };
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
@@ -140,11 +155,9 @@ export const Header = ({
 
   return (
     <header
-      className={`${
-        isFixed ? "fixed" : "relative"
-      } top-0 left-0 right-0 z-50 py-3 px-4 sm:py-4 sm:px-6 transition-all duration-300 ${
-        currentVariant.container
-      }`}
+      className={`${isFixed ? "fixed" : "relative"
+        } top-0 left-0 right-0 z-50 py-3 px-4 sm:py-4 sm:px-6 transition-all duration-300 ${currentVariant.container
+        }`}
     >
       <div className="mx-auto max-w-container flex items-center justify-between gap-4">
         {/* Left */}
@@ -168,27 +181,31 @@ export const Header = ({
               <ChevronDown className="w-4 h-4" />
             </button>
             {isDropdownOpen && (
-              <div
-                className={`absolute top-full left-0 mt-4 w-48 rounded-lg shadow-lg z-50 ${currentVariant.dropdown}`}
-              >
-                {loadingCategories ? (
-                  <div className="px-4 py-3 text-sm">Đang tải...</div>
-                ) : (
-                  categories.map((cat, i) => {
-                    const Icon = cat.icon;
-                    return (
-                      <Link
-                        key={cat.id}
-                        to={cat.href}
-                        className={`flex items-center space-x-3 px-4 py-3 ${currentVariant.dropdownItem}`}
-                      >
-                        <Icon className={`w-4 h-4 ${cat.color}`} />
-                        <span className="text-sm font-medium">{cat.name}</span>
-                      </Link>
-                    );
-                  })
-                )}
-              </div>
+              <>
+                {/* Bridge element để lấp khoảng trống giữa button và dropdown */}
+                <div className="absolute top-full left-0 w-48 h-4" />
+                <div
+                  className={`absolute top-full left-0 mt-4 w-48 rounded-lg shadow-lg z-50 ${currentVariant.dropdown}`}
+                >
+                  {loadingCategories ? (
+                    <div className="px-4 py-3 text-sm">Đang tải...</div>
+                  ) : (
+                    categories.map((cat, i) => {
+                      const Icon = cat.icon;
+                      return (
+                        <Link
+                          key={cat.id}
+                          to={buildSearchUrl({ category: cat.id })}
+                          className={`flex items-center space-x-3 px-4 py-3 ${currentVariant.dropdownItem}`}
+                        >
+                          <Icon className={`w-4 h-4 ${cat.color}`} />
+                          <span className="text-sm font-medium">{cat.name}</span>
+                        </Link>
+                      );
+                    })
+                  )}
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -202,9 +219,8 @@ export const Header = ({
               <input
                 type="text"
                 placeholder="Tìm kiếm..."
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border bg-transparent ${
-                  isScrolled ? "border-gray-300" : "border-white/30 text-white"
-                }`}
+                className={`w-full pl-10 pr-4 py-2 rounded-lg border bg-transparent ${isScrolled ? "border-gray-300" : "border-white/30 text-white"
+                  }`}
               />
             </div>
           </div>
@@ -214,18 +230,16 @@ export const Header = ({
           {isLoggedIn && user && (
             <button
               onClick={handleCoinClick}
-              className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg ${
-                Number(headerBalance) === 0
-                  ? "hover:bg-red-100 dark:hover:bg-red-900/30"
-                  : "bg-primary/10 hover:bg-primary/20"
-              } transition-all duration-200 hover:scale-105 coin-button relative`}
+              className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg ${Number(headerBalance) === 0
+                ? "hover:bg-red-100 dark:hover:bg-red-900/30"
+                : "bg-primary/10 hover:bg-primary/20"
+                } transition-all duration-200 hover:scale-105 coin-button relative`}
             >
               <span
-                className={`text-md font-bold ${
-                  Number(headerBalance) === 0
-                    ? "text-red-500 dark:text-red-400"
-                    : "text-primary dark:text-primary-400"
-                }`}
+                className={`text-md font-bold ${Number(headerBalance) === 0
+                  ? "text-red-500 dark:text-red-400"
+                  : "text-primary dark:text-primary-400"
+                  }`}
               >
                 {formatPrice(headerBalance)} VND
               </span>
@@ -260,27 +274,27 @@ export const Header = ({
                       {user?.rolesSecured?.some(
                         (role) => role.name === "ADMIN"
                       ) && (
-                        <Link
-                          to="/admin"
-                          onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-3 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
-                        >
-                          <ShieldCheck className="w-4 h-4" />
-                          <span>Quản trị hệ thống</span>
-                        </Link>
-                      )}
+                          <Link
+                            to="/admin"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
+                          >
+                            <ShieldCheck className="w-4 h-4" />
+                            <span>Quản trị hệ thống</span>
+                          </Link>
+                        )}
                       {user?.rolesSecured?.some(
                         (role) => role.name === "FOUNDER" || role.name === "ADMIN"
                       ) && (
-                      <Link
-                        to="/dashboard"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-text-primary dark:text-white border-b border-amber-600 dark:border-amber-700"
-                      >
-                        <LayoutDashboard className="w-4 h-4 text-gray-500" />
-                        <span>Bảng điều khiển</span>
-                      </Link>
-                      )}
+                          <Link
+                            to="/dashboard"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-text-primary dark:text-white border-b border-amber-600 dark:border-amber-700"
+                          >
+                            <LayoutDashboard className="w-4 h-4 text-gray-500" />
+                            <span>Bảng điều khiển</span>
+                          </Link>
+                        )}
                       <Link
                         to="/profile"
                         onClick={() => setIsUserMenuOpen(false)}
@@ -291,7 +305,7 @@ export const Header = ({
                       </Link>
 
                       <Link
-                        to="/your-projects"
+                        to="/my-pledges"
                         onClick={() => setIsUserMenuOpen(false)}
                         className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg text-text-primary dark:text-white"
                       >
@@ -377,14 +391,14 @@ export const Header = ({
         <div className="lg:hidden mt-4 py-4 border-t border-white/20 dark:border-gray-700 transition-colors duration-300">
           <nav className="space-y-2">
             {user?.rolesSecured?.some((role) => role.name === "FOUNDER" || role.name === "ADMIN") && (
-            <Link
-              to="/dashboard"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              <span>Bảng điều khiển</span>
-            </Link>
+              <Link
+                to="/dashboard"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-3 py-2 text-sm text-text-primary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Bảng điều khiển</span>
+              </Link>
             )}
             {/* Admin link - only show if user has ADMIN role */}
             {user?.rolesSecured?.some((role) => role.name === "ADMIN") && (
@@ -401,26 +415,22 @@ export const Header = ({
             <div className="border-t-2 border-border my-3"></div>
             <Link
               to="/home"
-              className={`block px-4 py-2 rounded-lg ${
-                currentVariant.navLink
-              } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${
-                location.pathname === "/home"
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink
+                } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${location.pathname === "/home"
                   ? "text-primary dark:text-primary-400"
                   : ""
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Trang chủ
             </Link>
             <Link
               to="/campaigns/create"
-              className={`block px-4 py-2 rounded-lg ${
-                currentVariant.navLink
-              } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${
-                location.pathname === "/campaigns/create"
+              className={`block px-4 py-2 rounded-lg ${currentVariant.navLink
+                } hover:bg-white/10 dark:hover:bg-darker-2-light/40 transition-colors font-medium ${location.pathname === "/campaigns/create"
                   ? "text-primary dark:text-primary-400"
                   : ""
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Tạo chiến dịch
