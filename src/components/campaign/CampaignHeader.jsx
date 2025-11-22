@@ -246,10 +246,10 @@ const CampaignHeader = ({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-[1200px] mx-auto px-4 lg:px-6 py-12 lg:py-14">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-4 lg:px-6 py-12 lg:pt-16 lg:pb-20">
         {/* Title & Description Section */}
         <div className="flex justify-center">
-          <div className="max-w-2xl">
+          <div className="max-w-4xl">
             <motion.h1
               className="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary mb-4 leading-tight"
               style={{ fontFamily: "'Roboto Slab', serif" }}
@@ -259,16 +259,18 @@ const CampaignHeader = ({
             >
               {title}
             </motion.h1>
+
+            <motion.p
+              className="text-base mb-12 lg:mb-8 lg:text-md text-gray-300 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              {description}
+            </motion.p>
           </div>
         </div>
-        <motion.p
-          className="text-base mb-12 lg:mb-8 lg:text-lg text-gray-300 leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {description}
-        </motion.p>
+
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
@@ -20,6 +20,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCategories } from "../../hooks/useCategories";
 import { walletApi } from "@/api/walletApi";
+import { campaignApi } from "@/api/campaignApi";
 
 export const Header = ({
   variant = "transparent",
@@ -32,6 +33,11 @@ export const Header = ({
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [headerBalance, setHeaderBalance] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchTotal, setSearchTotal] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchTimeoutRef = useRef(null);
 
   const { toggleTheme, isDark } = useTheme();
   const { isLoggedIn, user, logout } = useAuth();
@@ -105,11 +111,55 @@ export const Header = ({
     const handleClickOutside = (event) => {
       if (!event.target.closest(".user-menu-container"))
         setIsUserMenuOpen(false);
-      if (!event.target.closest(".search-container")) setIsSearchFocused(false);
+      if (!event.target.closest(".search-container")) {
+        setIsSearchFocused(false);
+        setSearchResults([]);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Debounced search
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    searchTimeoutRef.current = setTimeout(async () => {
+      try {
+        const filter = `title ~~ '*${searchQuery.trim()}*'`;
+        const response = await campaignApi.getAllCampaigns({
+          filter,
+          page: 0,
+          size: 5,
+        });
+        const campaigns = response.data?.data?.content || [];
+        const total = response.data?.data?.totalElements || 0;
+        setSearchResults(campaigns);
+        setSearchTotal(total);
+      } catch (error) {
+        console.error("Header: Lỗi tìm kiếm", error);
+        setSearchResults([]);
+        setSearchTotal(0);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 500);
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery]);
 
   const headerVariants = {
     transparent: {
@@ -219,9 +269,71 @@ export const Header = ({
               <input
                 type="text"
                 placeholder="Tìm kiếm..."
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border bg-transparent ${isScrolled ? "border-gray-300" : "border-white/30 text-white"
-                  }`}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                className={`w-full pl-10 pr-4 py-2 rounded-lg border bg-transparent ${isScrolled ? "border-gray-300 dark:border-gray-600" : "border-white/30 text-text-primary dark:text-white"
+                  } focus:outline-none focus:ring-2 focus:ring-primary/50`}
               />
+              {/* Search Results Dropdown */}
+              {isSearchFocused && (searchQuery.trim() || searchResults.length > 0) && (
+                <div className="absolute w-[600px] left-1/2 -translate-x-1/2 top-full mt-2 bg-white dark:bg-darker rounded-xs shadow-xl shadow-card z-50 max-h-96 overflow-y-auto scrollbar-hide">
+                  {isSearching ? (
+                    <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                      Đang tìm kiếm...
+                    </div>
+                  ) : searchResults.length > 0 ? (
+                    <>
+                      <div className="px-4 py-3 border-b text-center border-gray-200 dark:border-gray-700">
+                        <h3 className="text-sm font-semibold text-text-primary dark:text-white">
+                          PROJECTS: <span className="text-green-600 dark:text-green-400">{searchTotal}</span>
+                        </h3>
+                      </div>
+                      <div className="py-2">
+                        {searchResults.map((campaign) => {
+                          const displayName = campaign.owner
+                            ? `${campaign.owner.firstName || ""} ${campaign.owner.lastName || ""}`.trim() || "Unknown"
+                            : "Unknown";
+                          const thumbnail = campaign.introImageUrl || campaign.thumbnailUrl || "/placeholder.png";
+                          return (
+                            <Link
+                              key={campaign.campaignId || campaign.id}
+                              to={`/campaigns/${campaign.campaignId || campaign.id}`}
+                              onClick={() => {
+                                setSearchQuery("");
+                                setSearchResults([]);
+                                setIsSearchFocused(false);
+                              }}
+                              className="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                            >
+                              <img
+                                src={thumbnail}
+                                alt={campaign.title}
+                                className="w-12 h-12 rounded object-cover flex-shrink-0"
+                                onError={(e) => {
+                                  e.target.src = "/placeholder.png";
+                                }}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-sm font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">
+                                  {campaign.title}
+                                </h4>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                  {displayName}
+                                </p>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </>
+                  ) : searchQuery.trim() ? (
+                    <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                      Không tìm thấy kết quả
+                    </div>
+                  ) : null}
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
-import { useSelector } from 'react-redux';
 import { campaignApi } from '@/api/campaignApi';
+import { useCategories } from '@/hooks/useCategories';
 import SearchFilters from './search/SearchFilters';
 import SearchResults from './search/SearchResults';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -19,7 +19,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
  */
 const SearchPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const categories = useSelector(state => state.categories.categories);
+    const { categories } = useCategories();
 
     // Filter state
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -147,10 +147,10 @@ const SearchPage = () => {
 
         // Price range (fundingGoal)
         if (price?.min) {
-            filters.push(`fundingGoal >= ${price.min}`);
+            filters.push(`goalAmount >= ${price.min}`);
         }
         if (price?.max) {
-            filters.push(`fundingGoal <= ${price.max}`);
+            filters.push(`goalAmount <= ${price.max}`);
         }
 
         // Search query (title or description contains)
@@ -202,7 +202,9 @@ const SearchPage = () => {
             if (sort === 'newest') {
                 params.sort = 'createdAt,desc';
             } else if (sort === 'most_funded') {
-                params.sort = 'currentAmount,desc';
+                params.sort = 'pledgedAmount,desc';
+            } else if (sort === 'backersCount') {
+                params.sort = 'backersCount,desc';
             } else if (sort === 'ending_soon') {
                 params.sort = 'endDate,asc';
             }
