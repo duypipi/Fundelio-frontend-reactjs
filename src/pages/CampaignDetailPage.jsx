@@ -40,9 +40,7 @@ export default function CampaignDetailPage() {
 
   // Subscribe to campaign progress updates (real-time)
   const handleCampaignProgress = useCallback((progressData) => {
-    console.log('📊 Campaign progress updated via WebSocket:', progressData);
 
-    // Update campaign data with new progress
     setCampaignData(prev => {
       if (!prev) return prev;
 
@@ -203,6 +201,8 @@ export default function CampaignDetailPage() {
   const avatarUrl = useMemo(() => {
     const owner = campaignData?.owner;
     if (!owner) return null;
+    // Return avatarUrl from owner, or null if not available
+    return owner.avatarUrl || null;
   }, [campaignData?.owner]);
 
   const handlePickPerk = () => console.log('Pick Your Perk clicked');
@@ -278,6 +278,7 @@ export default function CampaignDetailPage() {
     name: `${campaignData.owner.firstName || ''} ${campaignData.owner.lastName || ''}`.trim() || 'Creator',
     username: campaignData.owner.email || 'creator',
     avatar: avatarUrl,
+    avatarUrl: avatarUrl, // Also include avatarUrl for compatibility
     bio: campaignData.owner.bio || 'Campaign creator',
     badges: [],
     stats: {
@@ -351,6 +352,8 @@ export default function CampaignDetailPage() {
           onSave={handleSave}
           onShare={handleShare}
           onTabChange={handleTabChange}
+          isPreview={isPreview}
+          isOwnerViewing={isOwnerViewing}
         />
 
         {isPreview ?
