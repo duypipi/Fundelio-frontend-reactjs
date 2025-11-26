@@ -21,9 +21,6 @@ export const setLogoutCallback = (callback) => {
   logoutCallback = callback;
 };
 
-let refreshTokenIntervalId = null;
-const REFRESH_TOKEN_INTERVAL = 50 * 60 * 1000; // 50 minutes
-
 const performTokenRefresh = async () => {
   try {
     console.log('Refreshing token...');
@@ -51,41 +48,6 @@ const performTokenRefresh = async () => {
     }
 
     throw error;
-  }
-};
-
-export const startTokenRefreshInterval = () => {
-  if (refreshTokenIntervalId) {
-    clearInterval(refreshTokenIntervalId);
-  }
-
-  console.log(
-    `Start automatic token refresh every ${
-      REFRESH_TOKEN_INTERVAL / 1000
-    } seconds`
-  );
-  refreshTokenIntervalId = window.setInterval(() => {
-    if (storageService.getAccessToken()) {
-      if (!refreshTokenPromise) {
-        refreshTokenPromise = performTokenRefresh().finally(() => {
-          refreshTokenPromise = null;
-        });
-      }
-    } else {
-      console.log('Stop automatic token refresh because no token');
-      if (refreshTokenIntervalId) {
-        clearInterval(refreshTokenIntervalId);
-        refreshTokenIntervalId = null;
-      }
-    }
-  }, REFRESH_TOKEN_INTERVAL);
-};
-
-export const stopTokenRefreshInterval = () => {
-  if (refreshTokenIntervalId) {
-    console.log('Stop automatic token refresh');
-    clearInterval(refreshTokenIntervalId);
-    refreshTokenIntervalId = null;
   }
 };
 

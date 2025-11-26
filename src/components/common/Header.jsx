@@ -142,7 +142,7 @@ export const Header = ({
           size: 5,
         });
         const campaigns = response.data?.data?.content || [];
-        const total = response.data?.data?.totalElements || 0;
+        const total = response.data?.data?.meta?.totalElements || 0;
         setSearchResults(campaigns);
         setSearchTotal(total);
       } catch (error) {
@@ -347,6 +347,7 @@ export const Header = ({
                 : "bg-primary/10 hover:bg-primary/20"
                 } transition-all duration-200 hover:scale-105 coin-button relative`}
             >
+              <Wallet className="w-4 h-4 text-primary dark:text-primary-400" />
               <span
                 className={`text-md font-bold ${Number(headerBalance) === 0
                   ? "text-red-500 dark:text-red-400"
