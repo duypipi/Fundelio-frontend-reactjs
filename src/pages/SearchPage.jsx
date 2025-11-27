@@ -222,7 +222,7 @@ const SearchPage = () => {
 
             const response = await campaignApi.getAllCampaigns(params);
             const newCampaigns = response.data?.data?.content || [];
-            const total = response.data?.data?.totalElements || 0;
+            const total = response.data?.data?.meta?.totalElements || 0;
             const totalPages = response.data?.data?.totalPages || 0;
 
             console.log('[SearchPage] API response:', {

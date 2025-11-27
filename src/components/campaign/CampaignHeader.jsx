@@ -297,6 +297,8 @@ const CampaignHeader = ({
                       alt={`Hình ảnh chiến dịch cho ${title}`}
                       className="w-full h-full object-cover"
                       loading="eager"
+                      fetchpriority="high"
+                      decoding="async"
                       onError={(e) => {
                         // Fallback to gradient placeholder if image fails to load
                         e.target.style.display = 'none';
