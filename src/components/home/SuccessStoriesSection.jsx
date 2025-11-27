@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Trophy, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProjectCard from './ProjectCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
-
+import { BiSolidBadgeCheck } from "react-icons/bi";
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -52,9 +52,9 @@ export const SuccessStoriesSection = ({ campaigns = [], loading = false }) => {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                        <Trophy className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-500" />
-                        <h2 className="text-2xl sm:text-3xl font-bold text-text-primary dark:text-white transition-colors duration-300">
-                            Câu Chuyện Thành Công
+                        <BiSolidBadgeCheck className="w-6 h-6 sm:w-7 sm:h-7 text-text-primary dark:text-white" />
+                        <h2 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-white transition-colors duration-300">
+                            Câu chuyện thành công
                         </h2>
                     </div>
 

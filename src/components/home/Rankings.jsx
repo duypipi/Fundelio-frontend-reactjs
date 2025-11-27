@@ -4,7 +4,7 @@ import RankingItem from './RankingItem';
 import RankingItemSkeleton from './RankingItemSkeleton';
 import { useCampaigns } from '@/hooks/useCampaigns';
 import { useCategories } from '@/hooks/useCategories';
-
+import { HiTrophy } from "react-icons/hi2";
 export const Rankings = ({
   title = 'Xếp hạng',
 }) => {
@@ -52,8 +52,8 @@ export const Rankings = ({
         {/* Section Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <Trophy className="w-8 h-8 text-yellow-400" />
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+            <HiTrophy className="w-8 h-8 text-text-primary dark:text-gray-100" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               {title}
             </h2>
           </div>

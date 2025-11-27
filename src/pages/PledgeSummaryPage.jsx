@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Check, AlertCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, Check, AlertCircle, MapPin } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,8 @@ import { RewardItem } from '@/components/campaign/rewards/reward-detail/RewardIt
 import { Card } from '@/components/campaign/rewards/ui/Card';
 import { usePledgeEvents } from '@/websocket/hooks';
 import { createPledge, webSocketClient } from '@/websocket';
+import { useAuth } from '@/contexts/AuthContext';
+import LocationModal from '@/pages/pledges/components/LocationModal';
 import toast from 'react-hot-toast';
 import gsap from 'gsap';
 import {
@@ -19,6 +21,7 @@ export default function PledgeSummaryPage() {
     const location = useLocation();
     const navigate = useNavigate();
     const { campaignId } = useParams();
+    const { user } = useAuth();
     const [showProducts, setShowProducts] = useState(false);
     const [bonusAmount, setBonusAmount] = useState(0);
     const [agreeToTerms, setAgreeToTerms] = useState(false);
@@ -27,6 +30,8 @@ export default function PledgeSummaryPage() {
     const [pledgeError, setPledgeError] = useState(null);
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [showLocationModal, setShowLocationModal] = useState(false);
+    const [userLocation, setUserLocation] = useState({ city: '', nationality: '' });
     const timeoutRef = useRef(null);
     const successIconRef = useRef(null);
     const errorIconRef = useRef(null);
@@ -70,6 +75,26 @@ export default function PledgeSummaryPage() {
             console.log('➕ Add-ons:', pledgeData.addOns);
         }
     }, [pledgeData, campaignId, navigate]);
+
+    // Check user location and show modal if needed
+    useEffect(() => {
+        if (user) {
+            const hasCity = user.city && user.city.trim() !== '';
+            const hasNationality = user.nationality && user.nationality.trim() !== '';
+
+            setUserLocation({
+                city: user.city || '',
+                nationality: user.nationality || ''
+            });
+
+            // Show modal if user doesn't have both city and nationality
+            // Only for reward pledges (not for No Reward pledges)
+            const isNoRewardPledge = pledgeData?.hasNoReward || !pledgeData?.reward;
+            if (!isNoRewardPledge && (!hasCity || !hasNationality)) {
+                setShowLocationModal(true);
+            }
+        }
+    }, [user, pledgeData]);
 
     // Cleanup timeout khi unmount
     useEffect(() => {
@@ -268,6 +293,14 @@ export default function PledgeSummaryPage() {
             return;
         }
 
+        // Check location for reward pledges
+        const isNoRewardPledge = pledgeData?.hasNoReward || !pledgeData?.reward;
+        if (!isNoRewardPledge && (!userLocation.city || !userLocation.nationality)) {
+            toast.error('Vui lòng cung cấp thông tin vị trí trước khi ủng hộ');
+            setShowLocationModal(true);
+            return;
+        }
+
         // Kiểm tra WebSocket connection
         if (!webSocketClient.isConnected()) {
             toast.error('WebSocket chưa kết nối. Vui lòng thử lại sau.');
@@ -277,6 +310,11 @@ export default function PledgeSummaryPage() {
 
         // Show confirmation modal
         setShowConfirmModal(true);
+    };
+
+    const handleLocationSuccess = (locationData) => {
+        setUserLocation(locationData);
+        toast.success('Đã cập nhật thông tin vị trí');
     };
 
     const handleConfirmPledge = async () => {
@@ -489,6 +527,49 @@ export default function PledgeSummaryPage() {
                         </div>
                     </Card>
 
+                    {/* Section 3.5: Location Information - Only show for reward pledges */}
+                    {!isNoRewardPledge && (
+                        <Card className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <MapPin className="w-5 h-5 text-primary" />
+                                    <h2 className="text-xl font-bold text-foreground">Thông tin vị trí</h2>
+                                </div>
+                                <button
+                                    onClick={() => setShowLocationModal(true)}
+                                    className="text-sm text-primary hover:text-primary-600 font-medium transition-colors"
+                                >
+                                    Chỉnh sửa
+                                </button>
+                            </div>
+
+                            {userLocation.city && userLocation.nationality ? (
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between p-3 bg-muted/30 dark:bg-darker rounded-sm">
+                                        <span className="text-sm text-muted-foreground">Quốc tịch</span>
+                                        <span className="text-sm font-semibold text-foreground">{userLocation.nationality}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between p-3 bg-muted/30 dark:bg-darker rounded-sm">
+                                        <span className="text-sm text-muted-foreground">Thành phố</span>
+                                        <span className="text-sm font-semibold text-foreground">{userLocation.city}</span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-sm">
+                                    <p className="text-sm text-amber-800 dark:text-amber-200">
+                                        Vui lòng cung cấp thông tin vị trí để hoàn tất cam kết ủng hộ.
+                                    </p>
+                                    <button
+                                        onClick={() => setShowLocationModal(true)}
+                                        className="mt-2 text-sm text-primary hover:text-primary-600 font-semibold transition-colors"
+                                    >
+                                        Thêm thông tin vị trí →
+                                    </button>
+                                </div>
+                            )}
+                        </Card>
+                    )}
+
                     {/* Section 4: Terms */}
                     <Card className="p-6">
                         <h2 className="text-xl font-bold text-foreground mb-4">Điều khoản</h2>
@@ -655,6 +736,13 @@ export default function PledgeSummaryPage() {
                     </div>
                 </DialogContent>
             </Dialog>
+
+            {/* Location Modal */}
+            <LocationModal
+                isOpen={showLocationModal}
+                onClose={() => setShowLocationModal(false)}
+                onSuccess={handleLocationSuccess}
+            />
         </div>
     );
 }

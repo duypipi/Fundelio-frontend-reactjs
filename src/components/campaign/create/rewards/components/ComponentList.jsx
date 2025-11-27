@@ -4,8 +4,18 @@ import Input from "@/components/common/Input"
 import RewardCard from "./RewardCard"
 import { Search } from "lucide-react"
 
-export default function ItemList({ items, onEdit, onDelete, onCreate, isLoading, itemRewards = {}, isReadOnly = false }) {
+export default function ItemList({
+  items,
+  onEdit,
+  onDelete,
+  onCreate,
+  isLoading,
+  itemRewards = {},
+  isReadOnly = false,
+  itemRules = {},
+}) {
   const [searchTerm, setSearchTerm] = useState("")
+  const preventDeletingOldItems = Boolean(itemRules?.preventDeletingOldItems)
 
   const filteredItems = useMemo(() => {
     return items.filter((item) =>
@@ -67,7 +77,9 @@ export default function ItemList({ items, onEdit, onDelete, onCreate, isLoading,
       </div>
 
       <div className="space-y-4">
-        {filteredItems.map((item) => (
+        {filteredItems.map((item) => {
+          const deleteDisabled = preventDeletingOldItems && item?.isOld
+          return (
           <RewardCard
             key={item.catalogItemId}
             data={item}
@@ -76,8 +88,11 @@ export default function ItemList({ items, onEdit, onDelete, onCreate, isLoading,
             onDelete={onDelete}
             linkedRewards={itemRewards[item.catalogItemId] || []}
             isReadOnly={isReadOnly}
+              disableDelete={deleteDisabled}
+              deleteTooltip={deleteDisabled ? 'Không thể xóa thành phần đã tồn tại trong trạng thái này.' : undefined}
           />
-        ))}
+          )
+        })}
       </div>
     </div>
   )

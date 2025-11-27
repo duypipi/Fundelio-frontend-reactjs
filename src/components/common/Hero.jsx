@@ -36,7 +36,18 @@ const Hero = () => {
         });
 
         if (response?.data?.data?.content && response.data.data.content.length > 0) {
-          setCampaigns(response.data.data.content);
+          const campaigns = response.data.data.content;
+          setCampaigns(campaigns);
+
+          // Preload first hero image for better LCP
+          if (campaigns[0]?.introImageUrl) {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = campaigns[0].introImageUrl;
+            link.fetchpriority = 'high';
+            document.head.appendChild(link);
+          }
         }
       } catch (error) {
         console.error('Error fetching hero campaigns:', error);
@@ -276,6 +287,9 @@ const Hero = () => {
               src={campaign.introImageUrl || 'https://via.placeholder.com/1920x1080?text=Campaign'}
               alt={campaign.title || 'Campaign'}
               className="h-full w-full object-cover object-center"
+              loading={index === safeCurrentSlide ? 'eager' : 'lazy'}
+              fetchpriority={index === safeCurrentSlide ? 'high' : undefined}
+              decoding="async"
             />
           </div>
         )
@@ -417,6 +431,8 @@ const Hero = () => {
                   src={campaign.introImageUrl || "/placeholder.svg?height=96&width=128&query=campaign-thumbnail"}
                   alt={campaign.title || 'Campaign'}
                   className="h-11 w-16 object-cover sm:h-12 sm:w-20 transition-transform duration-300 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
                 {/* Gradient overlay when active */}
                 {actualIndex === safeCurrentSlide && (
