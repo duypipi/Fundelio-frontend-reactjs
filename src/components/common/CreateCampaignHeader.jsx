@@ -112,7 +112,7 @@ export const CreateCampaignHeader = ({
           {/* Left - Logo + Back Button (if edit mode) */}
           <div className="flex items-center gap-4 flex-shrink-0">
             <Link to="/home" className="flex-shrink-0">
-              <img src="/logo.png" alt="Fundelio" className="w-10 h-10 md:w-12 md:h-12" />
+              <img src="https://i.postimg.cc/HLJPXtZ4/logo-(3)-(1)-(1).png" alt="Fundelio" className="w-10 h-10 md:w-12 md:h-12" width="48" height="48" />
             </Link>
 
             {isEditMode && (
@@ -313,7 +313,7 @@ export const CreateCampaignHeader = ({
         <div className="flex items-center justify-between px-4 h-1/2 border-b border-gray-200 dark:border-gray-700">
           {/* Logo */}
           <Link to="/home" className="flex-shrink-0">
-            <img src="/logo.png" alt="Fundelio" className="w-8 h-8" />
+            <img src="https://i.postimg.cc/HLJPXtZ4/logo-(3)-(1)-(1).png" alt="Fundelio" className="w-8 h-8" width="32" height="32" />
           </Link>
 
           {/* Right - Actions */}

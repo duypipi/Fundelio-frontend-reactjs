@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Gem, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Link } from 'react-router-dom';
-
+import { TbDiamondFilled } from "react-icons/tb";
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -53,8 +53,8 @@ export const QuickWinsMostBackedSection = ({ campaigns = [], loading = false }) 
                 <div className="flex items-center justify-between mb-2">
                     {/* Title */}
                     <div className="flex items-center gap-2">
-                        <Gem className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-                        <h2 className="text-lg sm:text-2xl font-medium text-text-primary dark:text-white">
+                        <TbDiamondFilled className="w-6 h-6 sm:w-7 sm:h-7 text-text-primary dark:text-white" />
+                        <h2 className="text-xl sm:text-2xl font-medium text-text-primary dark:text-white">
                             Tiềm năng
                         </h2>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-primary text-white">

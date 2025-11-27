@@ -404,17 +404,24 @@ export default function BasicsContent({ campaignId, isEditMode = false, isReadOn
               <label className="block text-md font-medium text-text-primary dark:text-white mb-2">
                 Mục tiêu gây quỹ (VND) <span className="text-primary">*</span>
               </label>
-              <Input
-                type="number"
-                name="goalAmount"
-                value={formData.goalAmount || ''}
-                onChange={handleChange}
-                onWheel={(e) => e.target.blur()}
-                placeholder="10000"
-                min="1"
-                disabled={isReadOnly}
-                className={`${fieldErrors.goalAmount ? 'border-red-500 focus:ring-red-500' : ''} ${isReadOnly ? 'opacity-60 cursor-not-allowed bg-gray-50 dark:bg-gray-800' : ''}`}
-              />
+              <div className="flex items-center gap-3">
+                <Input
+                  type="number"
+                  name="goalAmount"
+                  value={formData.goalAmount || ''}
+                  onChange={handleChange}
+                  onWheel={(e) => e.target.blur()}
+                  placeholder="10000"
+                  min="1"
+                  disabled={isReadOnly}
+                  className={`flex-1 ${fieldErrors.goalAmount ? 'border-red-500 focus:ring-red-500' : ''} ${isReadOnly ? 'opacity-60 cursor-not-allowed bg-gray-50 dark:bg-gray-800' : ''}`}
+                />
+                <div className="flex-shrink-0 min-w-[180px] px-4 py-2 bg-primary/10 border border-primary/30 rounded-sm">
+                  <p className="text-sm font-semibold text-primary text-right">
+                    {new Intl.NumberFormat('vi-VN').format(formData.goalAmount || 0)} VND
+                  </p>
+                </div>
+              </div>
               {fieldErrors.goalAmount ? (
                 <p className="text-xs text-red-500 mt-1">{fieldErrors.goalAmount}</p>
               ) : (

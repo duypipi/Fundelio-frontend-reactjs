@@ -95,16 +95,18 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside
         className={`${sidebarOpen ? 'w-64' : 'w-20'
-        } bg-white dark:bg-darker-2 border-r border-gray-200 dark:border-gray-800 transition-all duration-300 flex flex-col`}
+          } bg-white dark:bg-darker-2 border-r border-gray-200 dark:border-gray-800 transition-all duration-300 flex flex-col`}
       >
         {/* Logo */}
         <div className='h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800'>
           {sidebarOpen && (
             <Link to='/home' className='flex items-center space-x-2'>
               <img
-                src='/logo.png'
+                src='https://i.postimg.cc/HLJPXtZ4/logo-(3)-(1)-(1).png'
                 alt='Fundelio'
                 className='w-10 h-10 md:w-12 md:h-12'
+                width='48'
+                height='48'
               />
             </Link>
           )}
@@ -133,9 +135,9 @@ export default function AdminLayout() {
                 key={item.path}
                 to={item.path}
                 className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors ${active
-                    ? 'bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                  ? 'bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
               >
                 <Icon size={20} className='flex-shrink-0' />
                 {sidebarOpen && (

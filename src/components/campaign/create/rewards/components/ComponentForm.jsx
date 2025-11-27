@@ -134,18 +134,25 @@ export default function ItemForm({
             <label className="block text-sm font-medium text-foreground mb-2">
               Giá (VND)<span className="text-lg font-bold text-primary">*</span>
             </label>
-            <Input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="0"
-              min="1"
-              step="1"
-              onWheel={(e) => e.target.blur()}
-              disabled={disablePriceField}
-              className={`${fieldErrors.price ? 'border-red-500 focus:ring-red-500' : ''} ${disablePriceField ? 'opacity-60 cursor-not-allowed bg-gray-50 dark:bg-gray-800' : ''}`}
-            />
+            <div className="flex items-center gap-3">
+              <Input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="0"
+                min="1"
+                step="1"
+                onWheel={(e) => e.target.blur()}
+                disabled={disablePriceField}
+                className={`flex-1 ${fieldErrors.price ? 'border-red-500 focus:ring-red-500' : ''} ${disablePriceField ? 'opacity-60 cursor-not-allowed bg-gray-50 dark:bg-gray-800' : ''}`}
+              />
+              <div className="flex-shrink-0 min-w-[180px] px-4 py-2 bg-primary/10 border border-primary/30 rounded-sm">
+                <p className="text-sm font-semibold text-primary text-right">
+                  {new Intl.NumberFormat('vi-VN').format(formData.price || 0)} VND
+                </p>
+              </div>
+            </div>
             {fieldErrors.price && <p className="mt-1 text-sm text-destructive">{fieldErrors.price}</p>}
             {disablePriceField && (
               <p className="mt-1 text-xs text-muted-foreground">

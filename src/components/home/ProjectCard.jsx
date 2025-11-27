@@ -1,7 +1,7 @@
 'use client';
 import { Clock, Bookmark, Heart, Users } from 'lucide-react';
 import expired from '/expired.svg';
-import placeholderImage from '/logo.png'
+const placeholderImage = 'https://i.postimg.cc/HLJPXtZ4/logo-(3)-(1)-(1).png';
 export const ProjectCard = ({
   project,
   onBookmarkToggle,

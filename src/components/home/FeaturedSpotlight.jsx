@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Flame, Users } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Users } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import ProjectCard from './ProjectCard';
 import ProjectLists from './ProjectLists';
-
+import { FaFire } from "react-icons/fa6";
 /**
  * @param {Object} campaigns - Object with featured and spotlight arrays
  * @param {boolean} loading - Loading state from parent
@@ -94,7 +94,7 @@ export const FeaturedSpotlight = ({ campaigns = { featured: [], spotlight: [] },
               {/* Header with Navigation */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <Flame className="w-6 h-6 text-text-primary dark:text-white" />
+                  <FaFire className="w-6 h-6 text-text-primary dark:text-white" />
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                     Nổi bật
                   </h2>

@@ -165,7 +165,7 @@ export const Header = ({
     transparent: {
       container: isScrolled
         ? "bg-white/95 dark:bg-background-header-dark backdrop-blur-md text-text-primary dark:text-white shadow-md transition-colors duration-300"
-        : "bg-transparent text-text-white",
+        : "bg-transparent",
       title: isScrolled
         ? "text-text-primary dark:text-white"
         : "text-text-white",
@@ -214,9 +214,11 @@ export const Header = ({
         <div className="flex items-center gap-2 sm:gap-4">
           <Link to="/home">
             <img
-              src="/logo.png"
+              src="https://i.postimg.cc/HLJPXtZ4/logo-(3)-(1)-(1).png"
               alt="Fundelio"
               className="w-10 h-10 md:w-12 md:h-12"
+              width="48"
+              height="48"
             />
           </Link>
           <div
@@ -272,7 +274,9 @@ export const Header = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border text-text-primary dark:text-white bg-transparent ${isScrolled ? "border-gray-300 dark:border-gray-600" : "border-white/30 text-white"
+                className={`w-full pl-10 pr-4 py-2 rounded-lg border bg-transparent ${isScrolled
+                  ? "text-text-primary dark:text-white border-gray-300 dark:border-gray-600 placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                  : "text-text-primary dark:text-white border-border placeholder:text-gray-600 dark:placeholder:text-gray-300"
                   } focus:outline-none focus:ring-2 focus:ring-primary/50`}
               />
               {/* Search Results Dropdown */}

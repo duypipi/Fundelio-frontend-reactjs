@@ -71,11 +71,10 @@ export default function RewardCard({
 
   return (
     <div
-      className={`relative rounded-sm border bg-white dark:bg-darker-2 overflow-hidden hover:shadow-md transition-shadow ${
-        isLockedEntity
+      className={`relative rounded-sm border bg-white dark:bg-darker-2 overflow-hidden hover:shadow-md transition-shadow ${isLockedEntity
           ? 'border-amber-200/80 dark:border-amber-500/40 ring-1 ring-amber-200/60 dark:ring-amber-400/30'
           : 'border-border'
-      }`}
+        }`}
     >
       {isLockedEntity && (
         <div
@@ -102,7 +101,7 @@ export default function RewardCard({
           ) : (
             <div>
               <div className="text-2xl font-bold text-foreground mb-2">
-                {data.minPledgedAmount || 0} VND
+                {new Intl.NumberFormat('vi-VN').format(data.minPledgedAmount || 0)} VND
               </div>
               {/* Reward Status Badge */}
               {data.rewardStatus && (
@@ -135,7 +134,7 @@ export default function RewardCard({
           {/* Show price for items */}
           {type === 'item' && (
             <p className="text-sm text-foreground font-semibold mt-2">
-              Giá: {data.price || 0} VND
+              Giá: {new Intl.NumberFormat('vi-VN').format(data.price || 0)} VND
             </p>
           )}
 

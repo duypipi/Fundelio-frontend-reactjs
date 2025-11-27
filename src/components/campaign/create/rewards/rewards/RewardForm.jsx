@@ -501,14 +501,21 @@ const RewardForm = forwardRef(({ reward, items, rewards, onSave, onCancel, onCha
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-foreground mb-2">Giá (VND)</label>
-            <Input
-              type="number"
-              name="minPledgeAmount"
-              value={minPledgeAmount}
-              placeholder="0"
-              disabled
-              className="bg-black/30 cursor-not-allowed"
-            />
+            <div className="flex items-center gap-3">
+              <Input
+                type="number"
+                name="minPledgeAmount"
+                value={minPledgeAmount}
+                placeholder="0"
+                disabled
+                className="flex-1 bg-black/30 cursor-not-allowed"
+              />
+              <div className="flex-shrink-0 min-w-[180px] px-4 py-2 bg-primary/10 border border-primary/30 rounded-sm">
+                <p className="text-sm font-semibold text-primary text-right">
+                  {new Intl.NumberFormat('vi-VN').format(minPledgeAmount || 0)} VND
+                </p>
+              </div>
+            </div>
             <p className="mt-2 text-sm text-muted-foreground">
               Giá tự động tính dựa trên tổng giá × số lượng của các thành phần bao gồm
             </p>

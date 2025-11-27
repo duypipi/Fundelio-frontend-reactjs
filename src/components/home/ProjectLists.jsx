@@ -8,6 +8,7 @@ import {
   LayoutGrid
 } from 'lucide-react';
 import { useCategories } from '../../hooks/useCategories';
+import { FaDice } from "react-icons/fa";
 
 const ProjectLists = ({ className = '' }) => {
   const { categories, loading: loadingCategories } = useCategories();
@@ -94,7 +95,7 @@ const ProjectLists = ({ className = '' }) => {
         {/* Categories Section */}
         <div className="">
           <div className="flex items-center gap-3 mb-5">
-            <LayoutGrid className="w-6 h-6 text-text-primary dark:text-white" />
+            <FaDice className="w-6 h-6 text-text-primary dark:text-white" />
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               Danh mục
             </h2>
