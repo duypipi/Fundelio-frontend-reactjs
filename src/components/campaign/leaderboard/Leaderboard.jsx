@@ -6,6 +6,7 @@ import { HeartHandshake } from 'lucide-react';
 import { useCampaignProgress } from '@/websocket/hooks';
 import { pledgeApi } from "@/api/pledgeApi";
 gsap.registerPlugin(Flip);
+import { IoMdTrophy } from "react-icons/io";
 
 const WreathLaurel = ({ rank, className = "" }) => {
   const colors = {
@@ -239,8 +240,8 @@ const Leaderboard = ({ campaignId }) => {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-1.5 mb-3">
-          <div className="text-4xl">🏆</div>
-          <h2 className="text-3xl font-bold text-text-primary dark:text-white">
+          <IoMdTrophy className="text-3xl" />
+          <h2 className="text-2xl font-bold text-text-primary dark:text-white">
             Người ủng hộ hàng đầu
           </h2>
         </div>

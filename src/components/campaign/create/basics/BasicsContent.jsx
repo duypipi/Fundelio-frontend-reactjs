@@ -498,7 +498,7 @@ export default function BasicsContent({ campaignId, isEditMode = false, isReadOn
           <p className="text-md text-muted-foreground mb-3">
             Thêm một <strong>hình ảnh đại diện</strong> rõ ràng cho <strong>dự án</strong> của bạn.
             Chọn một <strong>hình ảnh</strong> trông đẹp ở các kích thước khác nhau—nó sẽ xuất hiện trên trang <strong>dự án</strong> của bạn,
-            trên trang web Kickstarter và ứng dụng di động, và (khi được chia sẻ) trên các kênh <strong>mạng xã hội</strong>.
+            trên trang web Fundelio và ứng dụng di động, và (khi được chia sẻ) trên các kênh <strong>mạng xã hội</strong>.
           </p>
           <p className="text-md text-muted-foreground mb-3">
             Hình ảnh của bạn phải có kích thước ít nhất 1024×576 pixel.

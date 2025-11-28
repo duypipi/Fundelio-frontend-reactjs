@@ -26,19 +26,19 @@ export default function UserProfilePage() {
             <User className="h-8 w-8" />
           </div>
           <h1 className="text-4xl font-extrabold text-text-primary dark:text-white transition-colors duration-500">
-            Personal Information
+            Thông tin cá nhân
           </h1>
           <p className="mt-2 text-base text-muted-foreground dark:text-gray-300 transition-colors duration-500">
-            Manage your personal information and account security easily
+            Quản lý thông tin cá nhân và bảo mật tài khoản dễ dàng
           </p>
         </div>
 
         <div className="mx-auto max-w-3xl">
           <div className="grid grid-cols-3 gap-2 mb-6">
             {[
-              { key: "profile", label: "Profile", icon: User },
+              { key: "profile", label: "Hồ sơ", icon: User },
               { key: "email", label: "Email", icon: Mail },
-              { key: "password", label: "Password", icon: Shield },
+              { key: "password", label: "Mật khẩu", icon: Shield },
             ].map(({ key, label, icon: Icon }) => (
               <button
                 key={key}

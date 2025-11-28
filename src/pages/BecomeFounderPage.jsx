@@ -109,7 +109,7 @@ export default function BecomeFounderPage() {
     }
 
     return (
-        <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center px-4 py-8">
+        <div className="min-h-screen bg-background-light-2 dark:bg-darker flex items-center justify-center px-4 pb-8 pt-20">
             <div className="w-full max-w-4xl">
                 {/* Header */}
                 <div className="mb-8">

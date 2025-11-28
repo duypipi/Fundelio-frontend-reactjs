@@ -148,10 +148,6 @@ export function RewardDetailModal({ isOpen, onClose, reward, items = [], addOns 
 
                             <div className="flex items-center gap-6 text-sm text-muted-foreground">
                                 <div className="flex items-center gap-2">
-                                    <Users className="w-4 h-4" />
-                                    <span>{reward.backersCount || 0} lượt ủng hộ</span>
-                                </div>
-                                <div className="flex items-center gap-2">
                                     <Truck className="w-4 h-4" />
                                     <span>
                                         {reward.estimatedDelivery
