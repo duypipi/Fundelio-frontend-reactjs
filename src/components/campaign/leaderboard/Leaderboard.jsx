@@ -50,10 +50,12 @@ const getInitials = (name) => {
 const Leaderboard = ({ campaignId }) => {
   const [backers, setBackers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
   const listRef = useRef(null);
   const flipStateRef = useRef(null);
   const backerColorsRef = useRef({});
   const lastToastKeyRef = useRef(null);
+  const componentRef = useRef(null);
 
   // Fetch initial top backers
   useEffect(() => {
@@ -92,6 +94,26 @@ const Leaderboard = ({ campaignId }) => {
 
   const amountRefs = useRef({});
 
+  // Track component visibility
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (componentRef.current) {
+      observer.observe(componentRef.current);
+    }
+
+    return () => {
+      if (componentRef.current) {
+        observer.unobserve(componentRef.current);
+      }
+    };
+  }, []);
+
   // Subscribe to campaign progress updates
   const handleCampaignProgress = useCallback((progressData) => {
     const data = progressData.data || progressData;
@@ -125,16 +147,16 @@ const Leaderboard = ({ campaignId }) => {
     }
 
     // Show toast for latest pledge
-    if (data.latestPledge) {
+    if (data.latestPledge && isVisible) {
       const pledge = data.latestPledge;
-      console.log('Latest pledge:', pledge);
       const toastKey = `${pledge.pledgeId}-${pledge.totalAmount || 0}-${pledge.createdAt}`;
-      // console.log('Toast key:', toastKey);
-      // console.log('Last toast key:', lastToastKeyRef.current);
-      // if (lastToastKeyRef.current === toastKey) {
-      //   return;
-      // }
-      // lastToastKeyRef.current = toastKey;
+
+      // Prevent duplicate toasts
+      if (lastToastKeyRef.current === toastKey) {
+        return;
+      }
+      lastToastKeyRef.current = toastKey;
+
       const displayName = pledge.backerInfo.firstName + ' ' + pledge.backerInfo.lastName;
       toast.custom((t) => (
         <div
@@ -164,7 +186,7 @@ const Leaderboard = ({ campaignId }) => {
       // Animate the amount for the backer who just pledged
       if (pledge.backerInfo.userId && amountRefs.current[pledge.backerInfo.userId]) {
         const amountElement = amountRefs.current[pledge.backerInfo.userId];
-        console.log('PULSE', amountElement);
+
         // Pulse effect
         gsap.fromTo(
           amountElement.parentElement,
@@ -190,7 +212,7 @@ const Leaderboard = ({ campaignId }) => {
         );
       }
     }
-  }, []);
+  }, [isVisible]);
 
   useCampaignProgress(campaignId, handleCampaignProgress);
 
@@ -232,7 +254,7 @@ const Leaderboard = ({ campaignId }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div ref={componentRef} className="max-w-4xl mx-auto">
       <Toaster
         position="top-right"
         containerStyle={{
